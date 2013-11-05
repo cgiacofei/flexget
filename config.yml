@@ -91,19 +91,11 @@ presets:
     verify_ssl_certificates: no
     # Ignore torrents with only magnet links, they don't play well with BT-Guard
     magnets: no
-    # A couple of people didn't change this when they tried out my configs, so I
-    # moved it to private/global.yml, uncomment here to get email notificians
-    #email:
-    #  from: user@your.domain
-    #  to: your@email.address
-    # Deluge is configured in my private configs, but I'm leaving this for
-    # clarity and completeness uncomment it so that your torrents are added to
-    # deluge (or replace it with your target).
-    #deluge:
-    # # Ignore all but the file that is >90% of the torrent if it exists
-    # # You will most likely want to combine this with the 'DeletePartials' 
-    # # Deluge plugin
-    #  main_file_only: yes
+    deluge:
+      # Ignore all but the file that is >90% of the torrent if it exists
+      # You will most likely want to combine this with the 'DeletePartials' 
+      # Deluge plugin
+      main_file_only: yes
 
 
   # This preset is a "global" preset for all TV-related tasks.
@@ -125,7 +117,7 @@ presets:
       min: 20
     # Prevent from downloading shows that were aquired manually
     # or are currently downloading
-    exists_series: # TODO: set correct paths here
+    exists_series: # TODO: Put the correct location here
       - "/raid/videos/TV Shows/"
       - "/raid/videos/TV Premieres/"
       - "/raid/videos/staging/tv_shows/"
@@ -149,16 +141,16 @@ presets:
     # Add accepted entries to Deluge, queue them to the top and make sure they
     # end up in the correct folder
     set:
-      movedone: >
+      movedone: > # TODO: Put the correct location here
         /raid/videos/TV Shows/{{ series_name|replace('/', '_')|replace(':', ' -') }}/{% if series_id_type == 'ep' %}Season {{ tvdb_season|default(series_season) }}/{% endif %}
       queuetotop: yes
     # This is a custom plugin, it is part of my rar-unpacking method,
     # it changes 'movedone' based on the regexp in the key
-    content_sort:
+    content_sort: # TODO: Put the correct location here
       '*.rar': '/home/deluge/downloads/completed/tv_shows/'
 
 
-  # I'm always up for new shows, but some I genres I just can't stand. This
+  # I'm always up for new shows, but some genres I just can't stand. This
   # preset grabs all of the premieres except for some genres
   tv-premieres:
     # The entry has to have the tvdb_genres field so I can filter by it
@@ -171,7 +163,6 @@ presets:
     # Block these genres if they exist in the list of tvdb_genres at all
     regexp:
       reject:
-        - documentary: {from: tvdb_genres}
         - talk show: {from: tvdb_genres}
         - game show: {from: tvdb_genres}
         - reality: {from: tvdb_genres}
@@ -182,8 +173,8 @@ presets:
       # tvdb_genres. For example, this will not block a show that's both
       # "Comedy" and "Drama" but it will block a show that is just "Drama"
       - "tvdb_genres == ['Drama']": reject
-      # Block premieres that weren't within the last 60 days
-      - tvdb_first_air_date != None and tvdb_first_air_date < now - timedelta(days=60): reject
+      # Block premieres that weren't within the last 90 days
+      - tvdb_first_air_date != None and tvdb_first_air_date < now - timedelta(days=90): reject
     # Accept all series permieres
     series_premiere:
       target: 720p+ hdtv+
@@ -197,7 +188,7 @@ presets:
       label: tv-premiere
     # This is a custom plugin, it is part of my rar-unpacking method, it changes
     # 'movedone' based on the regexp in the key
-    content_sort:
+    content_sort: # TODO: Put the correct location here
       '*.rar': '/home/deluge/downloads/completed/tv_premieres/'
 
 
@@ -218,7 +209,7 @@ presets:
       label: tv-premiere-track
     # This is a custom plugin, it is part of my rar-unpacking method, it changes
     # 'movedone' based on the regexp in the key
-    content_sort:
+    content_sort: # TODO: Put the correct location here
       '*.rar': '/home/deluge/downloads/completed/tv_premieres/'
 
 
@@ -253,7 +244,7 @@ presets:
     #rottentomatoes_lookup: yes
     seen_movies: strict # Don't download movies we've already seen
     # Check for already downloaded or currently downloading movies
-    exists_movie:
+    exists_movie: # TODO: Put the correct location here
       - /raid/videos/Movies/
       - /raid/videos/SDMovies/
       - /raid/videos/staging/movies
@@ -263,18 +254,19 @@ presets:
     proper_movies: yes
     set:
       # Give folders/files nice names
+      # TODO: Put the correct location here
       movedone: "/raid/videos/Movies/{{ imdb_name|replace('/', '_')|replace(':', ' -') }} ({{ imdb_year }})"
       content_filename: |
         {{ imdb_name|replace('/', '_')|replace(':', ' -') }} ({{ imdb_year }}) - {{ quality }}
     # This is a custom plugin, it is part of my rar-unpacking method, it changes
     # 'movedone' based on the regexp in the key
-    content_sort:
+    content_sort: # TODO: Put the correct location here
       '*.rar': '/home/deluge/downloads/completed/movies/'
 
 
   # Keep all the discover settings in one place
   movies-discover:
-    include: [ private/movies-discover.yml ]
+    # include: [ private/movies-discover.yml ]
     discover:
       from:
         - flexget_archive: yes
@@ -333,10 +325,10 @@ tasks:
       parse_only: yes
     plugin_priority:
       exec: 0
-    listdir: /home/atlanta800/Dropbox/torrents/TV
+    listdir: /home/atlanta800/Dropbox/torrents/TV # TODO: Put the correct location here
     exec:
       on_output:
-        for_accepted: rm "/home/atlanta800/Dropbox/torrents/TV/{{title}}.torrent"
+        for_accepted: rm "/home/atlanta800/Dropbox/torrents/TV/{{title}}.torrent" # TODO: Put the correct location here
     accept_all: yes
     set:
       label: local-tv
@@ -360,10 +352,10 @@ tasks:
     movie_queue: yes
     plugin_priority:
       exec: 0
-    listdir: /home/atlanta800/Dropbox/torrents/Movies
+    listdir: /home/atlanta800/Dropbox/torrents/Movies # TODO: Put the correct location here
     exec:
       on_output:
-        for_accepted: rm "/home/atlanta800/Dropbox/torrents/Movies/{{title}}"
+        for_accepted: rm "/home/atlanta800/Dropbox/torrents/Movies/{{title}}" # TODO: Put the correct location here
     accept_all: yes
     set:
       label: local-movies
@@ -371,7 +363,7 @@ tasks:
 
   # All of the TV-related tasks pull in the tv-global preset, this gives
   # all of the necessary rss sources and a few extra configs
-
+  
   # There are 3 My_TV Shows tasks, the first, tries to get the most wanted qualities
   My_TV_Shows:
     priority: 10
