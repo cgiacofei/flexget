@@ -1,0 +1,34 @@
+series:
+  settings:
+    global:
+      propers: no
+    Average:
+      propers: yes
+  # These are my favorite shows, I want the best quality from these
+  Best:
+    - Dexter
+    - Falling Skies
+    - Game of Thrones
+    - House of Lies
+    - Justified
+    - Weeds
+    - Breaking Bad
+    - The Walking Dead\
+    - NCIS
+    - Castle (2009):
+        name_regexp: ^castle(.2009)?
+	
+	
+  # These are my other shows, quality isn't extremely important, but I still like to watch them!
+  Better:
+    - Tosh.0
+	
+  # And this is everything else, quality doesn't matter that much
+  Average:
+    # I love the daily show, but I'm more interested in just watching it than video quality
+    - The Daily Show with Jon Stewart:
+        name_regexp: ^the.daily.show(.with.jon.stewart)?
+        # I always like to watch Stewart the next morning, so don't wait too long
+        timeframe: 2 hours
+    - The Colbert Report:
+        timeframe: 2 hours
