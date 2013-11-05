@@ -43,7 +43,7 @@ presets:
     include: [ private/global.yml ]
     # Make there's 50GB free before adding more downloads
     free_space:
-      path: /raid
+      path: /raid # TODO: Change this to the correct location
       space: 50000
     # Make sure all filenames are Windows safe (for samba)
     pathscrub: windows
@@ -125,7 +125,7 @@ presets:
       min: 20
     # Prevent from downloading shows that were aquired manually
     # or are currently downloading
-    exists_series:
+    exists_series: # TODO: set correct paths here
       - "/raid/videos/TV Shows/"
       - "/raid/videos/TV Premieres/"
       - "/raid/videos/staging/tv_shows/"

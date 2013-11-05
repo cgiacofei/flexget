@@ -1,0 +1,15 @@
+# A couple of people didn't change this when they tried out my configs, so I
+# moved it to private/global.yml, uncomment here to get email notificians
+email:
+  # TODO set this up with server domain
+  from: user@your.domain
+  to: c.giacofei@gmail.com
+
+# Deluge is configured in my private configs, but I'm leaving this for
+# clarity and completeness uncomment it so that your torrents are added to
+# deluge (or replace it with your target).
+deluge:
+  # Ignore all but the file that is >90% of the torrent if it exists
+  # You will most likely want to combine this with the 'DeletePartials' 
+  # Deluge plugin
+  main_file_only: yes
