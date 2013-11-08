@@ -1,8 +1,9 @@
-inputs:
-  - rss: { url: 'http://rss.privatetracker.org/xxx', other_fields: [category] }
-if:
-  - "has_field('category')":
-      regexp:
-        reject_excluding:
-          - '^(xxx|xxx|xxx|xxx|xxx)$': {from: category}
-rottentomatoes_lookup: xxx # My personal RT API key
+# inputs:
+#   - rss: { url: 'http://rss.privatetracker.org/xxx', other_fields: [category] }
+# if:
+#   - "has_field('category')":
+#       regexp:
+#         reject_excluding:
+#           - '^(xxx|xxx|xxx|xxx|xxx)$': {from: category}
+
+rottentomatoes_lookup: ad7v5xwcrp9zc5dwj9v6b7zd # My personal RT API key
