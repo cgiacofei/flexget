@@ -47,7 +47,7 @@ presets:
     include: [ private/global.yml ]
     # Make there's 50GB free before adding more downloads
     free_space:
-      path: /raid # TODO: Put the correct location here
+      path: /home/chris/raid # TODO: Put the correct location here
       space: 50000
     # Make sure all filenames are Windows safe (for samba)
     pathscrub: windows
@@ -125,11 +125,11 @@ presets:
     # or are currently downloading
     # TODO: Put the correct location here
     exists_series: 
-      - "/raid/videos/TV Shows/"
-      - "/raid/videos/TV Premieres/"
-      - "/raid/videos/staging/tv_shows/"
-      - "/raid/videos/staging/tv_premieres/"
-      - "/home/transmission/downloads/"
+      - "/home/chris/raid/videos/TV Shows/"
+      - "/home/chris/raid/videos/TV Premieres/"
+      - "/home/chris/raid/videos/staging/tv_shows/"
+      - "/home/chris/raid/videos/staging/tv_premieres/"
+      - "/home/chris/transmission/"
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
     # Add accepted entries to Transmission and make sure they end up in the correct
@@ -150,12 +150,12 @@ presets:
     set:
       # TODO: Put the correct location here
       movedone: > 
-        /raid/videos/TV Shows/{{ series_name|replace('/', '_')|replace(':', ' -') }}/{% if series_id_type == 'ep' %}Season {{ tvdb_season|default(series_season) }}/{% endif %}
+        /home/chris/raid/videos/TV Shows/{{ series_name|replace('/', '_')|replace(':', ' -') }}/{% if series_id_type == 'ep' %}Season {{ tvdb_season|default(series_season) }}/{% endif %}
       queuetotop: yes
     # This is a custom plugin, it is part of my rar-unpacking method,
     # it changes 'movedone' based on the regexp in the key
     content_sort:
-      '*.rar': '/home/transmission/downloads/completed/tv_shows/'
+      '*.rar': '/home/chris/transmission/completed/tv_shows/'
 
 
   # I'm always up for new shows, but some genres I just can't stand. This
@@ -190,13 +190,13 @@ presets:
     # Add to deluge, but don't queue to top (My_TV_Shows are more important)
     # and put in a different location
     set:
-      movedone: "/raid/videos/TV Premieres/{{ series_name|replace('/', '_')|replace(':', ' -') }}/Season {{ tvdb_season|default(series_season) }}"
+      movedone: "/home/chris/raid/videos/TV Premieres/{{ series_name|replace('/', '_')|replace(':', ' -') }}/Season {{ tvdb_season|default(series_season) }}"
       queuetotop: no
       label: tv-premiere
     # This is a custom plugin, it is part of my rar-unpacking method, it changes
     # 'movedone' based on the regexp in the key
     content_sort:
-      '*.rar': '/home/transmission/downloads/completed/tv_premieres/'
+      '*.rar': '/home/chris/transmission/completed/tv_premieres/'
 
 
   # If a premier was grabbed, keep on tracking it until the directory is (re)moved
@@ -208,16 +208,16 @@ presets:
         quality: webrip+
       from:
         listdir:
-          - "/raid/videos/TV Premieres/"
+          - "/home/chris/raid/videos/TV Premieres/"
     set:
       movedone: >
-        /raid/videos/TV Premieres/{{ series_name|replace('/', '_')|replace(':', ' -') }}/{% if series_id_type == 'ep' %}Season {{ tvdb_season|default(series_season) }}/{% endif %}
+        /home/chris/raid/videos/TV Premieres/{{ series_name|replace('/', '_')|replace(':', ' -') }}/{% if series_id_type == 'ep' %}Season {{ tvdb_season|default(series_season) }}/{% endif %}
       queuetotop: no
       label: tv-premiere-track
     # This is a custom plugin, it is part of my rar-unpacking method, it changes
     # 'movedone' based on the regexp in the key
     content_sort:
-      '*.rar': '/home/transmission/downloads/completed/tv_premieres/'
+      '*.rar': '/home/chris/transmission/completed/tv_premieres/'
 
 
   # This preset is a "global" preset for all movie-related tasks.
@@ -253,9 +253,9 @@ presets:
     # Check for already downloaded or currently downloading movies
     exists_movie:
       # TODO: Put the correct location here
-      - /raid/videos/Movies/
-      - /raid/videos/SDMovies/
-      - /raid/videos/staging/movies
+      - /home/chris/raid/videos/Movies/
+      - /home/chris/raid/videos/SDMovies/
+      - /home/chris/raid/videos/staging/movies
       - /home/transmission/downloads/
     # Download propers, since they will have the same content_filename,
     # lower/non-propers will be overwritten
@@ -263,13 +263,13 @@ presets:
     set:
       # Give folders/files nice names
       # TODO: Put the correct location here
-      movedone: "/raid/videos/Movies/{{ imdb_name|replace('/', '_')|replace(':', ' -') }} ({{ imdb_year }})"
+      movedone: "/home/chris/raid/videos/Movies/{{ imdb_name|replace('/', '_')|replace(':', ' -') }} ({{ imdb_year }})"
       content_filename: |
         {{ imdb_name|replace('/', '_')|replace(':', ' -') }} ({{ imdb_year }}) - {{ quality }}
     # This is a custom plugin, it is part of my rar-unpacking method, it changes
     # 'movedone' based on the regexp in the key
     content_sort:
-      '*.rar': '/home/transmission/downloads/completed/movies/'
+      '*.rar': '/home/chris/transmission/completed/movies/'
 
 
   # Keep all the discover settings in one place
@@ -429,8 +429,8 @@ tasks:
     preset: no_global # None of the global presets make sense here
     accept_all: yes
     listdir:
-      - /raid/videos/Movies/
-      - /raid/videos/SDMovies/
+      - /home/chris/raid/videos/Movies/
+      - /home/chris/raid/videos/SDMovies/
     movie_queue: yes
 
 
