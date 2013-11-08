@@ -110,7 +110,7 @@ presets:
   # We keep all of the RSS feeds that list tv-related torrents here
   # as well as where to check existing shows.
   tv-global:
-    include: [ private/tv-global.yml ]
+    # include: [ private/tv-global.yml ]
     # This is a TON of feeds, you probably don't need so many, but why not?
     inputs:
       - rss: { url: 'http://www.torlock.com/television/rss.xml', silent: yes }  # TorLock (TV)
