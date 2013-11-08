@@ -98,6 +98,8 @@ presets:
     transmission:
       host: localhost
       port: 9091
+      username: transmission
+      password: Microe01
       # Ignore all but the file that is >90% of the torrent if it exists
       # You will most likely want to combine this with the 'DeletePartials' 
       # Deluge plugin
@@ -256,7 +258,7 @@ presets:
       - /home/chris/raid/videos/Movies/
       - /home/chris/raid/videos/SDMovies/
       - /home/chris/raid/videos/staging/movies
-      - /home/transmission/downloads/
+      - /home/chris/transmission/
     # Download propers, since they will have the same content_filename,
     # lower/non-propers will be overwritten
     proper_movies: yes
