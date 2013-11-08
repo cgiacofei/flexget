@@ -118,7 +118,7 @@ presets:
       - rss: { url: 'http://ezrss.it/feed/', silent: yes }                      # EZRSS
       - rss: { url: 'http://showrss.karmorra.info/feeds/all.rss', silent: yes } # Karmorra (All)
       - rss: { url: 'http://rss.bt-chat.com/?group=3', silent: yes }            # BT-Chat (EZTV)
-      - rss: { url: 'https://rss.thepiratebay.se/208', silent: yes }            # The Pirate Bay (Highres - TV shows)
+      - rss: { url: 'https://rss.thepiratebay.sx/208', silent: yes }            # The Pirate Bay (Highres - TV shows)
     # Impose reasonable size constraints
     content_size:
       max: 5000
@@ -231,7 +231,7 @@ presets:
     inputs:
       - rss: { url: 'http://www.torlock.com/movies/rss.xml', silent: yes }     # TorLock (Movies)
       - rss: { url: 'http://torrentz.eu/feed_verified?q=movies', silent: yes } # Torrentz (Verified Movies)
-      - rss: { url: 'https://rss.thepiratebay.se/207', silent: yes }           # The Pirate Bay (Highres - Movies)
+      - rss: { url: 'https://rss.thepiratebay.sx/207', silent: yes }           # The Pirate Bay (Highres - Movies)
     # Some feeds might include TV Shows, ignore them
     regexp:
       reject:
