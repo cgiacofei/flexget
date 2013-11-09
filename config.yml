@@ -47,7 +47,7 @@ presets:
     include: [ private/global.yml ]
     # Make there's 50GB free before adding more downloads
     free_space:
-      path: /home/chris/raid # TODO: Put the correct location here
+      path: /media/sf_Iomega_HDD/
       space: 50000
     # Make sure all filenames are Windows safe (for samba)
     pathscrub: windows
