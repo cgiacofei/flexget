@@ -118,19 +118,18 @@ presets:
       - rss: { url: 'http://ezrss.it/feed/', silent: yes }                      # EZRSS
       - rss: { url: 'http://showrss.karmorra.info/feeds/all.rss', silent: yes } # Karmorra (All)
       - rss: { url: 'http://rss.bt-chat.com/?group=3', silent: yes }            # BT-Chat (EZTV)
-      - rss: { url: 'https://rss.thepiratebay.sx/208', silent: yes }            # The Pirate Bay (Highres - TV shows)
+      - rss: { url: 'http://rss.thepiratebay.sx/208', silent: yes }            # The Pirate Bay (Highres - TV shows)
     # Impose reasonable size constraints
     content_size:
       max: 5000
       min: 20
     # Prevent from downloading shows that were aquired manually
     # or are currently downloading
-    # TODO: Put the correct location here
     exists_series: 
-      - "/home/chris/raid/videos/TV Shows/"
-      - "/home/chris/raid/videos/TV Premieres/"
-      - "/home/chris/raid/videos/staging/tv_shows/"
-      - "/home/chris/raid/videos/staging/tv_premieres/"
+      - "/media/sf_Iomega_HDD/TV Shows/"
+      - "/media/sf_Iomega_HDD/TV Premieres/"
+      - "/media/sf_Iomega_HDD/staging/tv_shows/"
+      - "/media/sf_Iomega_HDD/staging/tv_premieres/"
       - "/home/chris/transmission/"
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
@@ -152,7 +151,7 @@ presets:
     set:
       # TODO: Put the correct location here
       movedone: > 
-        /home/chris/raid/videos/TV Shows/{{ series_name|replace('/', '_')|replace(':', ' -') }}/{% if series_id_type == 'ep' %}Season {{ tvdb_season|default(series_season) }}/{% endif %}
+        /media/sf_Iomega_HDD/TV Shows/{{ series_name|replace('/', '_')|replace(':', ' -') }}/{% if series_id_type == 'ep' %}Season {{ tvdb_season|default(series_season) }}/{% endif %}
       queuetotop: yes
     # This is a custom plugin, it is part of my rar-unpacking method,
     # it changes 'movedone' based on the regexp in the key
@@ -192,7 +191,7 @@ presets:
     # Add to deluge, but don't queue to top (My_TV_Shows are more important)
     # and put in a different location
     set:
-      movedone: "/home/chris/raid/videos/TV Premieres/{{ series_name|replace('/', '_')|replace(':', ' -') }}/Season {{ tvdb_season|default(series_season) }}"
+      movedone: "/media/sf_Iomega_HDD/TV Premieres/{{ series_name|replace('/', '_')|replace(':', ' -') }}/Season {{ tvdb_season|default(series_season) }}"
       queuetotop: no
       label: tv-premiere
     # This is a custom plugin, it is part of my rar-unpacking method, it changes
@@ -210,10 +209,10 @@ presets:
         quality: webrip+
       from:
         listdir:
-          - "/home/chris/raid/videos/TV Premieres/"
+          - "/media/sf_Iomega_HDD/TV Premieres/"
     set:
       movedone: >
-        /home/chris/raid/videos/TV Premieres/{{ series_name|replace('/', '_')|replace(':', ' -') }}/{% if series_id_type == 'ep' %}Season {{ tvdb_season|default(series_season) }}/{% endif %}
+        /media/sf_Iomega_HDD/TV Premieres/{{ series_name|replace('/', '_')|replace(':', ' -') }}/{% if series_id_type == 'ep' %}Season {{ tvdb_season|default(series_season) }}/{% endif %}
       queuetotop: no
       label: tv-premiere-track
     # This is a custom plugin, it is part of my rar-unpacking method, it changes
@@ -231,7 +230,7 @@ presets:
     inputs:
       - rss: { url: 'http://www.torlock.com/movies/rss.xml', silent: yes }     # TorLock (Movies)
       - rss: { url: 'http://torrentz.eu/feed_verified?q=movies', silent: yes } # Torrentz (Verified Movies)
-      - rss: { url: 'https://rss.thepiratebay.sx/207', silent: yes }           # The Pirate Bay (Highres - Movies)
+      - rss: { url: 'http://rss.thepiratebay.sx/207', silent: yes }           # The Pirate Bay (Highres - Movies)
     # Some feeds might include TV Shows, ignore them
     regexp:
       reject:
@@ -255,9 +254,9 @@ presets:
     # Check for already downloaded or currently downloading movies
     exists_movie:
       # TODO: Put the correct location here
-      - /home/chris/raid/videos/Movies/
-      - /home/chris/raid/videos/SDMovies/
-      - /home/chris/raid/videos/staging/movies
+      - /media/sf_Iomega_HDD/Movies/
+      - /media/sf_Iomega_HDD/SDMovies/
+      - /media/sf_Iomega_HDD/staging/movies
       - /home/chris/transmission/
     # Download propers, since they will have the same content_filename,
     # lower/non-propers will be overwritten
@@ -265,7 +264,7 @@ presets:
     set:
       # Give folders/files nice names
       # TODO: Put the correct location here
-      movedone: "/home/chris/raid/videos/Movies/{{ imdb_name|replace('/', '_')|replace(':', ' -') }} ({{ imdb_year }})"
+      movedone: "/media/sf_Iomega_HDD/Movies/{{ imdb_name|replace('/', '_')|replace(':', ' -') }} ({{ imdb_year }})"
       content_filename: |
         {{ imdb_name|replace('/', '_')|replace(':', ' -') }} ({{ imdb_year }}) - {{ quality }}
     # This is a custom plugin, it is part of my rar-unpacking method, it changes
@@ -431,8 +430,8 @@ tasks:
     preset: no_global # None of the global presets make sense here
     accept_all: yes
     listdir:
-      - /home/chris/raid/videos/Movies/
-      - /home/chris/raid/videos/SDMovies/
+      - /media/sf_Iomega_HDD/Movies/
+      - /media/sf_Iomega_HDD/SDMovies/
     movie_queue: yes
 
 
