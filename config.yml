@@ -130,7 +130,7 @@ presets:
       - "/media/sf_Iomega_HDD/TV Premieres/"
       - "/media/sf_Iomega_HDD/staging/tv_shows/"
       - "/media/sf_Iomega_HDD/staging/tv_premieres/"
-      - "/home/transmission/"
+      - "/media/sf_Iomega_HDD/transmission/"
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
     # Add accepted entries to Transmission and make sure they end up in the correct
@@ -156,7 +156,7 @@ presets:
     # This is a custom plugin, it is part of my rar-unpacking method,
     # it changes 'movedone' based on the regexp in the key
     content_sort:
-      '*.rar': '/home/transmission/completed/tv_shows/'
+      '*.rar': '/media/sf_Iomega_HDD/transmission/completed/tv_shows/'
 
 
   # I'm always up for new shows, but some genres I just can't stand. This
@@ -197,7 +197,7 @@ presets:
     # This is a custom plugin, it is part of my rar-unpacking method, it changes
     # 'movedone' based on the regexp in the key
     content_sort:
-      '*.rar': '/home/transmission/completed/tv_premieres/'
+      '*.rar': '/media/sf_Iomega_HDD/transmission/completed/tv_premieres/'
 
 
   # If a premier was grabbed, keep on tracking it until the directory is (re)moved
@@ -218,7 +218,7 @@ presets:
     # This is a custom plugin, it is part of my rar-unpacking method, it changes
     # 'movedone' based on the regexp in the key
     content_sort:
-      '*.rar': '/home/transmission/completed/tv_premieres/'
+      '*.rar': '/media/sf_Iomega_HDD/transmission/completed/tv_premieres/'
 
 
   # This preset is a "global" preset for all movie-related tasks.
@@ -257,7 +257,7 @@ presets:
       - /media/sf_Iomega_HDD/Movies/
       - /media/sf_Iomega_HDD/SDMovies/
       - /media/sf_Iomega_HDD/staging/movies
-      - /home/transmission/
+      - /media/sf_Iomega_HDD/transmission/
     # Download propers, since they will have the same content_filename,
     # lower/non-propers will be overwritten
     proper_movies: yes
@@ -270,7 +270,7 @@ presets:
     # This is a custom plugin, it is part of my rar-unpacking method, it changes
     # 'movedone' based on the regexp in the key
     content_sort:
-      '*.rar': '/home/transmission/completed/movies/'
+      '*.rar': '/media/sf_Iomega_HDD/transmission/completed/movies/'
 
 
   # Keep all the discover settings in one place
