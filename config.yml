@@ -100,6 +100,8 @@ presets:
       port: 9091
       username: transmission
       password: Microe01
+      removewhendone: True
+      ratio: .1
       # Ignore all but the file that is >90% of the torrent if it exists
       # You will most likely want to combine this with the 'DeletePartials' 
       # Deluge plugin
