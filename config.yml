@@ -224,7 +224,7 @@ presets:
   # We keep all of the RSS feeds that list movie-related torrents here
   # as well as some other configurations.
   movies-global:
-    include: [ private/movies-global.yml ]
+    # include: [ private/movies-global.yml ]
     interval: 1 hour # I have flexget run every half hour, that's really only necessary for TV Shows
     inputs:
       - rss: { url: 'http://www.torlock.com/movies/rss.xml', silent: yes }     # TorLock (Movies)
@@ -418,7 +418,7 @@ tasks:
     interval: 2 hours # Only check every 2 hours (I have Flexget run every half hour)
     imdb_list:
       list: watchlist
-      auto_remove: [ accepted, rejected ] # keep my watchlist clean
+     # auto_remove: [ accepted, rejected ] # keep my watchlist clean
     accept_all: yes
     queue_movies: { force: no } # Output entries to movie queue (with any quality)
 
