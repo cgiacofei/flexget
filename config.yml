@@ -29,7 +29,7 @@
 presets:
 
   global:
-    include: [ private/global.yml ]
+    #~ include: [ private/global.yml ]
     # Make there's 50GB free before adding more downloads
     free_space:
       path: /media/sf_Iomega_HDD/
@@ -343,26 +343,25 @@ tasks:
 
   # This task queues all of the movies in my IMDB watchlist
   IMDB_Movie_Queue:
-    include: [ private/imdb-movie-queue.yml ] # Contains IMDB username/password for auto_remove
+    include: [ private/imdb-movie-queue.yml ]
     priority: 100 # Always run before My_Movies task
-    preset: no_global # None of the global presets make sense here
-    interval: 2 hours # Only check every 2 hours (I have Flexget run every half hour)
+    preset: no_global
+    interval: 2 hours
     imdb_list:
       list: watchlist
-     # auto_remove: [ accepted, rejected ] # keep my watchlist clean
+      # auto_remove: [ accepted, rejected ] # keep my watchlist clean
     accept_all: yes
     queue_movies: { force: no } # Output entries to movie queue (with any quality)
 
   # Cleans movies from the movie queue that we already have
   Clean_Movie_Queue:
-    interval: 1 week # doesn't need to be run often
-    preset: no_global # None of the global presets make sense here
+    interval: 1 week
+    preset: no_global
     accept_all: yes
     listdir:
       - /media/sf_Iomega_HDD/Movies/
       - /media/sf_Iomega_HDD/SDMovies/
     movie_queue: yes
-
 
   # The next two tasks download the queue from the previous task effectively implementing
   # a 2 day timeframe for 1080p movies, then falls back to 720p
