@@ -29,8 +29,9 @@
 presets:
 
   global:
-    #~ include: [ private/global.yml ]
-    # Make there's 50GB free before adding more downloads
+    # TODO: Setup email server for notifications
+    #~ include: [ global.yml ]
+    # Make sure there's 50GB free before adding more downloads
     free_space:
       path: /media/sf_Iomega_HDD/
       space: 50000
@@ -92,7 +93,6 @@ presets:
   # We keep all of the RSS feeds that list tv-related torrents here
   # as well as where to check existing shows.
   tv-global:
-    # include: [ private/tv-global.yml ]
     # This is a TON of feeds, you probably don't need so many, but why not?
     inputs:
       - rss: { url: 'http://www.torlock.com/television/rss.xml', silent: yes }  # TorLock (TV)
@@ -180,7 +180,6 @@ presets:
   # We keep all of the RSS feeds that list movie-related torrents here
   # as well as some other configurations.
   movies-global:
-    # include: [ private/movies-global.yml ]
     interval: 1 hour # I have flexget run every half hour, that's really only necessary for TV Shows
     inputs:
       - rss: { url: 'http://www.torlock.com/movies/rss.xml', silent: yes }     # TorLock (Movies)
@@ -220,7 +219,6 @@ presets:
 
   # Keep all the discover settings in one place
   movies-discover:
-    # include: [ private/movies-discover.yml ]
     discover:
       from:
         - flexget_archive: yes
@@ -343,7 +341,7 @@ tasks:
 
   # This task queues all of the movies in my IMDB watchlist
   IMDB_Movie_Queue:
-    include: [ private/imdb-movie-queue.yml ]
+    include: [ imdb-movie-queue.yml ]
     priority: 100 # Always run before My_Movies task
     preset: no_global
     interval: 2 hours
