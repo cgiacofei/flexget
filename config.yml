@@ -156,8 +156,8 @@ presets:
       queuetotop: yes
     # This is a custom plugin, it is part of my rar-unpacking method,
     # it changes 'movedone' based on the regexp in the key
-    content_sort:
-      '*.rar': '/media/sf_Iomega_HDD/transmission/completed/tv_shows/'
+    # content_sort:
+    #   '*.rar': '/media/sf_Iomega_HDD/transmission/completed/tv_shows/'
 
 
   # I'm always up for new shows, but some genres I just can't stand. This
@@ -197,8 +197,8 @@ presets:
       label: tv-premiere
     # This is a custom plugin, it is part of my rar-unpacking method, it changes
     # 'movedone' based on the regexp in the key
-    content_sort:
-      '*.rar': '/media/sf_Iomega_HDD/transmission/completed/tv_premieres/'
+    # content_sort:
+    #   '*.rar': '/media/sf_Iomega_HDD/transmission/completed/tv_premieres/'
 
 
   # If a premier was grabbed, keep on tracking it until the directory is (re)moved
@@ -217,8 +217,8 @@ presets:
       label: tv-premiere-track
     # This is a custom plugin, it is part of my rar-unpacking method, it changes
     # 'movedone' based on the regexp in the key
-    content_sort:
-      '*.rar': '/media/sf_Iomega_HDD/transmission/completed/tv_premieres/'
+    # content_sort:
+    #   '*.rar': '/media/sf_Iomega_HDD/transmission/completed/tv_premieres/'
 
 
   # This preset is a "global" preset for all movie-related tasks.
@@ -267,8 +267,8 @@ presets:
         {{ imdb_name|replace('/', '_')|replace(':', ' -') }} ({{ imdb_year }}) - {{ quality }}
     # This is a custom plugin, it is part of my rar-unpacking method, it changes
     # 'movedone' based on the regexp in the key
-    content_sort:
-      '*.rar': '/media/sf_Iomega_HDD/transmission/completed/movies/'
+    # content_sort:
+    #   '*.rar': '/media/sf_Iomega_HDD/transmission/completed/movies/'
 
 
   # Keep all the discover settings in one place
