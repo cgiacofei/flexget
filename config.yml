@@ -22,24 +22,9 @@
 # destination with a nice name regardless if it's packed in a rar or not.
 # Here's the gist of how it works:
 #   1. Flexget accepts the torrent regardless if it's a rar-pack or not
-#   2. My custom content_sort plugin changes the move_done value if the torrent
-#       contains a .rar
-#   3. The torrent is added to Deluge
-#   4. Deluge is configured with the Execute (http://dev.deluge-torrent.org/wiki/Plugins/Execute)
-#       plugin to run my deluge_torrent_complete script (also available in this
-#       repository) when any torrent is done downloading
-#   5. deluge_torrent_complete checks if the torrent is located in the
-#       directory we set in step #2, if not it skips to the last step
-#   6. deluge_torrent_complete unpacks the first .rar file it finds in the
-#       torrent to a 'staging' location
-#   7. deluge_torrent_complete calls flexget with a completely separate config,
-#       'sorting.yml' (also available in this repository)
-#   8. The 'sorting.yml' config checks for files in the 'staging' location from
-#       step #6 and renames and moves the files to their appropriate final
-#       location
-#   9. deluge_torrent_complete tells my XBMC server to update the library (scan
-#       for new files)
-#
+#   2. The torrent is added to Transmission
+#   3. Perl script sorttv.pl runs hourly to move files to their final homes
+#      May modify things to run sorttv on demand instead
 
 presets:
 
@@ -94,7 +79,7 @@ presets:
     # The Pirate Bay ssl certs always fail
     verify_ssl_certificates: no
     # Ignore torrents with only magnet links, they don't play well with BT-Guard
-    magnets: no
+    magnets: yes
     transmission:
       host: localhost
       port: 9091
@@ -102,11 +87,6 @@ presets:
       # password: Microe01
       removewhendone: True
       ratio: .1
-      # Ignore all but the file that is >90% of the torrent if it exists
-      # You will most likely want to combine this with the 'DeletePartials' 
-      # Deluge plugin
-      # main_file_only: yes
-
 
   # This preset is a "global" preset for all TV-related tasks.
   # We keep all of the RSS feeds that list tv-related torrents here
@@ -135,14 +115,6 @@ presets:
       - '/media/sf_Iomega_HDD/transmission/'
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
-    # Add accepted entries to Transmission and make sure they end up in the correct
-    # folder with a nice name
-    set:
-      # Rename the "content file" to something nice
-      content_filename: >
-        {{ series_name|replace('/', '_')|replace(':', ' -') }} - {{ tvdb_ep_id|default(series_id) }}{% if tvdb_ep_name|default(False) %} - {{ tvdb_ep_name|replace('/', '_')|replace(':', ' -') }}{% endif %} - {{ quality }}
-      label: tv
-
 
   # These are the shows I regularly watch
   tv-my_shows:
@@ -152,13 +124,7 @@ presets:
     # end up in the correct folder
     set:
       path: '/media/sf_Iomega_HDD/transmission/completed/tv_shows/'
-      
       queuetotop: yes
-    # This is a custom plugin, it is part of my rar-unpacking method,
-    # it changes 'movedone' based on the regexp in the key
-    # content_sort:
-    #   '*.rar': '/media/sf_Iomega_HDD/transmission/completed/tv_shows/'
-
 
   # I'm always up for new shows, but some genres I just can't stand. This
   # preset grabs all of the premieres except for some genres
@@ -185,6 +151,7 @@ presets:
       - "tvdb_genres == ['Drama']": reject
       # Block premieres that weren't within the last 60 days
       - tvdb_first_air_date != None and tvdb_first_air_date < now - timedelta(days=60): reject
+    
     # Accept all series permieres
     series_premiere:
       timeframe: 1 days
@@ -192,14 +159,8 @@ presets:
     # Add to deluge, but don't queue to top (My_TV_Shows are more important)
     # and put in a different location
     set:
-      path: '/media/sf_Iomega_HDD/TV Premieres/'
+      path: '/media/sf_Iomega_HDD/transmission/completed/tv_premieres/'
       queuetotop: no
-      label: tv-premiere
-    # This is a custom plugin, it is part of my rar-unpacking method, it changes
-    # 'movedone' based on the regexp in the key
-    # content_sort:
-    #   '*.rar': '/media/sf_Iomega_HDD/transmission/completed/tv_premieres/'
-
 
   # If a premier was grabbed, keep on tracking it until the directory is (re)moved
   tv-premieres-track:
@@ -212,14 +173,8 @@ presets:
         listdir:
           - '/media/sf_Iomega_HDD/TV Premieres/'
     set:
-      path: '/media/sf_Iomega_HDD/TV Premieres/'
+      path: '/media/sf_Iomega_HDD/transmission/completed/tv_premieres/'
       queuetotop: no
-      label: tv-premiere-track
-    # This is a custom plugin, it is part of my rar-unpacking method, it changes
-    # 'movedone' based on the regexp in the key
-    # content_sort:
-    #   '*.rar': '/media/sf_Iomega_HDD/transmission/completed/tv_premieres/'
-
 
   # This preset is a "global" preset for all movie-related tasks.
   # We keep all of the RSS feeds that list movie-related torrents here
@@ -261,15 +216,7 @@ presets:
     # lower/non-propers will be overwritten
     proper_movies: yes
     set:
-      # Give folders/files nice names
       path: '/media/sf_Iomega_HDD/transmission/completed/movies/'
-      content_filename: |
-        {{ imdb_name|replace('/', '_')|replace(':', ' -') }} ({{ imdb_year }}) - {{ quality }}
-    # This is a custom plugin, it is part of my rar-unpacking method, it changes
-    # 'movedone' based on the regexp in the key
-    # content_sort:
-    #   '*.rar': '/media/sf_Iomega_HDD/transmission/completed/movies/'
-
 
   # Keep all the discover settings in one place
   movies-discover:
@@ -281,7 +228,6 @@ presets:
         - piratebay:
             category: 'highres movies'
             sort_by: seeds
-
 
   # This preset runs feeds through my very specific custom filter
   movies-auto:
@@ -296,8 +242,6 @@ presets:
               - new_releases
     set:
       queuetotop: no
-      label: movies-auto
-
 
   # This preset uses the movie queue to find movies from various sources
   movies-queued:
@@ -306,9 +250,6 @@ presets:
     discover:
       what:
         - emit_movie_queue: yes
-    set:
-      label: my-movies
-
 
 # This is where we pull everything together
 tasks:
@@ -337,9 +278,6 @@ tasks:
       on_output:
         for_accepted: rm '/home/chris/Dropbox/torrents/TV/{{title}}.torrent'
     accept_all: yes
-    set:
-      label: local-tv
-
 
   # Same as above but for movies
   Local_Torrents-Movies:
@@ -364,9 +302,6 @@ tasks:
       on_output:
         for_accepted: rm '/home/chris/Dropbox/torrents/Movies/{{title}}'
     accept_all: yes
-    set:
-      label: local-movies
-
 
   # All of the TV-related tasks pull in the tv-global preset, this gives
   # all of the necessary rss sources and a few extra configs
@@ -392,7 +327,6 @@ tasks:
           timeframe: 12 hours
           quality: preair+
 
-
   # Task for the tv-premieres plugin
   Series_Premieres:
     priority: 40
@@ -400,14 +334,12 @@ tasks:
       - tv-global
       - tv-premieres
 
-
   # Task for the tv-premieres-track plugin
   Series_Premieres_Track:
     priority: 50
     preset:
       - tv-global
       - tv-premieres-track
-
 
   # This task queues all of the movies in my IMDB watchlist
   IMDB_Movie_Queue:
@@ -420,7 +352,6 @@ tasks:
      # auto_remove: [ accepted, rejected ] # keep my watchlist clean
     accept_all: yes
     queue_movies: { force: no } # Output entries to movie queue (with any quality)
-
 
   # Cleans movies from the movie queue that we already have
   Clean_Movie_Queue:
@@ -461,8 +392,6 @@ tasks:
     preset:
       - movies-global
       - movies-auto
-    set:
-      label: movies-auto
 
   Auto_Movies-720p:
     priority: 140
@@ -470,6 +399,4 @@ tasks:
     preset:
       - movies-global
       - movies-auto
-    set:
-      label: movies-auto
     delay: 7 days # Wait 7 days for a 1080p movie before trying downloading 720p
