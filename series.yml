@@ -11,9 +11,10 @@ series:
     - Homeland
     - Marvel's Agents of S.H.I.E.L.D.
     - Justified
-    - The Walking Dead\
+    - The Walking Dead
     - NCIS
     - Orphan Black
+    - Almost Human
     - Castle (2009):
         name_regexp: ^castle(.2009)?
 
