@@ -30,7 +30,7 @@ presets:
 
   global:
     # TODO: Setup email server for notifications
-    #~ include: [ global.yml ]
+    include: [ global.yml ]
     # Make sure there's 50GB free before adding more downloads
     free_space:
       path: /media/sf_Iomega_HDD/

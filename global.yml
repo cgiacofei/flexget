@@ -1,8 +1,13 @@
 # This is just a redacted example of what I have in my private directory,
 # you'll obviously need to modify for your own needs
 email:
-  from: xxx@xxx.xxx.xxx
+  from: c.giacofei.htpc@gmail.com
   to: c.giacofei@gmail.com
+  smtp_username : c.giacofei.htpc
+  smtp_password : Microe01
+  smtp_host: smtp.gmail.com
+  smtp_port: 587
+  smtp_tls: yes
   
 # domain_delay:
 #   www.privatetracker.org: 10 seconds
