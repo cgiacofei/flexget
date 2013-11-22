@@ -1,36 +1,22 @@
 # Flexget (http://www.flexget.com) configuration file.
 #
-# Created by: Jeff Wilson <jeff@jeffalwilson.com>
-# Available from: https://github.com/atlanta800/dotfiles
-#
-# Some settings in this config require changes in my fork of Flexget which
-# is available here: https://github.com/atlanta800/Flexget
-#
-# For various reasons I've moved some settings into a private subfolder. The
-# files are:
-#   * private/global.yml
-#   * private/movies-global.yml
-#   * private/tv-global.yml
-# These files are not necessary to use this cofiguration, simply remove the
-# 'include' plugin references and you should be fine. You'll also want to check
-# for a few places that I've commented out sections that I've moved to these
-# config files. I've also added redacted versions of the private files to
-# reference if you'd like to do the same.
-#
-# == Rar-unpacking ==
-# My entire setup results in a single video file (.mkv, .mp4, etc) in the final
-# destination with a nice name regardless if it's packed in a rar or not.
-# Here's the gist of how it works:
-#   1. Flexget accepts the torrent regardless if it's a rar-pack or not
-#   2. The torrent is added to Transmission
-#   3. Perl script sorttv.pl runs hourly to move files to their final homes
-#      May modify things to run sorttv on demand instead
+# Modified from:
+# Jeff Wilson <jeff@jeffalwilson.com>
+# https://github.com/atlanta800/dotfiles
 
 presets:
 
   global:
-    # TODO: Setup email server for notifications
-    include: [ global.yml ]
+    #~ include: [ global.yml ]
+    email:
+      from: c.giacofei.htpc@gmail.com
+      to: c.giacofei@gmail.com
+      smtp_username : c.giacofei.htpc
+      smtp_password : Microe01
+      smtp_host: smtp.gmail.com
+      smtp_port: 587
+      smtp_tls: yes
+      
     # Make sure there's 50GB free before adding more downloads
     free_space:
       path: /media/sf_Iomega_HDD/
