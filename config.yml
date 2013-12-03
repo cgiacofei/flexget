@@ -128,11 +128,11 @@ presets:
     # Prevent from downloading shows that were aquired manually
     # or are currently downloading
     exists_series: 
-      - "/media/sf_Iomega_HDD/TV Shows/"
-      - "/media/sf_Iomega_HDD/TV Premieres/"
-      - "/media/sf_Iomega_HDD/staging/tv_shows/"
-      - "/media/sf_Iomega_HDD/staging/tv_premieres/"
-      - "/media/sf_Iomega_HDD/transmission/"
+      - '/media/sf_Iomega_HDD/TV Shows/'
+      - '/media/sf_Iomega_HDD/TV Premieres/'
+      - '/media/sf_Iomega_HDD/staging/tv_shows/'
+      - '/media/sf_Iomega_HDD/staging/tv_premieres/'
+      - '/media/sf_Iomega_HDD/transmission/'
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
     # Add accepted entries to Transmission and make sure they end up in the correct
@@ -151,7 +151,7 @@ presets:
     # Add accepted entries to Transmission, queue them to the top and make sure they
     # end up in the correct folder
     set:
-      path: /media/sf_Iomega_HDD/TV Shows/{{ series_name|replace('/', '_')|replace(':', ' -') }}/{% if series_id_type == 'ep' %}Season {{ tvdb_season|default(series_season) }}/{% endif %}
+      path: '/media/sf_Iomega_HDD/transmission/completed/tv_shows/'
       queuetotop: yes
     # This is a custom plugin, it is part of my rar-unpacking method,
     # it changes 'movedone' based on the regexp in the key
@@ -191,7 +191,7 @@ presets:
     # Add to deluge, but don't queue to top (My_TV_Shows are more important)
     # and put in a different location
     set:
-      path: "/media/sf_Iomega_HDD/TV Premieres/{{ series_name|replace('/', '_')|replace(':', ' -') }}/Season {{ tvdb_season|default(series_season) }}"
+      path: '/media/sf_Iomega_HDD/transmission/completed/tv_premieres/'
       queuetotop: no
       label: tv-premiere
     # This is a custom plugin, it is part of my rar-unpacking method, it changes
@@ -209,9 +209,9 @@ presets:
         quality: webrip+
       from:
         listdir:
-          - "/media/sf_Iomega_HDD/TV Premieres/"
+          - /media/sf_Iomega_HDD/TV Premieres/
     set:
-      path: /media/sf_Iomega_HDD/TV Premieres/{{ series_name|replace('/', '_')|replace(':', ' -') }}/{% if series_id_type == 'ep' %}Season {{ tvdb_season|default(series_season) }}/{% endif %}
+      path: '/media/sf_Iomega_HDD/transmission/completed/tv_premieres/'
       queuetotop: no
       label: tv-premiere-track
     # This is a custom plugin, it is part of my rar-unpacking method, it changes
@@ -224,8 +224,9 @@ presets:
   # We keep all of the RSS feeds that list movie-related torrents here
   # as well as some other configurations.
   movies-global:
-    include: [ private/movies-global.yml ]
-    interval: 1 hour # I have flexget run every half hour, that's really only necessary for TV Shows
+    # include: [ private/movies-global.yml ]
+    # I have flexget run every half hour, that's really only necessary for TV Shows
+    interval: 1 hour 
     inputs:
       - rss: { url: 'http://www.torlock.com/movies/rss.xml', silent: yes }     # TorLock (Movies)
       - rss: { url: 'http://torrentz.eu/feed_verified?q=movies', silent: yes } # Torrentz (Verified Movies)
@@ -248,11 +249,10 @@ presets:
     imdb_lookup: yes
     # A Rotten Tomatoes API key is set in my private config, but I'm leaving
     # this here for clarity and completeness.
-    #rottentomatoes_lookup: yes
+    # rottentomatoes_lookup: yes
     seen_movies: strict # Don't download movies we've already seen
     # Check for already downloaded or currently downloading movies
     exists_movie:
-      # TODO: Put the correct location here
       - /media/sf_Iomega_HDD/Movies/
       - /media/sf_Iomega_HDD/SDMovies/
       - /media/sf_Iomega_HDD/staging/movies
@@ -262,8 +262,7 @@ presets:
     proper_movies: yes
     set:
       # Give folders/files nice names
-      # TODO: Put the correct location here
-      path: "/media/sf_Iomega_HDD/Movies/{{ imdb_name|replace('/', '_')|replace(':', ' -') }} ({{ imdb_year }})"
+      path: '/media/sf_Iomega_HDD/transmission/completed/movies/'
       content_filename: |
         {{ imdb_name|replace('/', '_')|replace(':', ' -') }} ({{ imdb_year }}) - {{ quality }}
     # This is a custom plugin, it is part of my rar-unpacking method, it changes
