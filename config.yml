@@ -98,7 +98,7 @@ presets:
       - '/media/sf_Iomega_HDD/TV Premieres/'
       - '/media/sf_Iomega_HDD/staging/tv_shows/'
       - '/media/sf_Iomega_HDD/staging/tv_premieres/'
-      - '/media/sf_Iomega_HDD/transmission/'
+      - '/media/sf_torrents/'
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
 
@@ -109,7 +109,7 @@ presets:
     # Add accepted entries to Transmission, queue them to the top and make sure they
     # end up in the correct folder
     set:
-      path: '/media/sf_Iomega_HDD/transmission/completed/tv_shows/'
+      path: '/media/sf_torrents/completed/tv_shows/'
       queuetotop: yes
 
   # I'm always up for new shows, but some genres I just can't stand. This
@@ -145,7 +145,7 @@ presets:
     # Add to deluge, but don't queue to top (My_TV_Shows are more important)
     # and put in a different location
     set:
-      path: '/media/sf_Iomega_HDD/transmission/completed/tv_premieres/'
+      path: '/media/sf_torrents/completed/tv_premieres/'
       queuetotop: no
 
   # If a premier was grabbed, keep on tracking it until the directory is (re)moved
@@ -160,7 +160,7 @@ presets:
           - '/media/sf_Iomega_HDD/TV Premieres/'
 
     set:
-      path: '/media/sf_Iomega_HDD/transmission/completed/tv_premieres/'
+      path: '/media/sf_torrents/completed/tv_premieres/'
       queuetotop: no
 
   # This preset is a "global" preset for all movie-related tasks.
@@ -197,12 +197,12 @@ presets:
       - /media/sf_Iomega_HDD/Movies/
       - /media/sf_Iomega_HDD/SDMovies/
       - /media/sf_Iomega_HDD/staging/movies
-      - /media/sf_Iomega_HDD/transmission/
+      - /media/sf_torrents/
     # Download propers, since they will have the same content_filename,
     # lower/non-propers will be overwritten
     proper_movies: yes
     set:
-      path: '/media/sf_Iomega_HDD/transmission/completed/movies/'
+      path: '/media/sf_torrents/completed/movies/'
 
   # Keep all the discover settings in one place
   movies-discover:
