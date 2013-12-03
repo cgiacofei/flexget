@@ -157,11 +157,8 @@ presets:
         quality: webrip+
       from:
         listdir:
-<<<<<<< HEAD
-          - /media/sf_Iomega_HDD/TV Premieres/
-=======
           - '/media/sf_Iomega_HDD/TV Premieres/'
->>>>>>> 6a1d0f32d1614f6475bd94dd2fffd6b1143a45f6
+
     set:
       path: '/media/sf_Iomega_HDD/transmission/completed/tv_premieres/'
       queuetotop: no
@@ -170,13 +167,7 @@ presets:
   # We keep all of the RSS feeds that list movie-related torrents here
   # as well as some other configurations.
   movies-global:
-<<<<<<< HEAD
-    # include: [ private/movies-global.yml ]
-    # I have flexget run every half hour, that's really only necessary for TV Shows
-    interval: 1 hour 
-=======
     interval: 1 hour # I have flexget run every half hour, that's really only necessary for TV Shows
->>>>>>> 6a1d0f32d1614f6475bd94dd2fffd6b1143a45f6
     inputs:
       - rss: { url: 'http://www.torlock.com/movies/rss.xml', silent: yes }     # TorLock (Movies)
       - rss: { url: 'http://torrentz.eu/feed_verified?q=movies', silent: yes } # Torrentz (Verified Movies)
@@ -211,19 +202,7 @@ presets:
     # lower/non-propers will be overwritten
     proper_movies: yes
     set:
-<<<<<<< HEAD
-      # Give folders/files nice names
       path: '/media/sf_Iomega_HDD/transmission/completed/movies/'
-      content_filename: |
-        {{ imdb_name|replace('/', '_')|replace(':', ' -') }} ({{ imdb_year }}) - {{ quality }}
-    # This is a custom plugin, it is part of my rar-unpacking method, it changes
-    # 'movedone' based on the regexp in the key
-    content_sort:
-      '*.rar': '/media/sf_Iomega_HDD/transmission/completed/movies/'
-
-=======
-      path: '/media/sf_Iomega_HDD/transmission/completed/movies/'
->>>>>>> 6a1d0f32d1614f6475bd94dd2fffd6b1143a45f6
 
   # Keep all the discover settings in one place
   movies-discover:
