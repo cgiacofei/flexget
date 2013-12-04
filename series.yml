@@ -9,6 +9,7 @@ series:
     - Almost Human
     - Castle (2009):
         name_regexp: ^castle(.2009)?
+    - Doctor Who
     - Game of Thrones
     - Hannibal
     - Homeland
