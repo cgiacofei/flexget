@@ -6,17 +6,18 @@ series:
       propers: yes
 
   Best:
-    - Person of Interest
-    - Game of Thrones
-    - Homeland
-    - Marvel's Agents of S.H.I.E.L.D.
-    - Justified
-    - The Walking Dead
-    - NCIS
-    - Orphan Black
     - Almost Human
     - Castle (2009):
         name_regexp: ^castle(.2009)?
+    - Game of Thrones
+    - Hannibal
+    - Homeland
+    - Justified
+    - Marvel's Agents of S.H.I.E.L.D.
+    - NCIS
+    - Orphan Black
+    - Person of Interest
+    - The Walking Dead
 
   Better:
     - Tosh.0
