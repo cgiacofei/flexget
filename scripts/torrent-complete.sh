@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Final locations for downloaded files
-TVDIR = "/media/sf_Iomega_HDD/TV Shows"
-PREMDIR = "/media/sf_Iomega_HDD/TV Premieres"
-MOVIEDIR = "/media/sf_Iomega_HDD/Movies"
+TVDIR = "/media/sf_media-server/TV Shows"
+PREMDIR = "/media/sf_media-server/TV Premieres"
+MOVIEDIR = "/media/sf_media-server/Movies"
 
 # Transmission download folders
 TVTOR = "tv_shows"
