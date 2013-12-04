@@ -19,7 +19,7 @@ presets:
       
     # Make sure there's 50GB free before adding more downloads
     free_space:
-      path: /media/sf_Iomega_HDD/
+      path: /media/sf_torrents/
       space: 50000
     # Make sure all filenames are Windows safe (for samba)
     pathscrub: windows
@@ -94,10 +94,8 @@ presets:
     # Prevent from downloading shows that were aquired manually
     # or are currently downloading
     exists_series: 
-      - '/media/sf_Iomega_HDD/TV Shows/'
-      - '/media/sf_Iomega_HDD/TV Premieres/'
-      - '/media/sf_Iomega_HDD/staging/tv_shows/'
-      - '/media/sf_Iomega_HDD/staging/tv_premieres/'
+      - '/media/sf_media-drive/TV Shows/'
+      - '/media/sf_media-drive/TV Premieres/'
       - '/media/sf_torrents/'
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
@@ -157,7 +155,7 @@ presets:
         quality: webrip+
       from:
         listdir:
-          - '/media/sf_Iomega_HDD/TV Premieres/'
+          - '/media/sf_media-drive/TV Premieres/'
 
     set:
       path: '/media/sf_torrents/completed/tv_premieres/'
@@ -194,9 +192,7 @@ presets:
     seen_movies: strict # Don't download movies we've already seen
     # Check for already downloaded or currently downloading movies
     exists_movie:
-      - /media/sf_Iomega_HDD/Movies/
-      - /media/sf_Iomega_HDD/SDMovies/
-      - /media/sf_Iomega_HDD/staging/movies
+      - /media/sf_media-drive/Movies/
       - /media/sf_torrents/
     # Download propers, since they will have the same content_filename,
     # lower/non-propers will be overwritten
@@ -344,8 +340,7 @@ tasks:
     preset: no_global
     accept_all: yes
     listdir:
-      - /media/sf_Iomega_HDD/Movies/
-      - /media/sf_Iomega_HDD/SDMovies/
+      - /media/sf_media-drive/Movies/
     movie_queue: yes
 
   # The next two tasks download the queue from the previous task effectively implementing
