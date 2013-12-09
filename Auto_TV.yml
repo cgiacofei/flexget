@@ -1,0 +1,37 @@
+# All of the TV-related tasks pull in the tv-global preset, this gives
+# all of the necessary rss sources and a few extra configs
+
+# There are 3 My_TV Shows tasks, the first, tries to get the most wanted qualities
+My_TV_Shows:
+priority: 10
+preset:
+  - tv-global
+  - tv-my_shows
+series:
+  settings:
+    Best:
+      target: 720p+ hdtv+
+      timeframe: 5 days
+      quality: 720p+ dvdscr+
+    Better:
+      target: 720p+ dvdscr+
+      timeframe: 3 days
+      quality: 480p+ webrip+
+    Average:
+      target: webrip+
+      timeframe: 12 hours
+      quality: preair+
+
+# Task for the tv-premieres plugin
+Series_Premieres:
+priority: 40
+preset:
+  - tv-global
+  - tv-premieres
+
+# Task for the tv-premieres-track plugin
+Series_Premieres_Track:
+priority: 50
+preset:
+  - tv-global
+  - tv-premieres-track
