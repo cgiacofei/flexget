@@ -5,7 +5,6 @@
 # https://github.com/atlanta800/dotfiles
 
 presets:
-
   global:
     email:
       from: c.giacofei.htpc@gmail.com
@@ -64,8 +63,8 @@ presets:
       torrentz.eu: 5 seconds
     # The Pirate Bay ssl certs always fail
     verify_ssl_certificates: no
-    # Ignore torrents with only magnet links, they don't play well with BT-Guard
     magnets: yes
+    
     transmission:
       host: localhost
       port: 9091
