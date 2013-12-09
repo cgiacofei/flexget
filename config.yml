@@ -7,7 +7,6 @@
 presets:
 
   global:
-    #~ include: [ global.yml ]
     email:
       from: c.giacofei.htpc@gmail.com
       to: c.giacofei@gmail.com
@@ -236,13 +235,13 @@ presets:
 tasks:
   
   # Handles downloading TV and Movie torrents added to a dropbox folder.
-  include: [ Local_Torrents.yml ]
+  include: [ tasks/Local_Torrents.yml ]
   
   # Automatic downloading of Subscribed TV shows and new TV premieres.
-  include: [ Auto_TV.yml ]
+  include: [ tasks/Auto_TV.yml ]
 
   # Automatic downloading of iMDB watchlist items and new releases based on rotten tomatoes info.
-  include: [ Auto_Movies.yml ]
+  include: [ tasks/Auto_Movies.yml ]
 
   # Cleans movies from the movie queue that we already have
   Clean_Movie_Queue:

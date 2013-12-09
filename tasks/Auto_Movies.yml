@@ -1,10 +1,11 @@
 # This task queues all of the movies in my IMDB watchlist
 IMDB_Movie_Queue:
-  include: [ imdb-movie-queue.yml ]
   priority: 100 # Always run before My_Movies task
   preset: no_global
   interval: 2 hours
   imdb_list:
+    username: c.giacofei@gmail.com
+    password: cgiacofei
     list: watchlist
     # auto_remove: [ accepted, rejected ] # keep my watchlist clean
   accept_all: yes
