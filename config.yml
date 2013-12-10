@@ -5,6 +5,7 @@
 # https://github.com/atlanta800/dotfiles
 
 presets:
+
   global:
     email:
       from: c.giacofei.htpc@gmail.com
@@ -17,7 +18,7 @@ presets:
       
     # Make sure there's 50GB free before adding more downloads
     free_space:
-      path: /media/sf_torrents/
+      path: /home/media/torrents/
       space: 50000
     # Make sure all filenames are Windows safe (for samba)
     pathscrub: windows
@@ -63,8 +64,8 @@ presets:
       torrentz.eu: 5 seconds
     # The Pirate Bay ssl certs always fail
     verify_ssl_certificates: no
+    # Ignore torrents with only magnet links, they don't play well with BT-Guard
     magnets: yes
-    
     transmission:
       host: localhost
       port: 9091
@@ -84,7 +85,7 @@ presets:
       - rss: { url: 'http://ezrss.it/feed/', silent: yes }                      # EZRSS
       - rss: { url: 'http://showrss.karmorra.info/feeds/all.rss', silent: yes } # Karmorra (All)
       - rss: { url: 'http://rss.bt-chat.com/?group=3', silent: yes }            # BT-Chat (EZTV)
-      - rss: { url: 'http://rss.thepiratebay.sx/208', silent: yes }            # The Pirate Bay (Highres - TV shows)
+      - rss: { url: 'http://rss.thepiratebay.ac/208', silent: yes }             # The Pirate Bay (Highres - TV shows)
     # Impose reasonable size constraints
     content_size:
       max: 5000
@@ -92,9 +93,9 @@ presets:
     # Prevent from downloading shows that were aquired manually
     # or are currently downloading
     exists_series: 
-      - '/media/sf_media-drive/TV Shows/'
-      - '/media/sf_media-drive/TV Premieres/'
-      - '/media/sf_torrents/'
+      - '/media/media-drive/TV Shows/'
+      - '/media/media-drive/TV Premieres/'
+      - '/home/media/torrents/'
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
 
@@ -105,7 +106,7 @@ presets:
     # Add accepted entries to Transmission, queue them to the top and make sure they
     # end up in the correct folder
     set:
-      path: '/media/sf_torrents/completed/tv_shows/'
+      path: '/home/media/torrents/completed/tv_shows/'
       queuetotop: yes
 
   # I'm always up for new shows, but some genres I just can't stand. This
@@ -141,7 +142,7 @@ presets:
     # Add to deluge, but don't queue to top (My_TV_Shows are more important)
     # and put in a different location
     set:
-      path: '/media/sf_torrents/completed/tv_premieres/'
+      path: '/home/media/torrents/completed/tv_premieres/'
       queuetotop: no
 
   # If a premier was grabbed, keep on tracking it until the directory is (re)moved
@@ -153,10 +154,10 @@ presets:
         quality: webrip+
       from:
         listdir:
-          - '/media/sf_media-drive/TV Premieres/'
+          - '/media/media-drive/TV Premieres/'
 
     set:
-      path: '/media/sf_torrents/completed/tv_premieres/'
+      path: '/home/media/torrents/completed/tv_premieres/'
       queuetotop: no
 
   # This preset is a "global" preset for all movie-related tasks.
@@ -167,7 +168,7 @@ presets:
     inputs:
       - rss: { url: 'http://www.torlock.com/movies/rss.xml', silent: yes }     # TorLock (Movies)
       - rss: { url: 'http://torrentz.eu/feed_verified?q=movies', silent: yes } # Torrentz (Verified Movies)
-      - rss: { url: 'http://rss.thepiratebay.sx/207', silent: yes }           # The Pirate Bay (Highres - Movies)
+      - rss: { url: 'http://rss.thepiratebay.ac/207', silent: yes }           # The Pirate Bay (Highres - Movies)
     # Some feeds might include TV Shows, ignore them
     regexp:
       reject:
@@ -190,13 +191,13 @@ presets:
     seen_movies: strict # Don't download movies we've already seen
     # Check for already downloaded or currently downloading movies
     exists_movie:
-      - /media/sf_media-drive/Movies/
-      - /media/sf_torrents/
+      - /media/media-drive/Movies/
+      - /home/media/torrents/
     # Download propers, since they will have the same content_filename,
     # lower/non-propers will be overwritten
     proper_movies: yes
     set:
-      path: '/media/sf_torrents/completed/movies/'
+      path: '/home/media/torrents/completed/movies/'
 
   # Keep all the discover settings in one place
   movies-discover:
@@ -232,7 +233,56 @@ presets:
 
 # This is where we pull everything together
 tasks:
-  
+
+  # Use a local folder (synced with Dropbox) as a source
+  # I can drop torrents in this folder and they are synced with Dropbox, always
+  # accepted, then the original file is deleted
+  Local_Torrents-TV:
+  priority: 1
+  preset:
+    - tv-global
+    - tv-my_shows
+  disable_builtins: [seen, seen_info_hash]
+  disable_plugin:
+    - inputs
+    - exists_series
+    - regexp
+    - content_size
+    - torrent_alive
+  all_series:
+    parse_only: yes
+  plugin_priority:
+    exec: 0
+  listdir: /home/chris/Dropbox/torrents/TV
+  exec:
+    on_output:
+      for_accepted: rm '/home/chris/Dropbox/torrents/TV/{{title}}.torrent'
+  accept_all: yes
+
+  # Same as above but for movies
+  Local_Torrents-Movies:
+    priority: 2
+    preset:
+      - movies-global
+    disable_builtins: [seen, seen_info_hash]
+    disable_plugin:
+      - inputs
+      - exists_movie
+      - seen_movies
+      - regexp
+      - content_size
+      - torrent_alive
+      - interval
+    # Mark movies as seen
+    movie_queue: yes
+    plugin_priority:
+      exec: 0
+    listdir: /home/chris/Dropbox/torrents/Movies
+    exec:
+      on_output:
+        for_accepted: rm '/home/chris/Dropbox/torrents/Movies/{{title}}'
+    accept_all: yes
+
   # All of the TV-related tasks pull in the tv-global preset, this gives
   # all of the necessary rss sources and a few extra configs
 
@@ -257,6 +307,56 @@ tasks:
           timeframe: 12 hours
           quality: preair+
 
+# This task queues all of the movies in my IMDB watchlist
+IMDB_Movie_Queue:
+  priority: 100 # Always run before My_Movies task
+  preset: no_global
+  interval: 2 hours
+  imdb_list:
+    username: c.giacofei@gmail.com
+    password: cgiacofei
+    list: watchlist
+    # auto_remove: [ accepted, rejected ] # keep my watchlist clean
+  accept_all: yes
+  queue_movies: { force: no } # Output entries to movie queue (with any quality)
+
+  #~ # The next two tasks download the queue from the previous task effectively implementing
+  #~ # a 2 day timeframe for 1080p movies, then falls back to 720p
+  #~ My_Movies-1080p:
+    #~ priority: 110
+    #~ preset:
+      #~ - movies-global
+      #~ - movies-queued
+    #~ quality: 1080p+ bluray+ h264+ dtshd+
+#~ 
+  #~ My_Movies-720p:
+    #~ priority: 120
+    #~ preset:
+      #~ - movies-global
+      #~ - movies-queued
+    #~ quality: 720p+ webdl+ xvid+ !mp3
+    #~ torrent_alive:
+      #~ min_seeds: 5
+    #~ delay: 7 days # Wait 7 days for a 1080p movie before trying downloading 720p
+#~ 
+#~ 
+  #~ # These task implement the movies-auto preset
+  #~ Auto_Movies-1080p:
+    #~ priority: 130
+    #~ quality: 1080p+ bluray+ h264+ dtshd+
+    #~ preset:
+      #~ - movies-global
+      #~ - movies-auto
+#~ 
+  #~ Auto_Movies-720p:
+    #~ priority: 140
+    #~ quality: 720p+ dvdrip+ xvid+ !mp3
+    #~ preset:
+      #~ - movies-global
+      #~ - movies-auto
+    #~ delay: 7 days # Wait 7 days for a 1080p movie before trying downloading 720p
+
+
   # Task for the tv-premieres plugin
   Series_Premieres:
     priority: 40
@@ -278,5 +378,5 @@ tasks:
     preset: no_global
     accept_all: yes
     listdir:
-      - /media/sf_media-drive/Movies/
+      - /media/media-drive/Movies/
     movie_queue: yes
