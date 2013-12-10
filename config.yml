@@ -229,26 +229,26 @@ tasks:
   # accepted, then the original file is deleted                                    #
   #--------------------------------------------------------------------------------#  
   Local_Torrents-TV:
-  priority: 1
-  preset:
-    - tv-global
-    - tv-my_shows
-  disable_builtins: [seen, seen_info_hash]
-  disable_plugin:
-    - inputs
-    - exists_series
-    - regexp
-    - content_size
-    - torrent_alive
-  all_series:
-    parse_only: yes
-  plugin_priority:
-    exec: 0
-  listdir: /home/media/Dropbox/torrents/TV
-  exec:
-    on_output:
-      for_accepted: rm '/home/media/Dropbox/torrents/TV/{{title}}.torrent'
-  accept_all: yes
+    priority: 1
+    preset:
+      - tv-global
+      - tv-my_shows
+    disable_builtins: [seen, seen_info_hash]
+    disable_plugin:
+      - inputs
+      - exists_series
+      - regexp
+      - content_size
+      - torrent_alive
+    all_series:
+      parse_only: yes
+    plugin_priority:
+      exec: 0
+    listdir: /home/media/Dropbox/torrents/TV
+    exec:
+      on_output:
+        for_accepted: rm '/home/media/Dropbox/torrents/TV/{{title}}.torrent'
+    accept_all: yes
 
   # Same as above but for movies
   Local_Torrents-Movies:
@@ -365,7 +365,6 @@ tasks:
     preset:
       - tv-global
       - tv-premieres-track
-
 
   # Cleans movies from the movie queue that we already have
   Clean_Movie_Queue:
