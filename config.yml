@@ -5,7 +5,6 @@
 # https://github.com/atlanta800/dotfiles
 
 presets:
-
   global:
     email:
       from: c.giacofei.htpc@gmail.com
@@ -69,8 +68,6 @@ presets:
     transmission:
       host: localhost
       port: 9091
-      # username: transmission
-      # password: Microe01
       removewhendone: True
       ratio: .1
 
@@ -253,10 +250,10 @@ tasks:
     parse_only: yes
   plugin_priority:
     exec: 0
-  listdir: /home/chris/Dropbox/torrents/TV
+  listdir: /home/media/Dropbox/torrents/TV
   exec:
     on_output:
-      for_accepted: rm '/home/chris/Dropbox/torrents/TV/{{title}}.torrent'
+      for_accepted: rm '/home/media/Dropbox/torrents/TV/{{title}}.torrent'
   accept_all: yes
 
   # Same as above but for movies
@@ -277,10 +274,10 @@ tasks:
     movie_queue: yes
     plugin_priority:
       exec: 0
-    listdir: /home/chris/Dropbox/torrents/Movies
+    listdir: /home/media/Dropbox/torrents/Movies
     exec:
       on_output:
-        for_accepted: rm '/home/chris/Dropbox/torrents/Movies/{{title}}'
+        for_accepted: rm '/home/media/Dropbox/torrents/Movies/{{title}}'
     accept_all: yes
 
   # All of the TV-related tasks pull in the tv-global preset, this gives
