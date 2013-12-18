@@ -3,9 +3,11 @@
 # Modified from:
 # Jeff Wilson <jeff@jeffalwilson.com>
 # https://github.com/atlanta800/dotfiles
+# RegExr (http://www.gskinner.com/RegExr/) is a great tool for testing regexes
 
 presets:
   global:
+  
     email:
       from: c.giacofei.htpc@gmail.com
       to: c.giacofei@gmail.com
@@ -15,14 +17,18 @@ presets:
       smtp_port: 587
       smtp_tls: yes
       
-    # Make sure there's 50GB free before adding more downloads
+    transmission:
+      host: localhost
+      port: 9091
+      removewhendone: True
+      ratio: .1
+      
     free_space:
       path: /home/media/torrents/
       space: 50000
-    # Make sure all filenames are Windows safe (for samba)
+    
     pathscrub: windows
-    # Most of these are the results of problem torrents I kept seeing still pop up, so I wholesale blocked them
-    # RegExr (http://www.gskinner.com/RegExr/) is a great tool for testing regexes
+
     regexp:
       reject:
         - (s|d)ub(s|bed)?\b: {from: title}                    # Block any subbed/dubbed/etc videos
@@ -39,12 +45,11 @@ presets:
         - \[TNTVillage\]: {from: title}
         - \[facepalm\]: {from: title}
         - \bASAP\b: {from: title}
-    # Require at least 40 seeds of any torrent
+
     torrent_alive:
       min_seeds: 10
       reject_for: 3 hours
-    # Filter by filenames. Allow multiple video types and rar packs (but note if there is just a
-    # single .rar file it won't be accepted)
+
     content_filter:
       require:
         - '*.avi'
@@ -56,21 +61,15 @@ presets:
       reject:
         - 'password.txt'
         - '*.wmv'
-    # Limit the frequency of requests to domains so they don't complain about
-    # using a bot
+
     domain_delay:
       bt-chat.com: 5 seconds
       torrentz.eu: 5 seconds
+      
     # The Pirate Bay ssl certs always fail
     verify_ssl_certificates: no
-    # Ignore torrents with only magnet links, they don't play well with BT-Guard
     magnets: yes
-    transmission:
-      host: localhost
-      port: 9091
-      removewhendone: True
-      ratio: .1
-
+    
   # This preset is a "global" preset for all TV-related tasks.
   # We keep all of the RSS feeds that list tv-related torrents here
   # as well as where to check existing shows.
