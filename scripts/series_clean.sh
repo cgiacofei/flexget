@@ -1,6 +1,6 @@
 #! /bin/bash
 
-find "/media/media-drive/TV Shows/The Colbert Report"/Season*  -mtime +14 -type f -delete
-find "/media/media-drive/TV Shows/The Daily Show with Jon Stewart"/Season*  -mtime +14 -type f -delete
+find "/media/media-drive/TV Shows/The Colbert Report"/Season* -type f -mtime +14 -exec rm {} \;
+find "/media/media-drive/TV Shows/The Daily Show with Jon Stewart"/Season* -type f -mtime +14 -exec rm {} \;
 
-find "/media/media-drive/TV Shows" -type d -empty -delete
+find "/media/media-drive/TV Shows" -type d -empty -exec rm {} \;
