@@ -12,6 +12,7 @@ series:
     - Doctor Who
     - Game of Thrones
     - Hannibal
+    - Helix
     - Homeland
     - Justified
     - Marvel's Agents of S.H.I.E.L.D.
@@ -19,13 +20,18 @@ series:
     - Orphan Black
     - Person of Interest
     - The Walking Dead
-
+    
   Better:
     - Tosh.0
+    - Enlisted
 
   Average:
+    - The Bachelor
+    - The Bachelorette
+    - The Colbert Report:
+        timeframe: 2 hours
     - The Daily Show with Jon Stewart:
         name_regexp: ^the.daily.show(.with.jon.stewart)?
         timeframe: 2 hours
-    - The Colbert Report:
-        timeframe: 2 hours
+
+
