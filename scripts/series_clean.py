@@ -21,4 +21,5 @@ def delete_old_files(dirpath, max_age):
             except:
                 pass
 
-delete_old_files("/home/chris", 1000)
+for show in s_clean.items:
+    delete_old_files(os.join(tv_root,show,"Season"), s_clean[show])
