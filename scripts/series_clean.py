@@ -29,7 +29,7 @@ def delete_old_files(dirpath, max_age, extra=''):
             file_name = os.path.join(root, old_thing)
             
             try:
-                file_age = present - os.path.getmtime(file_name))
+                file_age = present - os.path.getmtime(file_name)
                 if (file_age > max_age and extra in root:
                     os.remove(file_name)
             except:
