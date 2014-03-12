@@ -7,7 +7,7 @@
 
 presets:
   global:
-  
+
     #~ email:
       #~ from: c.giacofei.htpc@gmail.com
       #~ to: c.giacofei@gmail.com
@@ -16,17 +16,17 @@ presets:
       #~ smtp_host: smtp.gmail.com
       #~ smtp_port: 587
       #~ smtp_tls: yes
-      
+
     transmission:
       host: localhost
       port: 9091
       removewhendone: True
       ratio: .1
-      
+
     free_space:
       path: /home/media/torrents/
       space: 50000
-    
+
     pathscrub: windows
 
     regexp:
@@ -65,24 +65,24 @@ presets:
     domain_delay:
       bt-chat.com: 5 seconds
       torrentz.eu: 5 seconds
-      
+
     # The Pirate Bay ssl certs always fail
     verify_ssl_certificates: no
     magnets: yes
-    
+
   # This preset is a "global" preset for all TV-related tasks.
   # We keep all of the RSS feeds that list tv-related torrents here
   # as well as where to check existing shows.
   tv-global:
     include: [ input/tv_input.yml ]
-    
+
     # Impose reasonable size constraints
     content_size:
       max: 5000
       min: 20
     # Prevent from downloading shows that were aquired manually
     # or are currently downloading
-    exists_series: 
+    exists_series:
       - '/media/media-drive/TV Shows/'
       - '/media/media-drive/TV Premieres/'
       - '/home/media/torrents/'
@@ -93,7 +93,7 @@ presets:
   tv-my_shows:
     # I've broken out my series lists into a seperate yml to clean up my config
     include: [ series.yml ]
-    
+
     # Add accepted entries to Transmission, and queue them to the top
     set:
       path: '/home/media/torrents/completed/tv_shows/'
@@ -124,7 +124,7 @@ presets:
       - "tvdb_genres == ['Drama']": reject
       # Block premieres that weren't within the last 60 days
       - tvdb_first_air_date != None and tvdb_first_air_date < now - timedelta(days=60): reject
-    
+
     # Accept all series permieres
     series_premiere:
       timeframe: 1 days
@@ -155,9 +155,9 @@ presets:
   # as well as some other configurations.
   movies-global:
     interval: 1 hour # I have flexget run every half hour, that's really only necessary for TV Shows
-    
+
     include: [ input/movie_input.yml ]
-    
+
     # Some feeds might include TV Shows, ignore them
     regexp:
       reject:
@@ -226,7 +226,7 @@ tasks:
   # Use a local folder (synced with Dropbox) as a source                           #
   # I can drop torrents in this folder and they are synced with Dropbox, always    #
   # accepted, then the original file is deleted                                    #
-  #--------------------------------------------------------------------------------#  
+  #--------------------------------------------------------------------------------#
   Local_Torrents-TV:
     priority: 1
     preset:
@@ -272,7 +272,7 @@ tasks:
       on_output:
         for_accepted: rm '/home/media/Dropbox/torrents/Movies/{{title}}'
     accept_all: yes
-  
+
   #--------------------------------------------------------------------------------#
   # All of the TV-related tasks pull in the tv-global preset, this gives           #
   # all of the necessary rss sources and a few extra configs                       #
@@ -300,13 +300,14 @@ tasks:
   #--------------------------------------------------------------------------------#
   # Movie download tasks                                                           #
   #--------------------------------------------------------------------------------#
-  
+
   # This task queues all of the movies in my IMDB watchlist
   IMDB_Movie_Queue:
     priority: 100 # Always run before My_Movies task
     preset: no_global
     interval: 2 hours
     imdb_list:
+      user_id: ur16715479
       username: c.giacofei@gmail.com
       password: cgiacofei
       list: watchlist
