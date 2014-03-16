@@ -5,7 +5,7 @@
 # https://github.com/atlanta800/dotfiles
 # RegExr (http://www.gskinner.com/RegExr/) is a great tool for testing regexes
 
-presets:
+templates:
   global:
 
     #~ email:
@@ -137,7 +137,7 @@ presets:
 
   # If a premier was grabbed, keep on tracking it until the directory is (re)moved
   tv-premieres-track:
-    import_series:
+    configure_series:
       settings:
         target: 720p+ hdtv+
         timeframe: 3 days
@@ -202,7 +202,7 @@ presets:
   movies-auto:
     interval: 2 hours # run less often since we'll be manuall searching sites
     my_movie_filter: yes
-    preset: movies-discover
+    template: movies-discover
     discover:
       what:
         - rottentomatoes_list:
@@ -215,7 +215,7 @@ presets:
   # This preset uses the movie queue to find movies from various sources
   movies-queued:
     movie_queue: yes
-    preset: movies-discover
+    template: movies-discover
     discover:
       what:
         - emit_movie_queue: yes
@@ -229,7 +229,7 @@ tasks:
   #--------------------------------------------------------------------------------#
   Local_Torrents-TV:
     priority: 1
-    preset:
+    template:
       - tv-global
       - tv-my_shows
     disable_builtins: [seen, seen_info_hash]
@@ -252,7 +252,7 @@ tasks:
   # Same as above but for movies
   Local_Torrents-Movies:
     priority: 2
-    preset:
+    template:
       - movies-global
     disable_builtins: [seen, seen_info_hash]
     disable_plugin:
@@ -279,7 +279,7 @@ tasks:
   #--------------------------------------------------------------------------------#
   My_TV_Shows:
     priority: 10
-    preset:
+    template:
       - tv-global
       - tv-my_shows
     series:
@@ -304,7 +304,7 @@ tasks:
   # This task queues all of the movies in my IMDB watchlist
   IMDB_Movie_Queue:
     priority: 100 # Always run before My_Movies task
-    preset: no_global
+    template: no_global
     interval: 2 hours
     imdb_list:
       user_id: ur16715479
@@ -319,14 +319,14 @@ tasks:
   # a 2 day timeframe for 1080p movies, then falls back to 720p
   My_Movies-1080p:
     priority: 110
-    preset:
+    template:
       - movies-global
       - movies-queued
     quality: 1080p+ bluray+ h264+ dtshd+
 
   My_Movies-720p:
     priority: 120
-    preset:
+    template:
       - movies-global
       - movies-queued
     quality: 720p+ webdl+ xvid+ !mp3
@@ -339,14 +339,14 @@ tasks:
   Auto_Movies-1080p:
     priority: 130
     quality: 1080p+ bluray+ h264+ dtshd+
-    preset:
+    template:
       - movies-global
       - movies-auto
 
   Auto_Movies-720p:
     priority: 140
     quality: 720p+ dvdrip+ xvid+ !mp3
-    preset:
+    template:
       - movies-global
       - movies-auto
     delay: 7 days # Wait 7 days for a 1080p movie before trying downloading 720p
@@ -355,21 +355,21 @@ tasks:
   # Task for the tv-premieres plugin
   Series_Premieres:
     priority: 40
-    preset:
+    template:
       - tv-global
       - tv-premieres
 
   # Task for the tv-premieres-track plugin
   Series_Premieres_Track:
     priority: 50
-    preset:
+    template:
       - tv-global
       - tv-premieres-track
 
   # Cleans movies from the movie queue that we already have
   Clean_Movie_Queue:
     interval: 1 week
-    preset: no_global
+    template: no_global
     accept_all: yes
     listdir:
       - /media/media-drive/Movies/
