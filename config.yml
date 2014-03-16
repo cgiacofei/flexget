@@ -200,20 +200,20 @@ templates:
             sort_by: seeds
       what: [ filler: yes ]
       
-  # This preset runs feeds through my very specific custom filter
-  movies-auto:
-    interval: 2 hours # run less often since we'll be manuall searching sites
-    my_movie_filter: yes
-    template: movies-discover
-    discover:
-      from: [ filler: yes ]
-      what:
-        - rottentomatoes_list:
-            dvds:
-              - top_rentals
-              - new_releases
-    set:
-      queuetotop: no
+  #~ # This preset runs feeds through my very specific custom filter
+  #~ movies-auto:
+    #~ interval: 2 hours # run less often since we'll be manuall searching sites
+    #~ my_movie_filter: yes
+    #~ template: movies-discover
+    #~ discover:
+      #~ from: [ filler: yes ]
+      #~ what:
+        #~ - rottentomatoes_list:
+            #~ dvds:
+              #~ - top_rentals
+              #~ - new_releases
+    #~ set:
+      #~ queuetotop: no
 
   # This preset uses the movie queue to find movies from various sources
   movies-queued:
