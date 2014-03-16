@@ -206,7 +206,7 @@ templates:
     my_movie_filter: yes
     template: movies-discover
     discover:
-      from: [ filler: yes 
+      from: [ filler: yes ]
       what:
         - rottentomatoes_list:
             dvds:
