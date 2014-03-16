@@ -192,17 +192,21 @@ templates:
     discover:
       from:
         - flexget_archive: yes
-        - torrentz: verified
+        - torrentz:
+            reputation: verified
+            extra_terms: "movie* hd"
         - piratebay:
             category: 'highres movies'
             sort_by: seeds
-
+      what: [ filler: yes ]
+      
   # This preset runs feeds through my very specific custom filter
   movies-auto:
     interval: 2 hours # run less often since we'll be manuall searching sites
     my_movie_filter: yes
     template: movies-discover
     discover:
+      from: [ filler: yes 
       what:
         - rottentomatoes_list:
             dvds:
@@ -216,6 +220,7 @@ templates:
     movie_queue: yes
     template: movies-discover
     discover:
+      from: [ filler: yes ]
       what:
         - emit_movie_queue: yes
 
