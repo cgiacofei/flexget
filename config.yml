@@ -170,7 +170,7 @@ templates:
       proper_movies: 171
     # Impose reasonable size constraints
     content_size:
-      max: 15000
+      max: 6000
       min: 1000
     imdb_lookup: yes
     # A Rotten Tomatoes API key is set in my private config, but I'm leaving
