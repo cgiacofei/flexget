@@ -7,23 +7,32 @@ series:
 
   Best:
     - Almost Human
+    - The Assets
+    - Bitten
+    - Black Sails
     - Castle (2009):
         name_regexp: ^castle(.2009)?
-    - Doctor Who
+    - Chicago PD
     - Game of Thrones
     - Hannibal
     - Helix
     - Homeland
+    - House of Cards (US)
+    - Intelligence US
     - Justified
-    - Marvel's Agents of S.H.I.E.L.D.
+    - Killer Women
+    - Marvels Agents Of S.H.I.E.L.D.:
+          name_regexp: ^marvel(')?s.agents.of.(s.h.i.e.l.d.?|shield)
     - NCIS
     - Orphan Black
     - Person of Interest
+    - True Detective
     - The Walking Dead
-    
+
   Better:
     - Tosh.0
     - Enlisted
+    - Doctor Who
 
   Average:
     - The Bachelor
