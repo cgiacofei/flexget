@@ -199,7 +199,7 @@ templates:
             category: 'highres movies'
             sort_by: seeds
       what: [ filler: yes ]
-      
+
   # This preset runs feeds through my very specific custom filter
   movies-auto:
     interval: 2 hours # run less often since we'll be manuall searching sites
@@ -378,10 +378,3 @@ tasks:
     listdir:
       - /media/media-drive/Movies/
     movie_queue: yes
-  
-  # Clear completed downloads from the transmission queue
-  clean_transmission:
-    host: localhost
-    port: 9091
-    finished_for: 2 hours
-    min_ratio: 1
