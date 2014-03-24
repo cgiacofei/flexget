@@ -14,6 +14,8 @@ series:
         name_regexp: ^castle(.2009)?
     - Chicago PD
     - Game of Thrones
+    - Grey's Anatomy:
+        name_regexp: Grey'?s.Anatomy
     - Hannibal
     - Helix
     - Homeland
@@ -33,7 +35,8 @@ series:
     - Tosh.0
     - Enlisted
     - Doctor Who
-
+    - Melissa and Joey
+    
   Average:
     - The Bachelor
     - The Bachelorette
