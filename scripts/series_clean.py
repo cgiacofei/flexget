@@ -21,6 +21,7 @@ torrent_location = {'tv_shows':30,
 
 test_dir = '/home/chris/testing'
 
+log_location = 'home/media'
 log_name = 'clean.log'
 
 def delete_old_files(dirpath, max_age, extra=''):
@@ -28,7 +29,7 @@ def delete_old_files(dirpath, max_age, extra=''):
     present = time.time()
     timestamp = datetime.datetime.fromtimestamp(present).strftime('%Y-%m-%d %H:%M:%S')
 
-    with open(log_name, "a") as myfile:
+    with open(os.path.join(log_location,log_name), "a") as myfile:
         myfile.write('Checking files in ' + dirpath + ' and removing older than ' + str(max_age/86400) + ' days\n')
 
     for root, dirs, files in os.walk(dirpath):
