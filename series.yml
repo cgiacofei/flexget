@@ -19,6 +19,7 @@ series:
     - Helix
     - Homeland
     - House of Cards (US)
+        name_regexp: ^house.of.cards(.US)?
     - Intelligence US
     - Justified
     - Killer Women
