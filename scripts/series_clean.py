@@ -21,7 +21,7 @@ torrent_location = {'tv_shows':30,
 
 test_dir = '/home/chris/testing'
 
-log_location = 'home/media'
+log_location = '/home/media'
 log_name = 'clean.log'
 
 def delete_old_files(dirpath, max_age, extra=''):
