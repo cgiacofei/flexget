@@ -18,7 +18,8 @@ series:
     - Hannibal
     - Helix
     - Homeland
-    - House of Cards (US)
+    - House of Cards (2013)
+        name_regexp: ^house.of.cards(.2013)?
     - Intelligence US
     - Justified
     - Killer Women
