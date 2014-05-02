@@ -40,7 +40,7 @@ def delete_old_files(dirpath, max_age, extra=''):
                 file_age = present - os.path.getmtime(file_name)
                 if file_age > max_age and extra in root:
                     os.remove(file_name)
-                    with open(log_name, "a") as myfile:
+                    with open(os.path.join(log_location,log_name), "a") as myfile:
                         output = '%s --- Age %03d days | Removing: %s\n' % (timestamp, int(file_age)/86400, file_name)
                         myfile.write(output)
                         myfile.write(' Age: ' + str(int(file_age)/86400) + ' days | Removing: ' + file_name + '\n')
