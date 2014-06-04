@@ -49,5 +49,5 @@ series:
     - The Daily Show with Jon Stewart:
         name_regexp: ^the.daily.show(.with.jon.stewart)?
         timeframe: 2 hours
-
+    - Last Week Tonight with John Oliver
 
