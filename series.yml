@@ -6,6 +6,7 @@ series:
       propers: yes
 
   Best:
+    - 24
     - Almost Human
     - Bitten
     - Black Sails
@@ -19,7 +20,6 @@ series:
     - Helix
     - Homeland
     - House of Cards (2013)
-        name_regexp: ^house.of.cards(.2013)?
     - Intelligence US
     - Justified
     - The Killing
@@ -32,12 +32,15 @@ series:
     - The Walking Dead
 
   Better:
+    - About a Boy
     - Cougar Town
     - Doctor Who
+    - Growing up Fisher
     - Melissa & Joey
+    - Mixology
     - Suburgatory
     - Tosh.0
-   
+
   Average:
     - The Bachelor
     - The Bachelorette
@@ -46,5 +49,5 @@ series:
     - The Daily Show with Jon Stewart:
         name_regexp: ^the.daily.show(.with.jon.stewart)?
         timeframe: 2 hours
-
+    - Last Week Tonight with John Oliver
 
