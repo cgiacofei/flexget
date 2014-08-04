@@ -312,8 +312,8 @@ tasks:
     interval: 2 hours
     imdb_list:
       user_id: ur16715479
-      username: c.giacofei@gmail.com
-      password: cgiacofei
+      #username: c.giacofei@gmail.com
+      #password: cgiacofei
       list: watchlist
       # auto_remove: [ accepted, rejected ] # keep my watchlist clean
     accept_all: yes
