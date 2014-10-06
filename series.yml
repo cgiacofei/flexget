@@ -13,6 +13,7 @@ series:
     - Castle (2009):
         name_regexp: ^castle(.2009)?
     - Chicago PD
+    - Forever
     - Game of Thrones
     - Grey's Anatomy:
         name_regexp: Grey'?s.Anatomy
@@ -20,6 +21,7 @@ series:
     - Helix
     - Homeland
     - House of Cards (2013)
+    - How to Get Away With Murder
     - Intelligence US
     - Justified
     - The Killing
