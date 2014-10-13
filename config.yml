@@ -61,12 +61,14 @@ templates:
         - 'password.txt'
         - '*.wmv'
 
-    domain_delay:
-      bt-chat.com: 5 seconds
-      torrentz.eu: 5 seconds
+      domain_delay:
+        www.torrentleech.org: 10 seconds
+        rss.torrentleech.org: 10 minutes
+        bt-chat.com: 5 seconds
+        torrentz.eu: 10 seconds
+      # The Pirate Bay ssl certs always fail
+      verify_ssl_certificates: no
 
-    # The Pirate Bay ssl certs always fail
-    verify_ssl_certificates: no
     magnets: yes
 
   # This preset is a "global" preset for all TV-related tasks.
