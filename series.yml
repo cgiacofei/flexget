@@ -7,7 +7,6 @@ series:
 
   Best:
     - 24
-    - Almost Human
     - Bitten
     - Black Sails
     - Castle (2009):
@@ -22,9 +21,7 @@ series:
     - Homeland
     - House of Cards (2013)
     - How to Get Away With Murder
-    - Intelligence US
     - Justified
-    - The Killing
     - Marvels Agents Of S.H.I.E.L.D.:
           name_regexp: ^marvel(')?s.agents.of.(s.h.i.e.l.d.?|shield)
     - NCIS
@@ -46,8 +43,6 @@ series:
     - Suburgatory
     - Tosh.0
     - Manhattan Love Story
-    - Forever
-    - How to Get Away With Murder
 
   Average:
     - The Bachelor
