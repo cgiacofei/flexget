@@ -5,6 +5,8 @@
 # https://github.com/atlanta800/dotfiles
 # RegExr (http://www.gskinner.com/RegExr/) is a great tool for testing regexes
 
+secrets: secretfile.yml
+
 templates:
   global:
 
@@ -20,7 +22,9 @@ templates:
     transmission:
       host: localhost
       port: 9091
-      ratio: .1
+      ratio: 1
+      main_file_only: yes
+      include_subs: yes
 
     free_space:
       path: /home/media/torrents/
@@ -62,8 +66,6 @@ templates:
         - '*.wmv'
 
     domain_delay:
-      www.torrentleech.org: 10 seconds
-      rss.torrentleech.org: 10 minutes
       bt-chat.com: 5 seconds
       torrentz.eu: 10 seconds
     # The Pirate Bay ssl certs always fail
@@ -380,3 +382,12 @@ tasks:
     listdir:
       - /media/media-drive/Movies/
     movie_queue: yes
+
+  # Clear transmission
+  Clean_Transmission:
+    host: '{{ secrets.transmission.host }}'
+    port: '{{ secrets.transmission.port }}'
+    username: '{{ secrets.transmission.username }}'
+    password: '{{ secrets.transmission.password }}'
+    finished_for: 3 hours
+    min_ratio: 1
