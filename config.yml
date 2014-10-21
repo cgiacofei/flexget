@@ -20,8 +20,10 @@ templates:
       #~ smtp_tls: yes
 
     transmission:
-      host: localhost
-      port: 9091
+      host: http://toffee.whatbox.ca
+      port: 52953
+      username: cgiacofei
+      password: EXBLAE0oAC184iLOkO0h
       ratio: 1
       main_file_only: yes
       include_subs: yes
@@ -385,9 +387,9 @@ tasks:
 
   # Clear transmission
   Clean_Transmission:
-    host: '{{ secrets.transmission.host }}'
-    port: '{{ secrets.transmission.port }}'
-    username: '{{ secrets.transmission.username }}'
-    password: '{{ secrets.transmission.password }}'
+    host: http://toffee.whatbox.ca
+    port: 52953
+    username: cgiacofei
+    password: EXBLAE0oAC184iLOkO0h
     finished_for: 3 hours
     min_ratio: 1
