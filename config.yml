@@ -21,7 +21,7 @@ templates:
 
     transmission:
       host: http://toffee.whatbox.ca
-      port: 52953
+      port: 21772
       username: cgiacofei
       password: EXBLAE0oAC184iLOkO0h
       ratio: 1
@@ -386,10 +386,11 @@ tasks:
     movie_queue: yes
 
   # Clear transmission
-  Clean_Transmission:
-    host: http://toffee.whatbox.ca
-    port: 52953
-    username: cgiacofei
-    password: EXBLAE0oAC184iLOkO0h
-    finished_for: 3 hours
-    min_ratio: 1
+  Clear_Torrents:
+    clean_transmission:
+      host: http://toffee.whatbox.ca
+      port: 21772
+      username: cgiacofei
+      password: EXBLAE0oAC184iLOkO0h
+      finished_for: 3 hours
+      min_ratio: 1
