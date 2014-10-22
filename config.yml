@@ -390,15 +390,15 @@ tasks:
         Best:
           target: 720p+ hdtv+
           timeframe: 5 days
-          quality: 720p+ dvdscr+ dtshd|dts|dd5.1
+          quality: 720p+ dvdscr+
         Better:
           target: 720p+ dvdscr+
           timeframe: 3 days
-          quality: 480p+ webrip+ dtshd|dts|dd5.1
+          quality: 480p+ webrip+
         Average:
           target: webrip+
           timeframe: 12 hours
-          quality: preair+ dtshd|dts|dd5.1
+          quality: preair+
 
   Andrea_TV_Shows:
     priority: 12
