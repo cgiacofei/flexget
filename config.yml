@@ -21,7 +21,7 @@ templates:
 
     transmission:
       host: '{{ secrets.transmission.host }}'
-      port: '{{ secrets.transmission.port }}'
+      port: 21772
       username: '{{ secrets.transmission.username }}'
       password: '{{ secrets.transmission.password }}'
       ratio: 1
@@ -389,7 +389,7 @@ tasks:
   Clear_Torrents:
     clean_transmission:
       host: '{{ secrets.transmission.host }}'
-      port: '{{ secrets.transmission.port }}'
+      port: 21772
       username: '{{ secrets.transmission.username }}'
       password: '{{ secrets.transmission.password }}'
       finished_for: 3 hours
