@@ -10,14 +10,14 @@ secrets: secretfile.yml
 templates:
   global:
 
-    #~ email:
-      #~ from: c.giacofei.htpc@gmail.com
-      #~ to: c.giacofei@gmail.com
-      #~ smtp_username : c.giacofei.htpc
-      #~ smtp_password : Microe01
-      #~ smtp_host: smtp.gmail.com
-      #~ smtp_port: 587
-      #~ smtp_tls: yes
+    email:
+      from: c.giacofei.htpc@gmail.com
+      to: c.giacofei@gmail.com
+      smtp_username : c.giacofei.htpc
+      smtp_password : BZWiMf1Vx1Q9o0V9EtGG
+      smtp_host: smtp.gmail.com
+      smtp_port: 587
+      smtp_tls: yes
 
     transmission:
       host: '{{ secrets.transmission.host }}'
