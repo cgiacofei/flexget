@@ -21,7 +21,9 @@ templates:
 
     transmission:
       host: '{{ secrets.transmission.host }}'
-      port: '{{ secrets.transmission.port }}'
+      port: 21772
+      username: '{{ secrets.transmission.username }}'
+      password: '{{ secrets.transmission.password }}'
       ratio: 1
       main_file_only: yes
       include_subs: yes
@@ -99,7 +101,7 @@ templates:
 
     # Add accepted entries to Transmission, and queue them to the top
     set:
-      path: '/home/cgiacofei/files/completed/completed/tv_shows/'
+      path: '/home/cgiacofei/torrents/completed/completed/tv_shows/'
       queuetotop: yes
 
   ################################################
@@ -111,7 +113,7 @@ templates:
 
     # Add accepted entries to Transmission, and queue them to the top
     set:
-      path: '/home/cgiacofei/files/completed/completed/andrea_tv/'
+      path: '/home/cgiacofei/torrents/completed/completed/andrea_tv/'
       queuetotop: yes
 
   # I'm always up for new shows, but some genres I just can't stand. This
@@ -147,7 +149,7 @@ templates:
     # Add to deluge, but don't queue to top (My_TV_Shows are more important)
     # and put in a different location
     set:
-      path: '/home/cgiacofei/files/completed/completed/tv_premieres/'
+      path: '/home/cgiacofei/torrents/completed/tv_premieres/'
       queuetotop: no
 
   # If a premier was grabbed, keep on tracking it until the directory is (re)moved
@@ -162,7 +164,7 @@ templates:
           - '/media/media-drive/TV Premieres/'
 
     set:
-      path: '/home/cgiacofei/files/completed/completed/tv_premieres/'
+      path: '/home/cgiacofei/torrents/completed/tv_premieres/'
       queuetotop: no
 
   # This preset is a "global" preset for all movie-related tasks.
@@ -201,7 +203,7 @@ templates:
     # lower/non-propers will be overwritten
     proper_movies: yes
     set:
-      path: '/home/cgiacofei/files/completed/movies/'
+      path: '/home/cgiacofei/torrents/completed/movies/'
 
   ################################################
   # This is a preset for kids movie downloads.
@@ -237,7 +239,7 @@ templates:
     # lower/non-propers will be overwritten
     proper_movies: yes
     set:
-      path: '/home/cgiacofei/files/completed/andrea_movies/'
+      path: '/home/cgiacofei/torrents/completed/andrea_movies/'
 
   # Keep all the discover settings in one place
   movies-discover:
@@ -408,15 +410,15 @@ tasks:
         Best:
           target: 720p+ hdtv+
           timeframe: 5 days
-          quality: 720p+ dvdscr+ dtshd|dts|dd5.1
+          quality: 720p+ dvdscr+
         Better:
           target: 720p+ dvdscr+
           timeframe: 3 days
-          quality: 480p+ webrip+ dtshd|dts|dd5.1
+          quality: 480p+ webrip+
         Average:
           target: webrip+
           timeframe: 12 hours
-          quality: preair+ dtshd|dts|dd5.1
+          quality: preair+
 
   #--------------------------------------------------------------------------------#
   # Movie download tasks                                                           #
@@ -460,14 +462,14 @@ tasks:
     quality: 1080p+ bluray+ h264+ dtshd|dts|dd5.1
     template:
       - movies-global
-      #~ - movies-auto
+      - movies-auto
 
   Auto_Movies-720p:
     priority: 140
     quality: 720p+ dvdrip+ xvid+ dtshd|dts|dd5.1
     template:
       - movies-global
-      #~ - movies-auto
+      - movies-auto
     delay: 7 days # Wait 7 days for a 1080p movie before trying downloading 720p
 
 
@@ -495,10 +497,12 @@ tasks:
     movie_queue: yes
 
   # Clear transmission
-  Clean_Transmission:
-    host: '{{ secrets.transmission.host }}'
-    port: '{{ secrets.transmission.port }}'
-    username: '{{ secrets.transmission.username }}'
-    password: '{{ secrets.transmission.password }}'
-    finished_for: 3 hours
-    min_ratio: 1
+  Clear_Torrents:
+    clean_transmission:
+      host: '{{ secrets.transmission.host }}'
+      port: 21772
+      username: '{{ secrets.transmission.username }}'
+      password: '{{ secrets.transmission.password }}'
+      finished_for: 3 hours
+      min_ratio: 1
+      delete_files: yes
