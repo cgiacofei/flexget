@@ -101,7 +101,7 @@ templates:
 
     # Add accepted entries to Transmission, and queue them to the top
     set:
-      path: '/home/cgiacofei/files/completed/tv_shows/'
+      path: '/home/cgiacofei/torrents/completed/tv_shows/'
       queuetotop: yes
 
   # I'm always up for new shows, but some genres I just can't stand. This
@@ -137,7 +137,7 @@ templates:
     # Add to deluge, but don't queue to top (My_TV_Shows are more important)
     # and put in a different location
     set:
-      path: '/home/cgiacofei/files/completed/tv_premieres/'
+      path: '/home/cgiacofei/torrents/completed/tv_premieres/'
       queuetotop: no
 
   # If a premier was grabbed, keep on tracking it until the directory is (re)moved
@@ -152,7 +152,7 @@ templates:
           - '/media/media-drive/TV Premieres/'
 
     set:
-      path: '/home/cgiacofei/files/completed/tv_premieres/'
+      path: '/home/cgiacofei/torrents/completed/tv_premieres/'
       queuetotop: no
 
   # This preset is a "global" preset for all movie-related tasks.
@@ -191,7 +191,7 @@ templates:
     # lower/non-propers will be overwritten
     proper_movies: yes
     set:
-      path: '/home/cgiacofei/files/completed/movies/'
+      path: '/home/cgiacofei/torrents/completed/movies/'
 
   # Keep all the discover settings in one place
   movies-discover:
