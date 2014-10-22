@@ -386,11 +386,12 @@ tasks:
     movie_queue: yes
 
   # Clear transmission
-  #Clear_Torrents:
-  #  clean_transmission:
-  #    host: '{{ secrets.transmission.host }}'
-  #    port: 21772
-  #    username: '{{ secrets.transmission.username }}'
-  #    password: '{{ secrets.transmission.password }}'
-  #    finished_for: 3 hours
-  #    min_ratio: 1
+  Clear_Torrents:
+    clean_transmission:
+      host: '{{ secrets.transmission.host }}'
+      port: 21772
+      username: '{{ secrets.transmission.username }}'
+      password: '{{ secrets.transmission.password }}'
+      finished_for: 3 hours
+      min_ratio: 1
+      delete_files: yes
