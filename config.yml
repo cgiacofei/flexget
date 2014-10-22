@@ -20,10 +20,10 @@ templates:
       #~ smtp_tls: yes
 
     transmission:
-      host: http://toffee.whatbox.ca
-      port: 21772
-      username: cgiacofei
-      password: EXBLAE0oAC184iLOkO0h
+      host: '{{ secrets.transmission.host }}'
+      port: '{{ secrets.transmission.port }}'
+      username: '{{ secrets.transmission.username }}'
+      password: '{{ secrets.transmission.password }}'
       ratio: 1
       main_file_only: yes
       include_subs: yes
@@ -388,9 +388,9 @@ tasks:
   # Clear transmission
   Clear_Torrents:
     clean_transmission:
-      host: http://toffee.whatbox.ca
-      port: 21772
-      username: cgiacofei
-      password: EXBLAE0oAC184iLOkO0h
+      host: '{{ secrets.transmission.host }}'
+      port: '{{ secrets.transmission.port }}'
+      username: '{{ secrets.transmission.username }}'
+      password: '{{ secrets.transmission.password }}'
       finished_for: 3 hours
       min_ratio: 1
