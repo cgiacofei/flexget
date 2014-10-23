@@ -506,3 +506,5 @@ tasks:
       finished_for: 3 hours
       min_ratio: 1
       delete_files: yes
+
+    disable_builtins: [details]
