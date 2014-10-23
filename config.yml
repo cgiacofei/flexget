@@ -10,14 +10,14 @@ secrets: secretfile.yml
 templates:
   global:
 
-    #~ email:
-      #~ from: c.giacofei.htpc@gmail.com
-      #~ to: c.giacofei@gmail.com
-      #~ smtp_username : c.giacofei.htpc
-      #~ smtp_password : Microe01
-      #~ smtp_host: smtp.gmail.com
-      #~ smtp_port: 587
-      #~ smtp_tls: yes
+    email:
+      from: c.giacofei.htpc@gmail.com
+      to: c.giacofei@gmail.com
+      smtp_username : c.giacofei.htpc
+      smtp_password : BZWiMf1Vx1Q9o0V9EtGG
+      smtp_host: smtp.gmail.com
+      smtp_port: 587
+      smtp_tls: yes
 
     transmission:
       host: '{{ secrets.transmission.host }}'
@@ -29,7 +29,7 @@ templates:
       include_subs: yes
 
     free_space:
-      path: /home/media/torrents/
+      path: /home/media/media-drive
       space: 50000
 
     pathscrub: windows
@@ -90,7 +90,7 @@ templates:
     exists_series:
       - '/media/media-drive/TV Shows/'
       - '/media/media-drive/TV Premieres/'
-      - '/home/media/torrents/'
+      - '/media/Iomega-HDD/Kids/TV
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
 
@@ -100,7 +100,19 @@ templates:
 
     # Add accepted entries to Transmission, and queue them to the top
     set:
-      path: '/home/cgiacofei/files/completed/tv_shows/'
+      path: '/home/cgiacofei/torrents/completed/completed/tv_shows/'
+      queuetotop: yes
+
+  ################################################
+  # This is a preset for kids tv downloads.
+  ################################################
+  tv-andrea:
+    # I've broken out my series lists into a seperate yml to clean up my config
+    include: [ andrea_series.yml ]
+
+    # Add accepted entries to Transmission, and queue them to the top
+    set:
+      path: '/home/cgiacofei/torrents/completed/completed/andrea_tv/'
       queuetotop: yes
 
   # I'm always up for new shows, but some genres I just can't stand. This
@@ -136,7 +148,7 @@ templates:
     # Add to deluge, but don't queue to top (My_TV_Shows are more important)
     # and put in a different location
     set:
-      path: '/home/cgiacofei/files/completed/tv_premieres/'
+      path: '/home/cgiacofei/torrents/completed/tv_premieres/'
       queuetotop: no
 
   # If a premier was grabbed, keep on tracking it until the directory is (re)moved
@@ -151,7 +163,7 @@ templates:
           - '/media/media-drive/TV Premieres/'
 
     set:
-      path: '/home/cgiacofei/files/completed/tv_premieres/'
+      path: '/home/cgiacofei/torrents/completed/tv_premieres/'
       queuetotop: no
 
   # This preset is a "global" preset for all movie-related tasks.
@@ -185,12 +197,48 @@ templates:
     # Check for already downloaded or currently downloading movies
     exists_movie:
       - /media/media-drive/Movies/
-      - /home/media/torrents/
+      - /media/Iomega-HDD/Kids/Movies/
     # Download propers, since they will have the same content_filename,
     # lower/non-propers will be overwritten
     proper_movies: yes
     set:
-      path: '/home/cgiacofei/files/completed/movies/'
+      path: '/home/cgiacofei/torrents/completed/movies/'
+
+  ################################################
+  # This is a preset for kids movie downloads.
+  ################################################
+  movies-andrea:
+    interval: 1 hour # I have flexget run every half hour, that's really only necessary for TV Shows
+
+    include: [ input/movie_input.yml ]
+
+    # Some feeds might include TV Shows, ignore them
+    regexp:
+      reject:
+        - s\d+e\d+: {from: title}
+        - '\d{4}.\d{2}.\d{2}': {from: title}
+        - \d+x\d+: {from: title}
+        - \baac2: {from: title} # No 2 channel audio
+    # Force proper_movies to run after regexp to avoid unnecessary imdb_lookup
+    plugin_priority:
+      if: 174
+      proper_movies: 171
+    # Impose reasonable size constraints
+    content_size:
+      max: 6000
+      min: 200
+    imdb_lookup: yes
+    seen_movies: strict # Don't download movies we've already seen
+
+    # Check for already downloaded or currently downloading movies
+    exists_movie:
+      - /media/media-drive/Movies/
+      - /media/Iomega-HDD/Kids/Movies/
+    # Download propers, since they will have the same content_filename,
+    # lower/non-propers will be overwritten
+    proper_movies: yes
+    set:
+      path: '/home/cgiacofei/torrents/completed/andrea_movies/'
 
   # Keep all the discover settings in one place
   movies-discover:
@@ -282,6 +330,51 @@ tasks:
         for_accepted: rm '/home/media/Dropbox/torrents/Movies/{{title}}'
     accept_all: yes
 
+  Local_Torrents-TV_Andrea:
+    priority: 3
+    template:
+      - tv-global
+      - tv-andrea
+    disable_builtins: [seen, seen_info_hash]
+    disable_plugin:
+      - inputs
+      - exists_series
+      - regexp
+      - content_size
+      - torrent_alive
+    all_series:
+      parse_only: yes
+    plugin_priority:
+      exec: 0
+    listdir: /home/media/Dropbox/torrents/TV_Andrea
+    exec:
+      on_output:
+        for_accepted: rm '/home/media/Dropbox/torrents/TV_Andrea/{{title}}.torrent'
+    accept_all: yes
+
+  Local_Torrents-Movies_Andrea:
+    priority: 4
+    template:
+      - movies-andrea
+    disable_builtins: [seen, seen_info_hash]
+    disable_plugin:
+      - inputs
+      - exists_movie
+      - seen_movies
+      - regexp
+      - content_size
+      - torrent_alive
+      - interval
+    # Mark movies as seen
+    movie_queue: yes
+    plugin_priority:
+      exec: 0
+    listdir: /home/media/Dropbox/torrents/Movies_Andrea
+    exec:
+      on_output:
+        for_accepted: rm '/home/media/Dropbox/torrents/Movies_Andrea/{{title}}'
+    accept_all: yes
+
   #--------------------------------------------------------------------------------#
   # All of the TV-related tasks pull in the tv-global preset, this gives           #
   # all of the necessary rss sources and a few extra configs                       #
@@ -294,7 +387,27 @@ tasks:
     series:
       settings:
         Best:
-          target: 720p+ hdtv+ 
+          target: 720p+ hdtv+
+          timeframe: 5 days
+          quality: 720p+ dvdscr+
+        Better:
+          target: 720p+ dvdscr+
+          timeframe: 3 days
+          quality: 480p+ webrip+
+        Average:
+          target: webrip+
+          timeframe: 12 hours
+          quality: preair+
+
+  Andrea_TV_Shows:
+    priority: 12
+    template:
+      - tv-global
+      - tv-andrea
+    series:
+      settings:
+        Best:
+          target: 720p+ hdtv+
           timeframe: 5 days
           quality: 720p+ dvdscr+
         Better:
@@ -317,8 +430,6 @@ tasks:
     interval: 2 hours
     imdb_list:
       user_id: ur16715479
-      #username: c.giacofei@gmail.com
-      #password: cgiacofei
       list: watchlist
       # auto_remove: [ accepted, rejected ] # keep my watchlist clean
     accept_all: yes
@@ -385,11 +496,12 @@ tasks:
     movie_queue: yes
 
   # Clear transmission
-  #Clear_Torrents:
-  #  clean_transmission:
-  #    host: '{{ secrets.transmission.host }}'
-  #    port: 21772
-  #    username: '{{ secrets.transmission.username }}'
-  #    password: '{{ secrets.transmission.password }}'
-  #    finished_for: 3 hours
-  #    min_ratio: 1
+  Clear_Torrents:
+    clean_transmission:
+      host: '{{ secrets.transmission.host }}'
+      port: 21772
+      username: '{{ secrets.transmission.username }}'
+      password: '{{ secrets.transmission.password }}'
+      finished_for: 3 hours
+      min_ratio: 1
+      delete_files: yes
