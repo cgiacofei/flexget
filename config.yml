@@ -29,7 +29,7 @@ templates:
       include_subs: yes
 
     free_space:
-      path: /home/media/media-drive
+      path: /home/media/torrents
       space: 50000
 
     pathscrub: windows
@@ -90,13 +90,13 @@ templates:
     exists_series:
       - '/media/media-drive/TV Shows/'
       - '/media/media-drive/TV Premieres/'
-      - '/media/Iomega-HDD/Kids/TV
+      - '/media/Iomega_HDD/Kids/TV Shows'
+
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
 
   # These are the shows I regularly watch
   tv-my_shows:
-    # I've broken out my series lists into a seperate yml to clean up my config
     include: [ series.yml ]
 
     # Add accepted entries to Transmission, and queue them to the top
@@ -198,7 +198,7 @@ templates:
     # Check for already downloaded or currently downloading movies
     exists_movie:
       - /media/media-drive/Movies/
-      - /media/Iomega-HDD/Kids/Movies/
+      - /media/Iomega_HDD/Kids/Movies/
     # Download propers, since they will have the same content_filename,
     # lower/non-propers will be overwritten
     proper_movies: yes
@@ -234,7 +234,7 @@ templates:
     # Check for already downloaded or currently downloading movies
     exists_movie:
       - /media/media-drive/Movies/
-      - /media/Iomega-HDD/Kids/Movies/
+      - /media/Iomega_HDD/Kids/Movies/
     # Download propers, since they will have the same content_filename,
     # lower/non-propers will be overwritten
     proper_movies: yes
