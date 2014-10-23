@@ -96,7 +96,6 @@ templates:
 
   # These are the shows I regularly watch
   tv-my_shows:
-    # I've broken out my series lists into a seperate yml to clean up my config
     include: [ series.yml ]
 
     # Add accepted entries to Transmission, and queue them to the top
