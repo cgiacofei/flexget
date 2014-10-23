@@ -198,7 +198,7 @@ templates:
     # Check for already downloaded or currently downloading movies
     exists_movie:
       - /media/media-drive/Movies/
-      - /media/Iomega-HDD/Kids/Movies/
+      - /media/Iomega_HDD/Kids/Movies/
     # Download propers, since they will have the same content_filename,
     # lower/non-propers will be overwritten
     proper_movies: yes
@@ -234,7 +234,7 @@ templates:
     # Check for already downloaded or currently downloading movies
     exists_movie:
       - /media/media-drive/Movies/
-      - /media/Iomega-HDD/Kids/Movies/
+      - /media/Iomega_HDD/Kids/Movies/
     # Download propers, since they will have the same content_filename,
     # lower/non-propers will be overwritten
     proper_movies: yes
