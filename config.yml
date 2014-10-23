@@ -101,7 +101,7 @@ templates:
 
     # Add accepted entries to Transmission, and queue them to the top
     set:
-      path: '/home/cgiacofei/torrents/completed/completed/tv_shows/'
+      path: '/home/cgiacofei/torrents/completed/tv_shows/'
       queuetotop: yes
 
   ################################################
@@ -113,7 +113,7 @@ templates:
 
     # Add accepted entries to Transmission, and queue them to the top
     set:
-      path: '/home/cgiacofei/torrents/completed/completed/andrea_tv/'
+      path: '/home/cgiacofei/torrents/completed/andrea_tv/'
       queuetotop: yes
 
   # I'm always up for new shows, but some genres I just can't stand. This
