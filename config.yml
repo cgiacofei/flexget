@@ -91,6 +91,7 @@ templates:
       - '/media/media-drive/TV Shows/'
       - '/media/media-drive/TV Premieres/'
       - '/media/Iomega_HDD/Kids/TV Shows'
+
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
 
