@@ -90,7 +90,7 @@ templates:
     exists_series:
       - '/media/media-drive/TV Shows/'
       - '/media/media-drive/TV Premieres/'
-      - '/media/Iomega-HDD/Kids/TV
+      - '/media/Iomega-HDD/Kids/TV'
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
 
