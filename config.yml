@@ -101,7 +101,7 @@ templates:
 
     # Add accepted entries to Transmission, and queue them to the top
     set:
-      path: '/home/cgiacofei/torrents/completed/completed/tv_shows/'
+      path: '/home/cgiacofei/torrents/completed/tv_shows/'
       queuetotop: yes
 
   ################################################
