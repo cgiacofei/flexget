@@ -84,9 +84,9 @@ templates:
 
     # Prevent from downloading shows that were aquired manually
     exists_series:
-      - '/media/media-drive/TV Shows/'
-      - '/media/media-drive/TV Premieres/'
-      - '/media/Iomega_HDD/Kids/TV Shows'
+      - '{{ secrets.directories.tv_shows }}'
+      - '{{ secrets.directories.tv_premieres }}'
+      - '{{ secrets.directories.kids_tv }}'
 
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
@@ -118,8 +118,8 @@ templates:
 
     # Check for already downloaded or currently downloading movies
     exists_movie:
-      - /media/media-drive/Movies/
-      - /media/Iomega_HDD/Kids/Movies/
+      - '{{ secrets.directories.kids_movies }}'
+      - '{{ secrets.directories.movies }}'
 
     proper_movies: yes
 
