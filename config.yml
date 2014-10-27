@@ -22,7 +22,7 @@ templates:
       include_subs: yes
 
     free_space:
-      path: {{ secrets.torrents.root }}
+      path: '{{ secrets.torrents.root }}'
       space: 50000
 
     pathscrub: windows
@@ -350,7 +350,7 @@ tasks:
     movie_queue: yes
     plugin_priority:
       exec: 0
-    listdir: {{ secrets.torrents.movies }}
+    listdir: '{{ secrets.torrents.movies }}'
     exec:
       on_output:
         for_accepted: rm '{{ secrets.torrents.movies }}/{{title}}'
@@ -374,7 +374,7 @@ tasks:
       parse_only: yes
     plugin_priority:
       exec: 0
-    listdir: {{ secrets.torrents.kids_tv }}
+    listdir: '{{ secrets.torrents.kids_tv }}'
     exec:
       on_output:
         for_accepted: rm '{{ secrets.torrents.kids_tv }}/{{title}}.torrent'
@@ -399,7 +399,7 @@ tasks:
     movie_queue: yes
     plugin_priority:
       exec: 0
-    listdir: {{ secrets.torrents.kids_movies }}
+    listdir: '{{ secrets.torrents.kids_movies }}'
     exec:
       on_output:
         for_accepted: rm '{{ secrets.torrents.kids_movies }}/{{title}}'
@@ -415,7 +415,7 @@ tasks:
     template: no_global
     accept_all: yes
     listdir:
-      - {{ secrets.directories.movies }}
+      - '{{ secrets.directories.movies }}'
     movie_queue: yes
 
   Clear_Torrents:
