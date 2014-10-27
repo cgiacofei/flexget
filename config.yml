@@ -1,0 +1,432 @@
+secrets: secretfile.yml
+
+templates:
+  global:
+
+    email:
+      from: c.giacofei.htpc@gmail.com
+      to: c.giacofei@gmail.com
+      smtp_username : c.giacofei.htpc
+      smtp_password : BZWiMf1Vx1Q9o0V9EtGG
+      smtp_host: smtp.gmail.com
+      smtp_port: 587
+      smtp_tls: yes
+
+    transmission:
+      host: '{{ secrets.transmission.host }}'
+      port: 21772
+      username: '{{ secrets.transmission.username }}'
+      password: '{{ secrets.transmission.password }}'
+      ratio: 1
+      main_file_only: yes
+      include_subs: yes
+
+    free_space:
+      path: '{{ secrets.torrents.root }}'
+      space: 50000
+
+    pathscrub: windows
+
+    regexp:
+      reject:
+        - (s|d)ub(s|bed)?\b: {from: title}                    # Block any subbed/dubbed/etc videos
+        - \b(duo|tri|quadri|tetra|penta)logy\b: {from: title} # Block series, only accept one at a time
+        - \b3-?D\b: {from: title}                             # I don't have any 3D displays
+        - \btrailer\b: {from: title}                          # I've gotten a few trailers that matched as movies. VERY annoying
+        - \bR5\b: {from: title}                               # The following are poor quality types that somehow got through the quality
+        - \bWEBSCR\b: {from: title}                           # features usually due to the title including a keyword like "720p" as well
+        - \bscreener\b: {from: title}
+        - \bTS\b: {from: title}
+        - \bCam\b: {from: title}
+        - '{C_P}': {from: title}                              # The following are groups with poor quality releases
+        - TrTd TeaM: {from: title}
+        - \[TNTVillage\]: {from: title}
+        - \[facepalm\]: {from: title}
+        - \bASAP\b: {from: title}
+
+    torrent_alive:
+      min_seeds: 10
+      reject_for: 3 hours
+
+    content_filter:
+      require:
+        - '*.avi'
+        - '*.mkv'
+        - '*.mpg'
+        - '*.mp4'
+        - '*.r0*'
+        - '*.part0*'
+      reject:
+        - 'password.txt'
+        - '*.wmv'
+
+    domain_delay:
+      bt-chat.com: 5 seconds
+      torrentz.eu: 10 seconds
+
+    # The Pirate Bay ssl certs always fail
+    verify_ssl_certificates: no
+
+    magnets: yes
+
+################################################################################
+#
+# Global Settings
+#
+################################################################################
+  tv-global:
+    include: [ input/tv_input.yml ]
+
+    # Impose reasonable size constraints
+    content_size:
+      max: 5000
+      min: 20
+
+    # Prevent from downloading shows that were aquired manually
+    exists_series:
+      - '{{ secrets.directories.tv_shows }}'
+      - '{{ secrets.directories.tv_premieres }}'
+      - '{{ secrets.directories.kids_tv }}'
+
+    # Look up info on TheTVDB.com to fill in extra info
+    thetvdb_lookup: yes
+
+  movies-global:
+    interval: 1 hour # I have flexget run every half hour, that's really only necessary for TV Shows
+
+    include: [ input/movie_input.yml ]
+
+    # Some feeds might include TV Shows, ignore them
+    regexp:
+      reject:
+        - s\d+e\d+: {from: title}
+        - '\d{4}.\d{2}.\d{2}': {from: title}
+        - \d+x\d+: {from: title}
+        - \baac2: {from: title} # No 2 channel audio
+    # Force proper_movies to run after regexp to avoid unnecessary imdb_lookup
+    plugin_priority:
+      if: 173
+      proper_movies: 171
+
+    # Impose reasonable size constraints
+    content_size:
+      max: 6000
+      min: 1000
+    imdb_lookup: yes
+
+    seen_movies: strict # Don't download movies we've already seen
+
+    # Check for already downloaded or currently downloading movies
+    exists_movie:
+      - '{{ secrets.directories.kids_movies }}'
+      - '{{ secrets.directories.movies }}'
+
+    proper_movies: yes
+
+
+################################################################################
+#
+# Settings for finding and tracking series premieres
+#
+################################################################################
+  tv-premieres:
+    # The entry has to have the tvdb_genres field so I can filter by it
+    require_field:
+      - tvdb_genres
+      - tvdb_first_air_date
+    # Make sure plenty of people are seeding it, otherwise it may not be that good
+    torrent_alive:
+      min_seeds: 50
+    # Block these genres if they exist in the list of tvdb_genres at all
+    regexp:
+      reject:
+        - talk show: {from: tvdb_genres}
+        - game show: {from: tvdb_genres}
+        - reality: {from: tvdb_genres}
+        - children: {from: tvdb_genres}
+        - home and garden: {from: tvdb_genres}
+    if:
+      # Block show if genres contains only 'Drama'
+      - "tvdb_genres == ['Drama']": reject
+      # Block premieres that weren't within the last 60 days
+      - tvdb_first_air_date != None and tvdb_first_air_date < now - timedelta(days=60): reject
+
+    # Accept all series permieres
+    series_premiere:
+      timeframe: 1 days
+      quality: 720p+ hdtv+
+
+    set:
+      path: '/home/cgiacofei/torrents/completed/tv_premieres/'
+      queuetotop: no
+
+  # If a premier was grabbed, keep on tracking it until the directory is (re)moved
+  tv-premieres-track:
+    configure_series:
+      settings:
+        target: 720p+ hdtv+
+        timeframe: 3 days
+        quality: webrip+
+      from:
+        listdir:
+          - '{{ secrets.directories.tv_premieres }}'
+
+    set:
+      path: '/home/cgiacofei/torrents/completed/tv_premieres/'
+      queuetotop: no
+
+tasks:
+################################################################################
+#
+# TV Tasks
+#
+################################################################################
+
+  #-----------------------------------------------------------------------------
+  # Main TV show download task
+  #-----------------------------------------------------------------------------
+  trakt_tv:
+    set:
+      path: '/home/cgiacofei/torrents/completed/tv_shows/'
+      queuetotop: yes
+    template:
+      - tv-global
+    configure_series:
+      from:
+        trakt_list:
+          username: gfei
+          password: Microe01
+          api_key: 89dc16c4fceab9ac52bcc1d07743dcf7
+          series: watchlist
+      settings:
+        target: 720p+ hdtv+
+        quality: 720p+ dvdscr+
+
+  #-----------------------------------------------------------------------------
+  # Kids TV download task
+  #-----------------------------------------------------------------------------
+  trakt_kids:
+    set:
+      path: '/home/cgiacofei/torrents/completed/andrea_tv/'
+      queuetotop: yes
+    template:
+      - tv-global
+    configure_series:
+      from:
+        trakt_list:
+          username: gfei
+          password: Microe01
+          api_key: 89dc16c4fceab9ac52bcc1d07743dcf7
+          custom: kids_tv
+      settings:
+        target: webrip+
+        quality: preair+
+
+  #-----------------------------------------------------------------------------
+  # Tasks for TV premieres
+  #-----------------------------------------------------------------------------
+  TV_Premieres:
+    priority: 40
+    template:
+      - tv-global
+      - tv-premieres
+
+  TV_Premieres_Track:
+    priority: 50
+    template:
+      - tv-global
+      - tv-premieres-track
+
+################################################################################
+#
+# Movie Tasks
+#
+################################################################################
+
+  #-----------------------------------------------------------------------------
+  # Main movie download task
+  #-----------------------------------------------------------------------------
+  trakt_movies-1080p:
+    set:
+      path: '/home/cgiacofei/torrents/completed/movies/'
+      queuetotop: yes
+    template:
+      - movies-global
+    configure_series:
+      from:
+        trakt_list:
+          username: gfei
+          password: Microe01
+          api_key: 89dc16c4fceab9ac52bcc1d07743dcf7
+          movies: watchlist
+      settings:
+        quality: 1080p+ bluray+ h264+ dtshd|dts|dd5.1
+
+  trakt_movies-720p:
+    set:
+      path: '/home/cgiacofei/torrents/completed/movies/'
+      queuetotop: yes
+    template:
+      - movies-global
+    configure_series:
+      from:
+        trakt_list:
+          username: gfei
+          password: Microe01
+          api_key: 89dc16c4fceab9ac52bcc1d07743dcf7
+          movies: watchlist
+      settings:
+        quality: 720p+ webdl+ xvid+ dtshd|dts|dd5.1
+
+    torrent_alive:
+      min_seeds: 5
+    delay: 7 days # Wait 7 days for a 1080p movie before trying downloading 720p
+
+  #-----------------------------------------------------------------------------
+  # Kids movie download task
+  #-----------------------------------------------------------------------------
+  trakt_kids_movies:
+    set:
+      path: '/home/cgiacofei/torrents/completed/andrea_movies/'
+      queuetotop: yes
+    template:
+      - movies-global
+    configure_series:
+      from:
+        trakt_list:
+          username: gfei
+          password: Microe01
+          api_key: 89dc16c4fceab9ac52bcc1d07743dcf7
+          custom: kids_movies
+      settings:
+        target: 720p+ hdtv+
+        quality: 720p+ dvdscr+
+
+################################################################################
+#
+# Local torrent file downloads
+#
+################################################################################
+  Local_Torrents-TV:
+    set:
+      path: '/home/cgiacofei/torrents/completed/tv_shows/'
+    priority: 1
+    template:
+      - tv-global
+    disable_builtins: [seen, seen_info_hash]
+    disable_plugin:
+      - inputs
+      - exists_series
+      - regexp
+      - content_size
+      - torrent_alive
+    all_series:
+      parse_only: yes
+    plugin_priority:
+      exec: 0
+    listdir: '{{ secrets.torrents.tv }}'
+    exec:
+      on_output:
+        for_accepted: rm '{{ secrets.torrents.tv }}/{{title}}.torrent'
+    accept_all: yes
+
+  # Same as above but for movies
+  Local_Torrents-Movies:
+    set:
+      path: '/home/cgiacofei/torrents/completed/movies/'
+    priority: 2
+    template:
+      - movies-global
+    disable_builtins: [seen, seen_info_hash]
+    disable_plugin:
+      - inputs
+      - exists_movie
+      - seen_movies
+      - regexp
+      - content_size
+      - torrent_alive
+      - interval
+    # Mark movies as seen
+    movie_queue: yes
+    plugin_priority:
+      exec: 0
+    listdir: '{{ secrets.torrents.movies }}'
+    exec:
+      on_output:
+        for_accepted: rm '{{ secrets.torrents.movies }}/{{title}}'
+    accept_all: yes
+
+  Local_Torrents-TV_Andrea:
+    set:
+      path: '/home/cgiacofei/torrents/completed/andrea_tv/'
+    priority: 3
+    template:
+      - tv-global
+      - tv-andrea
+    disable_builtins: [seen, seen_info_hash]
+    disable_plugin:
+      - inputs
+      - exists_series
+      - regexp
+      - content_size
+      - torrent_alive
+    all_series:
+      parse_only: yes
+    plugin_priority:
+      exec: 0
+    listdir: '{{ secrets.torrents.kids_tv }}'
+    exec:
+      on_output:
+        for_accepted: rm '{{ secrets.torrents.kids_tv }}/{{title}}.torrent'
+    accept_all: yes
+
+  Local_Torrents-Movies_Andrea:
+    set:
+      path: '/home/cgiacofei/torrents/completed/andrea_movies/'
+    priority: 4
+    template:
+      - movies-andrea
+    disable_builtins: [seen, seen_info_hash]
+    disable_plugin:
+      - inputs
+      - exists_movie
+      - seen_movies
+      - regexp
+      - content_size
+      - torrent_alive
+      - interval
+    # Mark movies as seen
+    movie_queue: yes
+    plugin_priority:
+      exec: 0
+    listdir: '{{ secrets.torrents.kids_movies }}'
+    exec:
+      on_output:
+        for_accepted: rm '{{ secrets.torrents.kids_movies }}/{{title}}'
+    accept_all: yes
+
+################################################################################
+#
+# Maintainence Tasks
+#
+################################################################################
+  Clean_Movie_Queue:
+    interval: 1 week
+    template: no_global
+    accept_all: yes
+    listdir:
+      - '{{ secrets.directories.movies }}'
+    movie_queue: yes
+
+  Clear_Torrents:
+    clean_transmission:
+      host: '{{ secrets.transmission.host }}'
+      port: 21772
+      username: '{{ secrets.transmission.username }}'
+      password: '{{ secrets.transmission.password }}'
+      finished_for: 3 hours
+      min_ratio: 1
+      delete_files: yes
+
+    disable_builtins: [details]
+
