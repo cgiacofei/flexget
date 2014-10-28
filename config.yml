@@ -194,9 +194,9 @@ tasks:
     configure_series:
       from:
         trakt_list:
-          username: gfei
-          password: Microe01
-          api_key: 89dc16c4fceab9ac52bcc1d07743dcf7
+          username: '{{ secrets.trakt.username }}'
+          password: '{{ secrets.trakt.password }}'
+          api_key: '{{ secrets.trakt.api_key }}'
           series: watchlist
       settings:
         target: 720p+ hdtv+
@@ -214,9 +214,9 @@ tasks:
     configure_series:
       from:
         trakt_list:
-          username: gfei
-          password: Microe01
-          api_key: 89dc16c4fceab9ac52bcc1d07743dcf7
+          username: '{{ secrets.trakt.username }}'
+          password: '{{ secrets.trakt.password }}'
+          api_key: '{{ secrets.trakt.api_key }}'
           custom: kids_tv
       settings:
         target: webrip+
@@ -255,9 +255,9 @@ tasks:
     configure_series:
       from:
         trakt_list:
-          username: gfei
-          password: Microe01
-          api_key: 89dc16c4fceab9ac52bcc1d07743dcf7
+          username: '{{ secrets.trakt.username }}'
+          password: '{{ secrets.trakt.password }}'
+          api_key: '{{ secrets.trakt.api_key }}'
           movies: watchlist
       settings:
         quality: 1080p+ bluray+ h264+ dtshd|dts|dd5.1
@@ -271,9 +271,9 @@ tasks:
     configure_series:
       from:
         trakt_list:
-          username: gfei
-          password: Microe01
-          api_key: 89dc16c4fceab9ac52bcc1d07743dcf7
+          username: '{{ secrets.trakt.username }}'
+          password: '{{ secrets.trakt.password }}'
+          api_key: '{{ secrets.trakt.api_key }}'
           movies: watchlist
       settings:
         quality: 720p+ webdl+ xvid+ dtshd|dts|dd5.1
@@ -294,9 +294,9 @@ tasks:
     configure_series:
       from:
         trakt_list:
-          username: gfei
-          password: Microe01
-          api_key: 89dc16c4fceab9ac52bcc1d07743dcf7
+          username: '{{ secrets.trakt.username }}'
+          password: '{{ secrets.trakt.password }}'
+          api_key: '{{ secrets.trakt.api_key }}'
           custom: kids_movies
       settings:
         target: 720p+ hdtv+
