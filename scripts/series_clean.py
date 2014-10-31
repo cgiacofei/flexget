@@ -12,7 +12,9 @@ import datetime
 
 tv_root = '/media/media-drive/TV Shows'
 s_clean = {'The Colbert Report':7,
-           'The Daily Show with Jon Stewart':7}
+           'The Daily Show with Jon Stewart':7,
+           'Last Week Tonight':30,
+           }
 
 torrent_root = '/home/media/torrents/completed'
 torrent_location = {'tv_shows':30,
