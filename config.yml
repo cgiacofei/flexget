@@ -186,6 +186,7 @@ tasks:
   # Main TV show download task
   #-----------------------------------------------------------------------------
   trakt_tv:
+    priority: 10
     set:
       path: '/home/cgiacofei/torrents/completed/tv_shows/'
       queuetotop: yes
@@ -206,6 +207,7 @@ tasks:
   # Kids TV download task
   #-----------------------------------------------------------------------------
   trakt_kids:
+    priority: 20
     set:
       path: '/home/cgiacofei/torrents/completed/andrea_tv/'
       queuetotop: yes
@@ -429,4 +431,3 @@ tasks:
       delete_files: yes
 
     disable_builtins: [details]
-
