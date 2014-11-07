@@ -197,7 +197,7 @@ tasks:
           username: '{{ secrets.trakt.username }}'
           password: '{{ secrets.trakt.password }}'
           api_key: '{{ secrets.trakt.api_key }}'
-          series: watchlist
+          custom: following
       settings:
         target: 720p+ hdtv+
         quality: 720p+ dvdscr+
