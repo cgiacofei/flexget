@@ -424,8 +424,7 @@ tasks:
       port: 21772
       username: '{{ secrets.transmission.username }}'
       password: '{{ secrets.transmission.password }}'
-      finished_for: 3 hours
-      min_ratio: 1
+      finished_for: 24 hours
       delete_files: yes
 
     disable_builtins: [details]
