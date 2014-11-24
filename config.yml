@@ -186,6 +186,7 @@ tasks:
   # Main TV show download task
   #-----------------------------------------------------------------------------
   trakt_tv:
+    priority: 10
     set:
       path: '/home/cgiacofei/torrents/completed/tv_shows/'
       queuetotop: yes
