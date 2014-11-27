@@ -278,7 +278,7 @@ tasks:
           api_key: '{{ secrets.trakt.api_key }}'
           movies: watchlist
       settings:
-        quality: 720p+ webdl+ xvid+ dtshd|dts|dd5.1
+        quality: 720p+ webdl+ xvid+
 
     torrent_alive:
       min_seeds: 5
