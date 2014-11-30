@@ -1,10 +1,6 @@
 #! /bin/bash
 
-CONFIG_FILES="sorttv.movies \
-              sorttv.shows \
-              sorttv.premieres \
-              sorttv.andrea_shows \
-              sorttv.andrea_movies"
+declare -a CONFIG_FILES=("sorttv.movies" "sorttv.shows" "sorttv.premieres" "sorttv.andrea_shows" "sorttv.andrea_movies")
 
 for i in "${CONFIG_FILES[@]}"
 do
