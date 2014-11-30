@@ -8,6 +8,7 @@ CONFIG_FILES="sorttv.movies \
 
 for i in "${CONFIG_FILES[@]}"
 do
+    echo "Using config file $i"
     perl /home/media/sorttv/sorttv.pl --read-config-file=/home/media/sorttv/$i
 done
 
