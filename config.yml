@@ -145,6 +145,8 @@ templates:
         - reality: {from: tvdb_genres}
         - children: {from: tvdb_genres}
         - home and garden: {from: tvdb_genres}
+        - documentary: {from: tvdb_genres}
+        - travel: {from: tvdb_genres}
     if:
       # Block show if genres contains only 'Drama'
       - "tvdb_genres == ['Drama']": reject
