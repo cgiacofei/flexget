@@ -1,5 +1,7 @@
 #! /bin/bash
 
+cd /home/media/sorttv
+
 declare -a CONFIG_FILES=("sorttv.movies" "sorttv.shows" "sorttv.premiere" "sorttv.shows_andrea" "sorttv.movies_andrea")
 
 for i in "${CONFIG_FILES[@]}"
