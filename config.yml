@@ -159,7 +159,7 @@ templates:
       quality: 720p+ hdtv+
 
     set:
-      path: '/home/cgiacofei/torrents/completed/tv_premieres/'
+      path: '/home/cgiacofei/files/completed/tv_premieres/'
       queuetotop: no
 
   # If a premier was grabbed, keep on tracking it until the directory is (re)moved
@@ -174,7 +174,7 @@ templates:
           - '{{ secrets.directories.tv_premieres }}'
 
     set:
-      path: '/home/cgiacofei/torrents/completed/tv_premieres/'
+      path: '/home/cgiacofei/files/completed/tv_premieres/'
       queuetotop: no
 
 tasks:
@@ -190,7 +190,7 @@ tasks:
   trakt_tv:
     priority: 10
     set:
-      path: '/home/cgiacofei/torrents/completed/tv_shows/'
+      path: '/home/cgiacofei/files/completed/tv_shows/'
       queuetotop: yes
     template:
       - tv-global
@@ -211,7 +211,7 @@ tasks:
   trakt_kids:
     priority: 20
     set:
-      path: '/home/cgiacofei/torrents/completed/andrea_tv/'
+      path: '/home/cgiacofei/files/completed/andrea_tv/'
       queuetotop: yes
     template:
       - tv-global
@@ -252,7 +252,7 @@ tasks:
   #-----------------------------------------------------------------------------
   trakt_movies-1080p:
     set:
-      path: '/home/cgiacofei/torrents/completed/movies/'
+      path: '/home/cgiacofei/files/completed/movies/'
       queuetotop: yes
     template:
       - movies-global
@@ -268,7 +268,7 @@ tasks:
 
   trakt_movies-720p:
     set:
-      path: '/home/cgiacofei/torrents/completed/movies/'
+      path: '/home/cgiacofei/files/completed/movies/'
       queuetotop: yes
     template:
       - movies-global
@@ -291,7 +291,7 @@ tasks:
   #-----------------------------------------------------------------------------
   trakt_kids_movies:
     set:
-      path: '/home/cgiacofei/torrents/completed/andrea_movies/'
+      path: '/home/cgiacofei/files/completed/andrea_movies/'
       queuetotop: yes
     template:
       - movies-global
@@ -313,7 +313,7 @@ tasks:
 ################################################################################
   Local_Torrents-TV:
     set:
-      path: '/home/cgiacofei/torrents/completed/tv_shows/'
+      path: '/home/cgiacofei/files/completed/tv_shows/'
     priority: 1
     template:
       - tv-global
@@ -337,7 +337,7 @@ tasks:
   # Same as above but for movies
   Local_Torrents-Movies:
     set:
-      path: '/home/cgiacofei/torrents/completed/movies/'
+      path: '/home/cgiacofei/files/completed/movies/'
     priority: 2
     template:
       - movies-global
@@ -362,7 +362,7 @@ tasks:
 
   Local_Torrents-TV_Andrea:
     set:
-      path: '/home/cgiacofei/torrents/completed/andrea_tv/'
+      path: '/home/cgiacofei/files/completed/andrea_tv/'
     priority: 3
     template:
       - tv-global
@@ -385,7 +385,7 @@ tasks:
 
   Local_Torrents-Movies_Andrea:
     set:
-      path: '/home/cgiacofei/torrents/completed/andrea_movies/'
+      path: '/home/cgiacofei/files/completed/andrea_movies/'
     priority: 4
     template:
       - movies-global

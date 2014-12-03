@@ -1,13 +1,18 @@
 #! /bin/bash
 
-cd /home/media/sorttv
+echo "Sorting TV Shows"
+perl /home/media/sorttv/sorttv.pl --directory-to-sort=/home/media/torrents/completed/tv_shows --tv-directory=/media/media-drive/TV Shows 
 
-declare -a CONFIG_FILES=("sorttv.movies" "sorttv.shows" "sorttv.premiere" "sorttv.shows_andrea" "sorttv.movies_andrea")
+echo "Sorting TV Premieres"
+perl /home/media/sorttv/sorttv.pl --directory-to-sort=/home/media/torrents/completed/tv_premieres --tv-directory=/media/media-drive/TV Premieres
 
-for i in "${CONFIG_FILES[@]}"
-do
-    echo "Using config file $i"
-    perl /home/media/sorttv/sorttv.pl --read-config-file=/home/media/sorttv/$i
-done
+echo "Sorting Movies"
+perl /home/media/sorttv/sorttv.pl --directory-to-sort=/home/media/torrents/completed/movies --movie-directory=/media/media-drive/Movies
+
+echo "Sorting Kids TV"
+perl /home/media/sorttv/sorttv.pl --directory-to-sort=/home/media/torrents/completed/andrea_tv --tv-directory=/media/Iomega_HDD/Kids/TV
+
+echo "Sorting Kids Movies"
+perl /home/media/sorttv/sorttv.pl --directory-to-sort=/home/media/torrents/completed/andrea_movies --movie-directory=/media/Iomega_HDD/Kids/Movies/
 
 exit 0
