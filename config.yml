@@ -189,6 +189,8 @@ tasks:
   #-----------------------------------------------------------------------------
   trakt_tv:
     priority: 10
+    parsing:
+      series: guessit
     set:
       path: '/home/cgiacofei/files/completed/tv_shows/'
       queuetotop: yes
@@ -210,6 +212,8 @@ tasks:
   #-----------------------------------------------------------------------------
   trakt_kids:
     priority: 20
+    parsing:
+      series: guessit
     set:
       path: '/home/cgiacofei/files/completed/andrea_tv/'
       queuetotop: yes
@@ -231,12 +235,16 @@ tasks:
   #-----------------------------------------------------------------------------
   TV_Premieres:
     priority: 40
+    parsing:
+      series: guessit
     template:
       - tv-global
       - tv-premieres
 
   TV_Premieres_Track:
     priority: 50
+    parsing:
+      series: guessit
     template:
       - tv-global
       - tv-premieres-track
@@ -251,6 +259,8 @@ tasks:
   # Main movie download task
   #-----------------------------------------------------------------------------
   trakt_movies-1080p:
+    parsing:
+      movie: guessit
     set:
       path: '/home/cgiacofei/files/completed/movies/'
       queuetotop: yes
@@ -267,6 +277,8 @@ tasks:
         quality: 1080p+ bluray+ h264+ dtshd|dts|dd5.1
 
   trakt_movies-720p:
+    parsing:
+      movie: guessit
     set:
       path: '/home/cgiacofei/files/completed/movies/'
       queuetotop: yes
@@ -290,6 +302,8 @@ tasks:
   # Kids movie download task
   #-----------------------------------------------------------------------------
   trakt_kids_movies:
+    parsing:
+      movie: guessit
     set:
       path: '/home/cgiacofei/files/completed/andrea_movies/'
       queuetotop: yes
