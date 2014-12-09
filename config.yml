@@ -19,6 +19,11 @@ templates:
       password: '{{ secrets.transmission.password }}'
       ratio: 1
       main_file_only: yes
+      skip_files:
+        - '*.nfo'
+        - '*.sfv'
+        - '*[sS]ample*'
+        - '*.txt'
       include_subs: yes
 
     free_space:
@@ -174,7 +179,8 @@ templates:
           - '{{ secrets.directories.tv_premieres }}'
 
     set:
-      path: '/home/cgiacofei/files/completed/tv_premieres/'
+      path: '/home/cgiacofei/files/completed/tv_premieres/{{ series_name }}/Season {{series_season}}/'
+      content_filename: "{{ series_name }} - {{ season|pad(2) }}x{{ episode|pad(2) }}"
       queuetotop: no
 
 tasks:
@@ -192,7 +198,8 @@ tasks:
     parsing:
       series: guessit
     set:
-      path: '/home/cgiacofei/files/completed/tv_shows/'
+      path: '/home/cgiacofei/files/completed/tv_shows/{{ series_name }}/Season {{series_season}}/'
+      content_filename: "{{ series_name }} - {{ season|pad(2) }}x{{ episode|pad(2) }}"
       queuetotop: yes
     template:
       - tv-global
@@ -215,7 +222,8 @@ tasks:
     parsing:
       series: guessit
     set:
-      path: '/home/cgiacofei/files/completed/andrea_tv/'
+      path: '/home/cgiacofei/files/completed/andrea_tv/{{ series_name }}/Season {{series_season}}/'
+      content_filename: "{{ series_name }} - {{ season|pad(2) }}x{{ episode|pad(2) }}"
       queuetotop: yes
     template:
       - tv-global
