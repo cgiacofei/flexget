@@ -197,7 +197,7 @@ tasks:
   trakt_tv:
     priority: 10
     parsing:
-      series: guessit
+      series: internal
     set:
       path: '/home/cgiacofei/files/completed/tv_shows/{{ series_name }}/Season {{series_season}}/'
       content_filename: "{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}"
@@ -221,7 +221,7 @@ tasks:
   trakt_kids:
     priority: 20
     parsing:
-      series: guessit
+      series: internal
     set:
       path: '/home/cgiacofei/files/completed/andrea_tv/{{ series_name }}/Season {{series_season}}/'
       content_filename: "{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}"
@@ -245,7 +245,7 @@ tasks:
   TV_Premieres:
     priority: 40
     parsing:
-      series: guessit
+      series: internal
     template:
       - tv-global
       - tv-premieres
@@ -253,7 +253,7 @@ tasks:
   TV_Premieres_Track:
     priority: 50
     parsing:
-      series: guessit
+      series: internal
     template:
       - tv-global
       - tv-premieres-track
