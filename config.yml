@@ -190,7 +190,7 @@ tasks:
   trakt_tv:
     priority: 10
     parsing:
-      series: guessit
+      series: internal
     set:
       path: '/home/cgiacofei/files/completed/tv_shows/'
       queuetotop: yes
@@ -213,7 +213,7 @@ tasks:
   trakt_kids:
     priority: 20
     parsing:
-      series: guessit
+      series: internal
     set:
       path: '/home/cgiacofei/files/completed/andrea_tv/'
       queuetotop: yes
@@ -236,7 +236,7 @@ tasks:
   TV_Premieres:
     priority: 40
     parsing:
-      series: guessit
+      series: internal
     template:
       - tv-global
       - tv-premieres
@@ -244,7 +244,7 @@ tasks:
   TV_Premieres_Track:
     priority: 50
     parsing:
-      series: guessit
+      series: internal
     template:
       - tv-global
       - tv-premieres-track
