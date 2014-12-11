@@ -354,7 +354,7 @@ tasks:
     listdir: '{{ secrets.torrents.tv }}'
     exec:
       on_output:
-        for_accepted: rm '/home/media/Dropbox/torrents/TV/{{title}}.torrent'
+        for_accepted: rm '{{location}}'
     accept_all: yes
 
   # Same as above but for movies
@@ -380,7 +380,7 @@ tasks:
     listdir: '{{ secrets.torrents.movies }}'
     exec:
       on_output:
-        for_accepted: rm '/home/media/Dropbox/torrents/Movies/{{title}}'
+        for_accepted: rm '{{location}}'
     accept_all: yes
 
   Local_Torrents-TV_Andrea:
@@ -403,7 +403,7 @@ tasks:
     listdir: '{{ secrets.torrents.kids_tv }}'
     exec:
       on_output:
-        for_accepted: rm '/home/media/Dropbox/torrents/TV_Andrea/{{title}}.torrent'
+        for_accepted: rm '{{location}}'
     accept_all: yes
 
   Local_Torrents-Movies_Andrea:
@@ -428,7 +428,7 @@ tasks:
     listdir: '{{ secrets.torrents.kids_movies }}'
     exec:
       on_output:
-        for_accepted: rm '/home/media/Dropbox/torrents/Movies_Andrea/{{title}}'
+        for_accepted: rm '{{location}}'
     accept_all: yes
 
 ################################################################################
