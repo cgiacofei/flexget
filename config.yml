@@ -164,7 +164,8 @@ templates:
       quality: 720p+ hdtv+
 
     set:
-      path: '/home/cgiacofei/files/completed/tv_premieres/'
+      path: '/home/cgiacofei/files/completed/tv_premieres/{{ series_name }}/Season {{series_season}}/'
+      content_filename: "{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}"
       queuetotop: no
 
   # If a premier was grabbed, keep on tracking it until the directory is (re)moved
@@ -180,7 +181,7 @@ templates:
 
     set:
       path: '/home/cgiacofei/files/completed/tv_premieres/{{ series_name }}/Season {{series_season}}/'
-      content_filename: "{{ series_name }} - {{ season|pad(2) }}x{{ episode|pad(2) }}"
+      content_filename: "{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}"
       queuetotop: no
 
 tasks:
@@ -199,7 +200,7 @@ tasks:
       series: guessit
     set:
       path: '/home/cgiacofei/files/completed/tv_shows/{{ series_name }}/Season {{series_season}}/'
-      content_filename: "{{ series_name }} - {{ season|pad(2) }}x{{ episode|pad(2) }}"
+      content_filename: "{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}"
       queuetotop: yes
     template:
       - tv-global
@@ -223,7 +224,7 @@ tasks:
       series: guessit
     set:
       path: '/home/cgiacofei/files/completed/andrea_tv/{{ series_name }}/Season {{series_season}}/'
-      content_filename: "{{ series_name }} - {{ season|pad(2) }}x{{ episode|pad(2) }}"
+      content_filename: "{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}"
       queuetotop: yes
     template:
       - tv-global
