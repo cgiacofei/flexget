@@ -305,11 +305,11 @@ tasks:
 
     discover:
       what:
-        trakt_list:
-          username: '{{ secrets.trakt.username }}'
-          password: '{{ secrets.trakt.password }}'
-          api_key: '{{ secrets.trakt.api_key }}'
-          movies: watchlist
+        - trakt_list:
+            username: '{{ secrets.trakt.username }}'
+            password: '{{ secrets.trakt.password }}'
+            api_key: '{{ secrets.trakt.api_key }}'
+            movies: watchlist
       from:
         - isohunt: movies
         - torrentz: verified
@@ -329,11 +329,11 @@ tasks:
 
     discover:
       what:
-        trakt_list:
-          username: '{{ secrets.trakt.username }}'
-          password: '{{ secrets.trakt.password }}'
-          api_key: '{{ secrets.trakt.api_key }}'
-          movies: watchlist
+        - trakt_list:
+            username: '{{ secrets.trakt.username }}'
+            password: '{{ secrets.trakt.password }}'
+            api_key: '{{ secrets.trakt.api_key }}'
+            movies: watchlist
       from:
         - isohunt: movies
         - torrentz: verified
@@ -360,18 +360,17 @@ tasks:
 
     discover:
       what:
-        trakt_list:
-          username: '{{ secrets.trakt.username }}'
-          password: '{{ secrets.trakt.password }}'
-          api_key: '{{ secrets.trakt.api_key }}'
-          custom: kids_movies
+        - trakt_list:
+            username: '{{ secrets.trakt.username }}'
+            password: '{{ secrets.trakt.password }}'
+            api_key: '{{ secrets.trakt.api_key }}'
+            custom: kids_movies
       from:
         - isohunt: movies
         - torrentz: verified
         # - piratebay: yes
 
-    target: 720p+ hdtv+
-    quality: 720p+ dvdscr+
+    quality: 720p+ hdtv+
 
 ################################################################################
 #
