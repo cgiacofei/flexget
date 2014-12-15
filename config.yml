@@ -12,12 +12,12 @@ schedules:
       minutes: 30
 
   # New TV premieres
-  tasks: 'TV_Premieres'
+  - tasks: 'TV_Premieres'
     interval:
       hours: 1
 
   # Movies
-  tasks: 'trakt_movies*'
+  - tasks: 'trakt_movies*'
     interval:
       hours: 2
 
