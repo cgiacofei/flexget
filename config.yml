@@ -123,6 +123,12 @@ templates:
 
     proper_movies: yes
 
+    trakt_remove:
+      username: '{{ secrets.trakt.username }}'
+      password: '{{ secrets.trakt.password }}'
+      api_key: '{{ secrets.trakt.api_key }}'
+      list: watchlist
+
 
 ################################################################################
 #
