@@ -1,5 +1,26 @@
 secrets: secretfile.yml
 
+schedules:
+  # Local torrents
+  - tasks: 'Local_Torrents*'
+    interval:
+      minutes: 15
+
+  # Tracked TV shows
+  - tasks: [trakt_tv, trakt_kids, TV_Premieres_Track]
+    interval:
+      minutes: 30
+
+  # New TV premieres
+  - tasks: 'TV_Premieres'
+    interval:
+      hours: 1
+
+  # Movies
+  - tasks: 'trakt_movies*'
+    interval:
+      hours: 2
+
 templates:
   global:
 
@@ -127,6 +148,12 @@ templates:
       - '{{ secrets.directories.movies }}'
 
     proper_movies: yes
+
+    trakt_remove:
+      username: '{{ secrets.trakt.username }}'
+      password: '{{ secrets.trakt.password }}'
+      api_key: '{{ secrets.trakt.api_key }}'
+      list: watchlist
 
 
 ################################################################################
@@ -310,7 +337,7 @@ tasks:
   #-----------------------------------------------------------------------------
   # Kids movie download task
   #-----------------------------------------------------------------------------
-  trakt_kids_movies:
+  trakt_movies_kids:
     parsing:
       movie: guessit
     set:
