@@ -389,8 +389,7 @@ tasks:
       - content_size
       - torrent_alive
       - interval
-    # Mark movies as seen
-    movie_queue: yes
+    movie_queue: remove
     plugin_priority:
       exec: 0
     listdir: '{{ secrets.torrents.movies }}'
@@ -437,8 +436,7 @@ tasks:
       - content_size
       - torrent_alive
       - interval
-    # Mark movies as seen
-    movie_queue: yes
+    movie_queue: remove
     plugin_priority:
       exec: 0
     listdir: '{{ secrets.torrents.kids_movies }}'
@@ -458,7 +456,7 @@ tasks:
     accept_all: yes
     listdir:
       - '{{ secrets.directories.movies }}'
-    movie_queue: yes
+    movie_queue: remove
 
   Clear_Torrents:
     clean_transmission:
