@@ -147,9 +147,7 @@ templates:
     trakt_remove:
       username: '{{ secrets.trakt.username }}'
       password: '{{ secrets.trakt.password }}'
-      api_key: '{{ secrets.trakt.api_key }}'
       list: watchlist
-
 
 ################################################################################
 #
@@ -228,8 +226,8 @@ tasks:
         trakt_list:
           username: '{{ secrets.trakt.username }}'
           password: '{{ secrets.trakt.password }}'
-          api_key: '{{ secrets.trakt.api_key }}'
-          custom: following
+          list: following
+          type: shows
       settings:
         target: 720p+ hdtv+
         quality: 720p+ dvdscr+
@@ -251,8 +249,8 @@ tasks:
         trakt_list:
           username: '{{ secrets.trakt.username }}'
           password: '{{ secrets.trakt.password }}'
-          api_key: '{{ secrets.trakt.api_key }}'
-          custom: kids_tv
+          list: kids_tv
+          type: shows
       settings:
         target: webrip+
         quality: preair+
@@ -298,8 +296,8 @@ tasks:
         trakt_list:
           username: '{{ secrets.trakt.username }}'
           password: '{{ secrets.trakt.password }}'
-          api_key: '{{ secrets.trakt.api_key }}'
-          movies: watchlist
+          list: watchlist
+          type: movies
       settings:
         quality: 1080p+ bluray+ h264+ dtshd|dts|dd5.1
 
@@ -316,8 +314,8 @@ tasks:
         trakt_list:
           username: '{{ secrets.trakt.username }}'
           password: '{{ secrets.trakt.password }}'
-          api_key: '{{ secrets.trakt.api_key }}'
-          movies: watchlist
+          list: watchlist
+          type: movies
       settings:
         quality: 720p+ webdl+ xvid+
 
@@ -341,8 +339,8 @@ tasks:
         trakt_list:
           username: '{{ secrets.trakt.username }}'
           password: '{{ secrets.trakt.password }}'
-          api_key: '{{ secrets.trakt.api_key }}'
-          custom: kids_movies
+          list: kids_movies
+          type: movies
       settings:
         target: 720p+ hdtv+
         quality: 720p+ dvdscr+
