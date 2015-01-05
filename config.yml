@@ -225,7 +225,6 @@ tasks:
       from:
         trakt_list:
           username: '{{ secrets.trakt.username }}'
-          password: '{{ secrets.trakt.password }}'
           list: following
           type: shows
       settings:
@@ -248,7 +247,6 @@ tasks:
       from:
         trakt_list:
           username: '{{ secrets.trakt.username }}'
-          password: '{{ secrets.trakt.password }}'
           list: kids_tv
           type: shows
       settings:
@@ -295,7 +293,6 @@ tasks:
       from:
         trakt_list:
           username: '{{ secrets.trakt.username }}'
-          password: '{{ secrets.trakt.password }}'
           list: watchlist
           type: movies
       settings:
@@ -313,7 +310,6 @@ tasks:
       from:
         trakt_list:
           username: '{{ secrets.trakt.username }}'
-          password: '{{ secrets.trakt.password }}'
           list: watchlist
           type: movies
       settings:
@@ -338,7 +334,6 @@ tasks:
       from:
         trakt_list:
           username: '{{ secrets.trakt.username }}'
-          password: '{{ secrets.trakt.password }}'
           list: kids_movies
           type: movies
       settings:
