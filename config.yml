@@ -132,10 +132,6 @@ templates:
         - '\d{4}.\d{2}.\d{2}': {from: title}
         - \d+x\d+: {from: title}
         - \baac2: {from: title} # No 2 channel audio
-    # Force proper_movies to run after regexp to avoid unnecessary imdb_lookup
-    plugin_priority:
-      if: 173
-      proper_movies: 171
 
     # Impose reasonable size constraints
     content_size:
@@ -149,8 +145,6 @@ templates:
     exists_movie:
       - '{{ secrets.directories.kids_movies }}'
       - '{{ secrets.directories.movies }}'
-
-    proper_movies: yes
 
     trakt_remove:
       username: '{{ secrets.trakt.username }}'
@@ -335,12 +329,10 @@ tasks:
       queuetotop: yes
     template:
       - movies-global
-    configure_series:
-      from:
-        trakt_list:
-          username: '{{ secrets.trakt.username }}'
-          list: kids_movies
-          type: movies
+    trakt_list:
+      username: '{{ secrets.trakt.username }}'
+      list: kids_movies
+      type: movies
       settings:
         target: 720p+ hdtv+
         quality: 720p+ dvdscr+
