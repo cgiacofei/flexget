@@ -137,7 +137,7 @@ templates:
     content_size:
       max: 6000
       min: 1000
-    imdb_lookup: yes
+    trakt_lookup: yes
 
     seen_movies: strict # Don't download movies we've already seen
 
