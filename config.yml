@@ -21,6 +21,14 @@ schedules:
     interval:
       hours: 2
 
+  - tasks: 'Clear_Torrents'
+    interval:
+      hours: 24
+
+  - tasks: 'Clean_Movie_Queue'
+    interval:
+      weeks: 1
+
 templates:
   global:
 
@@ -450,7 +458,6 @@ tasks:
 #
 ################################################################################
   Clean_Movie_Queue:
-    interval: 1 week
     template: no_global
     accept_all: yes
     listdir:
