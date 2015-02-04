@@ -334,7 +334,6 @@ tasks:
       list: kids_movies
       type: movies
 
-    target: 720p+ hdtv+
     quality: 720p+ dvdscr+
 
 ################################################################################
