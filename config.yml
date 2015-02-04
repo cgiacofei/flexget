@@ -333,9 +333,9 @@ tasks:
       username: '{{ secrets.trakt.username }}'
       list: kids_movies
       type: movies
-      settings:
-        target: 720p+ hdtv+
-        quality: 720p+ dvdscr+
+
+    target: 720p+ hdtv+
+    quality: 720p+ dvdscr+
 
 ################################################################################
 #
