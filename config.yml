@@ -351,8 +351,9 @@ tasks:
     priority: 1
     template:
       - tv-global
-    disable_builtins: [seen, seen_info_hash]
-    disable_plugin:
+    disable:
+      - seen
+      - seen_info_hash
       - inputs
       - exists_series
       - regexp
@@ -375,8 +376,9 @@ tasks:
     priority: 2
     template:
       - movies-global
-    disable_builtins: [seen, seen_info_hash]
-    disable_plugin:
+    disable:
+      - seen
+      - seen_info_hashts
       - inputs
       - exists_movie
       - seen_movies
@@ -399,8 +401,9 @@ tasks:
     priority: 3
     template:
       - tv-global
-    disable_builtins: [seen, seen_info_hash]
-    disable_plugin:
+    disable:
+      - seen
+      - seen_info_hash
       - inputs
       - exists_series
       - regexp
@@ -422,8 +425,9 @@ tasks:
     priority: 4
     template:
       - movies-global
-    disable_builtins: [seen, seen_info_hash]
-    disable_plugin:
+    disable:
+      - seen
+      - seen_info_hash
       - inputs
       - exists_movie
       - seen_movies
@@ -462,4 +466,4 @@ tasks:
       finished_for: 24 hours
       delete_files: yes
 
-    disable_builtins: [details]
+    disable: details
