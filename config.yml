@@ -297,14 +297,12 @@ tasks:
       queuetotop: yes
     template:
       - movies-global
-    configure_series:
-      from:
-        trakt_list:
-          username: '{{ secrets.trakt.username }}'
-          list: watchlist
-          type: movies
-      settings:
-        quality: 1080p+ bluray+ h264+ dtshd|dts|dd5.1
+    trakt_list:
+      username: '{{ secrets.trakt.username }}'
+      list: watchlist
+      type: movies
+
+    quality: 1080p+ bluray+ h264+ dtshd|dts|dd5.1
 
   trakt_movies-720p:
     parsing:
@@ -314,14 +312,13 @@ tasks:
       queuetotop: yes
     template:
       - movies-global
-    configure_series:
-      from:
-        trakt_list:
-          username: '{{ secrets.trakt.username }}'
-          list: watchlist
-          type: movies
-      settings:
-        quality: 720p+ webdl+ xvid+
+
+    trakt_list:
+      username: '{{ secrets.trakt.username }}'
+      list: watchlist
+      type: movies
+
+    quality: 720p+ webdl+ xvid+
 
     torrent_alive:
       min_seeds: 5
