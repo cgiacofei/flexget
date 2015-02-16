@@ -17,7 +17,7 @@ schedules:
       hours: 1
 
   # Movies
-  - tasks: 'trakt_movies*'
+  - tasks: 'populate_movies, trakt_movies*'
     interval:
       hours: 2
 
@@ -279,6 +279,15 @@ tasks:
 # Movie Tasks
 #
 ################################################################################
+  populate_movies:
+    priority: 1
+    interval: 2 hours
+    trakt_list:
+      username: '{{ secrets.trakt.username }}'
+      list: watchlist
+      type: movies
+    accept_all: yes
+    movie_queue: add
 
   #-----------------------------------------------------------------------------
   # Main movie download task
@@ -291,10 +300,11 @@ tasks:
       queuetotop: yes
     template:
       - movies-global
-    trakt_list:
-      username: '{{ secrets.trakt.username }}'
-      list: watchlist
-      type: movies
+    discover:
+      what:
+        - emit_movie_queue: yes
+
+    movie_queue: accept
 
     quality: 1080p+ bluray+ h264+ dtshd|dts|dd5.1
 
@@ -307,34 +317,14 @@ tasks:
     template:
       - movies-global
 
-    trakt_list:
-      username: '{{ secrets.trakt.username }}'
-      list: watchlist
-      type: movies
+    discover:
+      what:
+        - emit_movie_queue: yes
+
+    movie_queue: accept
 
     quality: 720p+ webdl+ xvid+
-
-    torrent_alive:
-      min_seeds: 5
     delay: 7 days # Wait 7 days for a 1080p movie before trying downloading 720p
-
-  #-----------------------------------------------------------------------------
-  # Kids movie download task
-  #-----------------------------------------------------------------------------
-  trakt_movies_kids:
-    parsing:
-      movie: guessit
-    set:
-      path: '/home/cgiacofei/files/completed/andrea_movies/'
-      queuetotop: yes
-    template:
-      - movies-global
-    trakt_list:
-      username: '{{ secrets.trakt.username }}'
-      list: kids_movies
-      type: movies
-
-    quality: 720p+ dvdscr+
 
 ################################################################################
 #
