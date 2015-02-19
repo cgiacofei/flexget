@@ -204,6 +204,20 @@ templates:
       path: '/home/cgiacofei/files/completed/tv_premieres/'
       queuetotop: no
 
+  queue-movies:
+    parsing:
+      movie: guessit
+    set:
+      path: '/home/cgiacofei/files/completed/movies/'
+      queuetotop: yes
+
+    discover:
+      what:
+        - emit_movie_queue: yes
+      from: [ filler: yes ]
+
+    movie_queue: accept
+
 tasks:
 ################################################################################
 #
@@ -293,41 +307,20 @@ tasks:
   # Main movie download task
   #-----------------------------------------------------------------------------
   trakt_movies-1080p:
-    parsing:
-      movie: guessit
-    set:
-      path: '/home/cgiacofei/files/completed/movies/'
-      queuetotop: yes
     template:
       - movies-global
-    discover:
-      what:
-        - emit_movie_queue: yes
-      from: [ filler: yes ]
+      - queue-movies
 
+    quality: 1080p+ bluray+ h264+ truehd|dtshd|dd5.1|dts
 
-    movie_queue: accept
-
-    quality: 1080p+ bluray+ h264+ dtshd|dts|dd5.1
-
+  # Delay sets a window to allow for higher resolution videos
   trakt_movies-720p:
-    parsing:
-      movie: guessit
-    set:
-      path: '/home/cgiacofei/files/completed/movies/'
-      queuetotop: yes
     template:
       - movies-global
+      - queue-movies
 
-    discover:
-      what:
-        - emit_movie_queue: yes
-      from: [ filler: yes ]
-
-    movie_queue: accept
-
-    quality: 720p+ webdl+ xvid+
-    delay: 7 days # Wait 7 days for a 1080p movie before trying downloading 720p
+    quality: 720p+ webdl+ xvid+ truehd|dtshd|dd5.1|dts|ac3
+    delay: 7 days
 
 ################################################################################
 #
