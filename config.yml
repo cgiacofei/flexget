@@ -303,6 +303,8 @@ tasks:
     discover:
       what:
         - emit_movie_queue: yes
+      from: [ filler: yes ]
+
 
     movie_queue: accept
 
@@ -320,6 +322,7 @@ tasks:
     discover:
       what:
         - emit_movie_queue: yes
+      from: [ filler: yes ]
 
     movie_queue: accept
 
