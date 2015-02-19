@@ -5,6 +5,6 @@ inputs:
   - rss: { url: 'http://ezrss.it/feed/', silent: yes }                      # EZRSS
   - rss: { url: 'http://showrss.karmorra.info/feeds/all.rss', silent: yes } # Karmorra (All)
   - rss: { url: 'http://rss.bt-chat.com/?group=3', silent: yes }            # BT-Chat (EZTV)
-  #- rss: { url: 'http://rss.thepiratebay.se/208', silent: yes }             # The Pirate Bay (Highres - TV shows)
+#  - rss: { url: 'http://rss.thepiratebay.se/208', silent: yes }             # The Pirate Bay (Highres - TV shows)
   - rss: { url: 'https://kickass.so/tv/?rss=1', silent: yes }
 
