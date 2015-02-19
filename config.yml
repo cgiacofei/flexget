@@ -224,6 +224,25 @@ templates:
       content_filename: "{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}"
       queuetotop: no
 
+  # Global settings for local torrent downloads
+  local-torrents:
+    disable:
+      - seen
+      - seen_info_hash
+      - inputs
+      - exists_series
+      - regexp
+      - content_size
+      - torrent_alive
+
+    plugin_priority:
+      exec: 0
+
+    exec:
+      on_output:
+        for_accepted: rm '{{location}}'
+    accept_all: yes
+
 tasks:
 ################################################################################
 #
@@ -334,103 +353,55 @@ tasks:
 #
 ################################################################################
   Local_Torrents-TV:
-    set:
-      path: '/home/cgiacofei/files/completed/tv_shows/'
     priority: 1
     template:
       - tv-global
-    disable:
-      - seen
-      - seen_info_hash
-      - inputs
-      - exists_series
-      - regexp
-      - content_size
-      - torrent_alive
+      - local-torrents
+
+    listdir: '{{ secrets.torrents.tv }}'
+    set:
+      path: '/home/cgiacofei/files/completed/tv_shows/'
+
     all_series:
       parse_only: yes
-    plugin_priority:
-      exec: 0
-    listdir: '{{ secrets.torrents.tv }}'
-    exec:
-      on_output:
-        for_accepted: rm '{{location}}'
-    accept_all: yes
 
   # Same as above but for movies
   Local_Torrents-Movies:
-    set:
-      path: '/home/cgiacofei/files/completed/movies/'
     priority: 2
     template:
       - movies-global
-    disable:
-      - seen
-      - seen_info_hashts
-      - inputs
-      - exists_movie
-      - seen_movies
-      - regexp
-      - content_size
-      - torrent_alive
-      - interval
-    movie_queue: remove
-    plugin_priority:
-      exec: 0
+      - local-torrents
+
     listdir: '{{ secrets.torrents.movies }}'
-    exec:
-      on_output:
-        for_accepted: rm '{{location}}'
-    accept_all: yes
+    set:
+      path: '/home/cgiacofei/files/completed/movies/'
+
+    movie_queue: remove
 
   Local_Torrents-TV_Andrea:
-    set:
-      path: '/home/cgiacofei/files/completed/andrea_tv/'
     priority: 3
     template:
       - tv-global
-    disable:
-      - seen
-      - seen_info_hash
-      - inputs
-      - exists_series
-      - regexp
-      - content_size
-      - torrent_alive
+      - local-torrents
+
+    listdir: '{{ secrets.torrents.kids_tv }}'
+    set:
+      path: '/home/cgiacofei/files/completed/andrea_tv/'
+
     all_series:
       parse_only: yes
-    plugin_priority:
-      exec: 0
-    listdir: '{{ secrets.torrents.kids_tv }}'
-    exec:
-      on_output:
-        for_accepted: rm '{{location}}'
-    accept_all: yes
 
   Local_Torrents-Movies_Andrea:
-    set:
-      path: '/home/cgiacofei/files/completed/andrea_movies/'
     priority: 4
     template:
       - movies-global
-    disable:
-      - seen
-      - seen_info_hash
-      - inputs
-      - exists_movie
-      - seen_movies
-      - regexp
-      - content_size
-      - torrent_alive
-      - interval
-    movie_queue: remove
-    plugin_priority:
-      exec: 0
+      - local-torrents
+
     listdir: '{{ secrets.torrents.kids_movies }}'
-    exec:
-      on_output:
-        for_accepted: rm '{{location}}'
-    accept_all: yes
+    set:
+      path: '/home/cgiacofei/files/completed/andrea_movies/'
+
+    movie_queue: remove
 
 ################################################################################
 #
