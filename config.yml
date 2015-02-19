@@ -410,10 +410,22 @@ tasks:
 ################################################################################
   Clean_Movie_Queue:
     template: no_global
+    disable:
+      - seen
+      - seen_info_hash
+      - seen_movies
     accept_all: yes
     listdir:
       - '{{ secrets.directories.movies }}'
-    movie_queue: remove
+      - '{{ secrets.directories.kids_movies }}'
+    imdb_lookup: yes
+    tmdb_lookup: yes
+    require_field: [movie_name, movie_year]
+    movie_queue: accept
+    trakt_remove:
+      username: '{{ secrets.trakt.username }}'
+      password: '{{ secrets.trakt.password }}'
+      list: watchlist
 
   Clear_Torrents:
     clean_transmission:
