@@ -33,6 +33,7 @@ templates:
   global:
 
     email:
+      template: html
       from: c.giacofei.htpc@gmail.com
       to: c.giacofei@gmail.com
       smtp_username : '{{ secrets.gmail.smtp_username }}'
