@@ -149,7 +149,7 @@ templates:
 
     # Check for already downloaded or currently downloading movies
     exists_movie:
-      - '{{ secrets.directories.kids_movies }}'
+      #- '{{ secrets.directories.kids_movies }}'
       - '{{ secrets.directories.movies }}'
 
     trakt_remove:
@@ -435,7 +435,7 @@ tasks:
     accept_all: yes
     listdir:
       - '{{ secrets.directories.movies }}'
-      - '{{ secrets.directories.kids_movies }}'
+      #- '{{ secrets.directories.kids_movies }}'
     imdb_lookup: yes
     tmdb_lookup: yes
     require_field: [movie_name, movie_year]
