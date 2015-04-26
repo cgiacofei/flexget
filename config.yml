@@ -33,6 +33,7 @@ templates:
   global:
 
     email:
+      template: html
       from: c.giacofei.htpc@gmail.com
       to: c.giacofei@gmail.com
       smtp_username : '{{ secrets.gmail.smtp_username }}'
@@ -48,6 +49,11 @@ templates:
       password: '{{ secrets.transmission.password }}'
       ratio: 1
       main_file_only: yes
+      skip_files:
+        - '*.nfo'
+        - '*.sfv'
+        - '*[sS]ample*'
+        - '*.txt'
       include_subs: yes
 
     free_space:
@@ -151,6 +157,19 @@ templates:
       password: '{{ secrets.trakt.password }}'
       list: watchlist
 
+  movies-queued:
+    parsing:
+      movie: guessit
+    set:
+      path: '/home/cgiacofei/files/completed/movies/'
+      queuetotop: yes
+    discover:
+      what:
+        - emit_movie_queue: yes
+      from: [ filler: yes ]
+
+    movie_queue: accept
+
 ################################################################################
 #
 # Settings for finding and tracking series premieres
@@ -186,7 +205,8 @@ templates:
       quality: 720p+ hdtv+
 
     set:
-      path: '/home/cgiacofei/files/completed/tv_premieres/'
+      path: '/home/cgiacofei/files/completed/tv_premieres/{{ series_name }}/Season {{series_season}}/'
+      content_filename: "{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}"
       queuetotop: no
 
   # If a premier was grabbed, keep on tracking it until the directory is (re)moved
@@ -201,7 +221,8 @@ templates:
           - '{{ secrets.directories.tv_premieres }}'
 
     set:
-      path: '/home/cgiacofei/files/completed/tv_premieres/'
+      path: '/home/cgiacofei/files/completed/tv_premieres/{{ series_name }}/Season {{series_season}}/'
+      content_filename: "{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}"
       queuetotop: no
 
   queue-movies:
@@ -218,6 +239,26 @@ templates:
 
     movie_queue: accept
 
+  # Global settings for local torrent downloads
+  local-torrents:
+    disable:
+      - seen
+      - seen_info_hash
+      - inputs
+      - exists_series
+      - regexp
+      - content_size
+      - torrent_alive
+
+    plugin_priority:
+      exec: 0
+
+    exec:
+      on_output:
+        for_accepted: rm '{{location}}'
+    accept_all: yes
+
+
 tasks:
 ################################################################################
 #
@@ -233,7 +274,8 @@ tasks:
     parsing:
       series: internal
     set:
-      path: '/home/cgiacofei/files/completed/tv_shows/'
+      path: '/home/cgiacofei/files/completed/tv_shows/{{ series_name }}/Season {{series_season}}/'
+      content_filename: "{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}"
       queuetotop: yes
     template:
       - tv-global
@@ -255,7 +297,8 @@ tasks:
     parsing:
       series: internal
     set:
-      path: '/home/cgiacofei/files/completed/andrea_tv/'
+      path: '/home/cgiacofei/files/completed/andrea_tv/{{ series_name }}/Season {{series_season}}/'
+      content_filename: "{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}"
       queuetotop: yes
     template:
       - tv-global
@@ -328,103 +371,55 @@ tasks:
 #
 ################################################################################
   Local_Torrents-TV:
-    set:
-      path: '/home/cgiacofei/files/completed/tv_shows/'
     priority: 1
     template:
       - tv-global
-    disable:
-      - seen
-      - seen_info_hash
-      - inputs
-      - exists_series
-      - regexp
-      - content_size
-      - torrent_alive
+      - local-torrents
+
+    listdir: '{{ secrets.torrents.tv }}'
+    set:
+      path: '/home/cgiacofei/files/completed/tv_shows/'
+
     all_series:
       parse_only: yes
-    plugin_priority:
-      exec: 0
-    listdir: '{{ secrets.torrents.tv }}'
-    exec:
-      on_output:
-        for_accepted: rm '{{location}}'
-    accept_all: yes
 
   # Same as above but for movies
   Local_Torrents-Movies:
-    set:
-      path: '/home/cgiacofei/files/completed/movies/'
     priority: 2
     template:
       - movies-global
-    disable:
-      - seen
-      - seen_info_hashts
-      - inputs
-      - exists_movie
-      - seen_movies
-      - regexp
-      - content_size
-      - torrent_alive
-      - interval
-    movie_queue: remove
-    plugin_priority:
-      exec: 0
+      - local-torrents
+
     listdir: '{{ secrets.torrents.movies }}'
-    exec:
-      on_output:
-        for_accepted: rm '{{location}}'
-    accept_all: yes
+    set:
+      path: '/home/cgiacofei/files/completed/movies/'
+
+    movie_queue: remove
 
   Local_Torrents-TV_Andrea:
-    set:
-      path: '/home/cgiacofei/files/completed/andrea_tv/'
     priority: 3
     template:
       - tv-global
-    disable:
-      - seen
-      - seen_info_hash
-      - inputs
-      - exists_series
-      - regexp
-      - content_size
-      - torrent_alive
+      - local-torrents
+
+    listdir: '{{ secrets.torrents.kids_tv }}'
+    set:
+      path: '/home/cgiacofei/files/completed/andrea_tv/'
+
     all_series:
       parse_only: yes
-    plugin_priority:
-      exec: 0
-    listdir: '{{ secrets.torrents.kids_tv }}'
-    exec:
-      on_output:
-        for_accepted: rm '{{location}}'
-    accept_all: yes
 
   Local_Torrents-Movies_Andrea:
-    set:
-      path: '/home/cgiacofei/files/completed/andrea_movies/'
     priority: 4
     template:
       - movies-global
-    disable:
-      - seen
-      - seen_info_hash
-      - inputs
-      - exists_movie
-      - seen_movies
-      - regexp
-      - content_size
-      - torrent_alive
-      - interval
-    movie_queue: remove
-    plugin_priority:
-      exec: 0
+      - local-torrents
+
     listdir: '{{ secrets.torrents.kids_movies }}'
-    exec:
-      on_output:
-        for_accepted: rm '{{location}}'
-    accept_all: yes
+    set:
+      path: '/home/cgiacofei/files/completed/andrea_movies/'
+
+    movie_queue: remove
 
 ################################################################################
 #
@@ -433,10 +428,22 @@ tasks:
 ################################################################################
   Clean_Movie_Queue:
     template: no_global
+    disable:
+      - seen
+      - seen_info_hash
+      - seen_movies
     accept_all: yes
     listdir:
       - '{{ secrets.directories.movies }}'
-    movie_queue: remove
+      - '{{ secrets.directories.kids_movies }}'
+    imdb_lookup: yes
+    tmdb_lookup: yes
+    require_field: [movie_name, movie_year]
+    movie_queue: accept
+    trakt_remove:
+      username: '{{ secrets.trakt.username }}'
+      password: '{{ secrets.trakt.password }}'
+      list: watchlist
 
   Clear_Torrents:
     clean_transmission:
