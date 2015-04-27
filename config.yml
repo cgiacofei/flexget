@@ -157,12 +157,13 @@ templates:
       password: '{{ secrets.trakt.password }}'
       list: watchlist
 
-  movies-queued:
+  queue-movies:
     parsing:
       movie: guessit
     set:
       path: '/home/cgiacofei/files/completed/movies/'
       queuetotop: yes
+
     discover:
       what:
         - emit_movie_queue: yes
@@ -224,20 +225,6 @@ templates:
       path: '/home/cgiacofei/files/completed/tv_premieres/{{ series_name }}/Season {{series_season}}/'
       content_filename: "{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}"
       queuetotop: no
-
-  queue-movies:
-    parsing:
-      movie: guessit
-    set:
-      path: '/home/cgiacofei/files/completed/movies/'
-      queuetotop: yes
-
-    discover:
-      what:
-        - emit_movie_queue: yes
-      from: [ filler: yes ]
-
-    movie_queue: accept
 
   # Global settings for local torrent downloads
   local-torrents:
@@ -338,6 +325,7 @@ tasks:
 ################################################################################
   populate_movies:
     priority: 1
+    template: no_global
     interval: 2 hours
     trakt_list:
       username: '{{ secrets.trakt.username }}'
@@ -354,7 +342,7 @@ tasks:
       - movies-global
       - queue-movies
 
-    quality: 1080p+ bluray+ h264+ truehd|dtshd|dd5.1|dts
+    quality: 1080p+ bluray+ h264+
 
   # Delay sets a window to allow for higher resolution videos
   trakt_movies-720p:
@@ -362,7 +350,7 @@ tasks:
       - movies-global
       - queue-movies
 
-    quality: 720p+ webdl+ xvid+ truehd|dtshd|dd5.1|dts|ac3
+    quality: 720p+ webdl+ xvid+
     delay: 7 days
 
 ################################################################################
