@@ -23,7 +23,7 @@ schedules:
 
   - tasks: 'Clear_Torrents'
     interval:
-      hours: 24
+      hours: 1
 
   - tasks: 'Clean_Movie_Queue'
     interval:
