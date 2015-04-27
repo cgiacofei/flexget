@@ -160,16 +160,27 @@ templates:
   queue-movies:
     parsing:
       movie: guessit
-    set:
-      path: '/home/cgiacofei/files/completed/movies/'
-      queuetotop: yes
+    movie_queue: accept
 
+    disable:
+      - seen_movies
     discover:
       what:
         - emit_movie_queue: yes
-      from: [ filler: yes ]
 
-    movie_queue: accept
+      from:
+        - flexget_archive: [movies]
+
+        - kat:
+            category: movies
+            verified: yes
+        - torrentz:
+            reputation: verified
+            extra_terms: "movie* hd"
+
+    set:
+      path: '/home/cgiacofei/files/completed/movies/'
+      queuetotop: yes
 
 ################################################################################
 #
@@ -324,13 +335,14 @@ tasks:
 #
 ################################################################################
   populate_movies:
-    priority: 1
+    priority: 100
     template: no_global
     interval: 2 hours
     trakt_list:
       username: '{{ secrets.trakt.username }}'
       list: watchlist
       type: movies
+    no_entries_ok: yes
     accept_all: yes
     movie_queue: add
 
@@ -338,6 +350,7 @@ tasks:
   # Main movie download task
   #-----------------------------------------------------------------------------
   trakt_movies-1080p:
+    priority: 110
     template:
       - movies-global
       - queue-movies
@@ -346,6 +359,7 @@ tasks:
 
   # Delay sets a window to allow for higher resolution videos
   trakt_movies-720p:
+    priority: 120
     template:
       - movies-global
       - queue-movies
