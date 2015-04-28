@@ -17,7 +17,7 @@ schedules:
       hours: 1
 
   # Movies
-  - tasks: 'populate_movies, trakt_movies*'
+  - tasks: [populate_movies, trakt_movies*]
     interval:
       hours: 2
 
