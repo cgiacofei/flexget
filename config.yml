@@ -144,6 +144,8 @@ templates:
       max: 6000
       min: 1000
     trakt_lookup: yes
+    imdb_lookup: no
+    tmdb_lookup: no
 
     seen_movies: strict # Don't download movies we've already seen
 
@@ -440,8 +442,8 @@ tasks:
     listdir:
       - '{{ secrets.directories.movies }}'
       #- '{{ secrets.directories.kids_movies }}'
-    imdb_lookup: yes
-    tmdb_lookup: yes
+    #~ imdb_lookup: yes
+    #~ tmdb_lookup: yes
     require_field: [movie_name, movie_year]
     movie_queue: accept
     trakt_remove:
