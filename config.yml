@@ -365,7 +365,7 @@ tasks:
       - queue-movies
 
     quality: 720p+ webdl+ xvid+
-    delay: 7 days
+    delay: 2 days
 
 ################################################################################
 #
