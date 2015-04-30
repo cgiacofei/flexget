@@ -455,7 +455,7 @@ tasks:
   tv_sorting:
     template: no_global
     find:
-      path: '{{ secrets.downloads.tv_shows }}'
+      path: '/home/media/completed_files/tv_shows'
       regexp: '.*\.(mkv|mp4|avi|mp4)$'
       recursive: yes
     seen: local
@@ -473,7 +473,7 @@ tasks:
     require_field: series_name
     accept_all: yes
     move:
-      to: '/home/cgiacofe/flextest/storage/tv/{{ series_name }}/Season {{series_season}}/'
+      to: '/media/usb/TV Shows/{{ series_name }}/Season {{series_season}}/'
       filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
     #~ exec:
       #~ allow_background: yes
@@ -484,14 +484,14 @@ tasks:
   tv_premiere_sorting:
     template: no_global
     find:
-      path: '{{ secrets.downloads.tv_premieres }}'
+      path: '/home/media/completed_files/tv_premieres'
       regexp: '.*\.(mkv|mp4|avi|mp4)$'
       recursive: yes
     seen: local
     configure_series:
       from:
         listdir:
-          - '{{ secrets.downloads.tv_premieres }}'
+          - '/home/media/completed_files/tv_premieres'
       settings:
         parse_only: yes
     regexp:
@@ -500,7 +500,7 @@ tasks:
     require_field: series_name
     accept_all: yes
     move:
-      to: '/home/cgiacofe/flextest/storage/tv/{{ series_name }}/Season {{series_season}}/'
+      to: '/media/usb/TV Premieres/{{ series_name }}/Season {{series_season}}/'
       filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
     #~ exec:
       #~ allow_background: yes
@@ -512,13 +512,13 @@ tasks:
     template: no_global
     imdb_required: yes
     find:
-      path: '{{ secrets.downloads.movies }}'
+      path: '/home/media/completed_files/movies'
       regexp: '.*\.(mkv|mp4|avi|mp4)$'
       recursive: yes
     require_field: imdb_name
     accept_all: yes
     move:
-      to: '/home/cgiacofe/flextest/storage/movies/{{imdb_name}} ({{imdb_year}})'
+      to: '/media/usb/Movies/{{imdb_name}} ({{imdb_year}})'
       filename: '{{imdb_name}} ({{imdb_year}})'
 
 ################################################################################
