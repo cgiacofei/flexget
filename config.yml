@@ -475,6 +475,7 @@ tasks:
     move:
       to: '/media/usb/TV Shows/{{ series_name }}/Season {{series_season}}/'
       filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
+
     #~ exec:
       #~ allow_background: yes
       #~ auto_escape: yes
@@ -502,6 +503,7 @@ tasks:
     move:
       to: '/media/usb/TV Premieres/{{ series_name }}/Season {{series_season}}/'
       filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
+
     #~ exec:
       #~ allow_background: yes
       #~ auto_escape: yes
