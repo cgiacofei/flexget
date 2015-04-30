@@ -17,7 +17,7 @@ schedules:
       hours: 1
 
   # Movies
-  - tasks: [populate_movies, trakt_movies*]
+  - tasks: [populate_movies, trakt_movies-1080p, trakt_movies-720p]
     interval:
       hours: 2
 
@@ -27,7 +27,7 @@ schedules:
 
   - tasks: 'Clean_Movie_Queue'
     interval:
-      weeks: 1
+      days: 1
 
 templates:
   global:
@@ -180,10 +180,6 @@ templates:
             reputation: verified
             extra_terms: "movie* hd"
 
-    set:
-      path: '/home/cgiacofei/files/completed/movies/'
-      queuetotop: yes
-
 ################################################################################
 #
 # Settings for finding and tracking series premieres
@@ -219,7 +215,7 @@ templates:
       quality: 720p+ hdtv+
 
     set:
-      path: '/home/cgiacofei/files/completed/tv_premieres/{{ series_name }}/Season {{series_season}}/'
+      path: '/home/cgiacofei/files/completed/tv_premieres/{{ series_name }}/'
       content_filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
       queuetotop: no
 
@@ -235,7 +231,7 @@ templates:
           - '{{ secrets.directories.tv_premieres }}'
 
     set:
-      path: '/home/cgiacofei/files/completed/tv_premieres/{{ series_name }}/Season {{series_season}}/'
+      path: '/home/cgiacofei/files/completed/tv_premieres/{{ series_name }}/'
       content_filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
       queuetotop: no
 
@@ -274,7 +270,7 @@ tasks:
     parsing:
       series: internal
     set:
-      path: '/home/cgiacofei/files/completed/tv_shows/{{ series_name }}/Season {{series_season}}/'
+      path: '/home/cgiacofei/files/completed/tv_shows/'
       content_filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
       queuetotop: yes
     template:
@@ -297,7 +293,7 @@ tasks:
     parsing:
       series: internal
     set:
-      path: '/home/cgiacofei/files/completed/andrea_tv/{{ series_name }}/Season {{series_season}}/'
+      path: '/home/cgiacofei/files/completed/andrea_tv/'
       content_filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
       queuetotop: yes
     template:
@@ -353,20 +349,33 @@ tasks:
   #-----------------------------------------------------------------------------
   trakt_movies-1080p:
     priority: 110
+    imdb_lookup: yes
     template:
       - movies-global
       - queue-movies
 
     quality: 1080p+ bluray+ h264+
 
+    set:
+      path: '/home/cgiacofei/files/completed/movies/'
+      content_filename: '{{ movie_name }} {{movie_year}}'
+      queuetotop: yes
+
   # Delay sets a window to allow for higher resolution videos
   trakt_movies-720p:
     priority: 120
+    imdb_lookup: yes
     template:
       - movies-global
       - queue-movies
 
     quality: 720p+ webdl+ xvid+
+
+    set:
+      path: '/home/cgiacofei/files/completed/movies/'
+      content_filename: '{{ movie_name }} {{movie_year}}'
+      queuetotop: yes
+
     delay: 2 days
 
 ################################################################################
@@ -382,7 +391,7 @@ tasks:
 
     listdir: '{{ secrets.torrents.tv }}'
     set:
-      path: '/home/cgiacofei/files/completed/tv_shows/{{ series_name }}/Season {{series_season}}/'
+      path: '/home/cgiacofei/files/completed/tv_shows/'
       content_filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
 
     all_series:
@@ -409,7 +418,7 @@ tasks:
 
     listdir: '{{ secrets.torrents.kids_tv }}'
     set:
-      path: '/home/cgiacofei/files/completed/andrea_tv/{{ series_name }}/Season {{series_season}}/'
+      path: '/home/cgiacofei/files/completed/andrea_tv/'
       content_filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
 
     all_series:
@@ -429,6 +438,81 @@ tasks:
 
 ################################################################################
 #
+# File sorting
+#
+################################################################################
+
+  tv_sorting:
+    template: no_global
+    find:
+      path: '{{ secrets.downloads.tv_shows }}'
+      regexp: '.*\.(mkv|mp4|avi)$'
+      recursive: yes
+    seen: local
+    configure_series:
+      from:
+        trakt_list:
+          username: '{{ secrets.trakt.username }}'
+          list: following
+          type: shows
+      settings:
+        parse_only: yes
+    regexp:
+      reject:
+        - sample
+    require_field: series_name
+    accept_all: yes
+    move:
+      to: '/home/cgiacofe/flextest/storage/tv/{{ series_name }}/Season {{series_season}}/'
+      filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
+    exec:
+      allow_background: yes
+      auto_escape: yes
+      on_exit:
+        phase: "/bin/rm -rf {{ secrets.downloads.tv_shows }}/*"
+
+  tv_premiere_sorting:
+    template: no_global
+    find:
+      path: '{{ secrets.downloads.tv_premieres }}'
+      regexp: '.*\.(mkv|mp4|avi)$'
+      recursive: yes
+    seen: local
+    configure_series:
+      from:
+        listdir:
+          - '{{ secrets.downloads.tv_premieres }}'
+      settings:
+        parse_only: yes
+    regexp:
+      reject:
+        - sample
+    require_field: series_name
+    accept_all: yes
+    move:
+      to: '/home/cgiacofe/flextest/storage/tv/{{ series_name }}/Season {{series_season}}/'
+      filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
+    exec:
+      allow_background: yes
+      auto_escape: yes
+      on_exit:
+        phase: "/bin/rm -rf {{ secrets.downloads.tv_premieres }}/*"
+
+  movie_sorting:
+    template: no_global
+    imdb_required: yes
+    find:
+      path: '{{ secrets.downloads.movies }}'
+      regexp: '.*\.(mkv|mp4|avi)$'
+      recursive: yes
+    require_field: imdb_name
+    accept_all: yes
+    move:
+      to: '/home/cgiacofe/flextest/storage/movies/{{imdb_name}} ({{imdb_year}})'
+      filename: '{{imdb_name}} ({{imdb_year}})'
+
+################################################################################
+#
 # Maintainence Tasks
 #
 ################################################################################
@@ -442,10 +526,11 @@ tasks:
     listdir:
       - '{{ secrets.directories.movies }}'
       #- '{{ secrets.directories.kids_movies }}'
-    #~ imdb_lookup: yes
-    #~ tmdb_lookup: yes
+
+    imdb_lookup: yes
     require_field: [movie_name, movie_year]
     movie_queue: accept
+
     trakt_remove:
       username: '{{ secrets.trakt.username }}'
       password: '{{ secrets.trakt.password }}'
