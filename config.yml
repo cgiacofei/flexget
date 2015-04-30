@@ -21,6 +21,7 @@ schedules:
     interval:
       hours: 2
 
+  # Maintainence
   - tasks: 'Clear_Torrents'
     interval:
       hours: 1
@@ -28,6 +29,11 @@ schedules:
   - tasks: 'Clean_Movie_Queue'
     interval:
       days: 1
+
+  # Sort Files
+  - tasks: [tv_sorting, tv_premiere_sorting, movie_sorting]
+    interval:
+      minutes: 30
 
 templates:
   global:
@@ -89,11 +95,14 @@ templates:
         - '*.mkv'
         - '*.mpg'
         - '*.mp4'
-        - '*.r0*'
-        - '*.part0*'
+
       reject:
         - 'password.txt'
         - '*.wmv'
+        - '*.r0*'
+        - '*.part0*'
+
+      require_mainfile: yes
 
     domain_delay:
       bt-chat.com: 5 seconds
@@ -102,7 +111,8 @@ templates:
     # The Pirate Bay ssl certs always fail
     verify_ssl_certificates: no
 
-    magnets: yes
+    # Need to reject magnets in order for content filtering to work
+    magnets: no
 
 ################################################################################
 #
@@ -446,7 +456,7 @@ tasks:
     template: no_global
     find:
       path: '{{ secrets.downloads.tv_shows }}'
-      regexp: '.*\.(mkv|mp4|avi)$'
+      regexp: '.*\.(mkv|mp4|avi|mp4)$'
       recursive: yes
     seen: local
     configure_series:
@@ -465,17 +475,17 @@ tasks:
     move:
       to: '/home/cgiacofe/flextest/storage/tv/{{ series_name }}/Season {{series_season}}/'
       filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
-    exec:
-      allow_background: yes
-      auto_escape: yes
-      on_exit:
-        phase: "/bin/rm -rf {{ secrets.downloads.tv_shows }}/*"
+    #~ exec:
+      #~ allow_background: yes
+      #~ auto_escape: yes
+      #~ on_exit:
+        #~ phase: "/bin/rm -rf {{ secrets.downloads.tv_shows }}/*"
 
   tv_premiere_sorting:
     template: no_global
     find:
       path: '{{ secrets.downloads.tv_premieres }}'
-      regexp: '.*\.(mkv|mp4|avi)$'
+      regexp: '.*\.(mkv|mp4|avi|mp4)$'
       recursive: yes
     seen: local
     configure_series:
@@ -492,18 +502,18 @@ tasks:
     move:
       to: '/home/cgiacofe/flextest/storage/tv/{{ series_name }}/Season {{series_season}}/'
       filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
-    exec:
-      allow_background: yes
-      auto_escape: yes
-      on_exit:
-        phase: "/bin/rm -rf {{ secrets.downloads.tv_premieres }}/*"
+    #~ exec:
+      #~ allow_background: yes
+      #~ auto_escape: yes
+      #~ on_exit:
+        #~ phase: "/bin/rm -rf {{ secrets.downloads.tv_premieres }}/*"
 
   movie_sorting:
     template: no_global
     imdb_required: yes
     find:
       path: '{{ secrets.downloads.movies }}'
-      regexp: '.*\.(mkv|mp4|avi)$'
+      regexp: '.*\.(mkv|mp4|avi|mp4)$'
       recursive: yes
     require_field: imdb_name
     accept_all: yes
