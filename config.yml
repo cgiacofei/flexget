@@ -226,7 +226,7 @@ templates:
 
     set:
       path: '/home/cgiacofei/files/completed/tv_premieres/{{ series_name }}/'
-      content_filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
+      content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
       queuetotop: no
 
   # If a premier was grabbed, keep on tracking it until the directory is (re)moved
@@ -242,7 +242,7 @@ templates:
 
     set:
       path: '/home/cgiacofei/files/completed/tv_premieres/{{ series_name }}/'
-      content_filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
+      content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
       queuetotop: no
 
   # Global settings for local torrent downloads
@@ -281,7 +281,7 @@ tasks:
       series: internal
     set:
       path: '/home/cgiacofei/files/completed/tv_shows/'
-      content_filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
+      content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
       queuetotop: yes
     template:
       - tv-global
@@ -304,7 +304,7 @@ tasks:
       series: internal
     set:
       path: '/home/cgiacofei/files/completed/andrea_tv/'
-      content_filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
+      content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
       queuetotop: yes
     template:
       - tv-global
@@ -367,7 +367,7 @@ tasks:
     quality: 1080p+ bluray+ h264+
 
     set:
-      path: '/home/cgiacofei/files/completed/movies/'
+      path: '/home/cgiacofei/files/completed/movies/{{imdb_name}} ({{imdb_year}})/'
       content_filename: '{{ movie_name }} {{movie_year}}'
       queuetotop: yes
 
@@ -382,7 +382,7 @@ tasks:
     quality: 720p+ webdl+ xvid+
 
     set:
-      path: '/home/cgiacofei/files/completed/movies/'
+      path: '/home/cgiacofei/files/completed/movies/{{imdb_name}} ({{imdb_year}})/'
       content_filename: '{{ movie_name }} {{movie_year}}'
       queuetotop: yes
 
@@ -402,7 +402,7 @@ tasks:
     listdir: '{{ secrets.torrents.tv }}'
     set:
       path: '/home/cgiacofei/files/completed/tv_shows/'
-      content_filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
+      content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
 
     all_series:
       parse_only: yes
@@ -429,7 +429,7 @@ tasks:
     listdir: '{{ secrets.torrents.kids_tv }}'
     set:
       path: '/home/cgiacofei/files/completed/andrea_tv/'
-      content_filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
+      content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
 
     all_series:
       parse_only: yes
@@ -455,7 +455,7 @@ tasks:
   tv_sorting:
     template: no_global
     find:
-      path: '{{ secrets.downloads.tv_shows }}'
+      path: '/home/media/completed_files/tv_shows'
       regexp: '.*\.(mkv|mp4|avi|mp4)$'
       recursive: yes
     seen: local
@@ -484,14 +484,14 @@ tasks:
   tv_premiere_sorting:
     template: no_global
     find:
-      path: '{{ secrets.downloads.tv_premieres }}'
+      path: '/home/media/completed_files/tv_premieres'
       regexp: '.*\.(mkv|mp4|avi|mp4)$'
       recursive: yes
     seen: local
     configure_series:
       from:
         listdir:
-          - '{{ secrets.downloads.tv_premieres }}'
+          - '/home/media/completed_files/tv_premieres'
       settings:
         parse_only: yes
     regexp:
@@ -508,17 +508,18 @@ tasks:
       on_exit:
         phase: "/bin/rm -rf {{ secrets.downloads.tv_premieres }}/*"
 
+
   movie_sorting:
     template: no_global
     imdb_required: yes
     find:
-      path: '{{ secrets.downloads.movies }}'
+      path: '/home/media/completed_files/movies'
       regexp: '.*\.(mkv|mp4|avi|mp4)$'
       recursive: yes
     require_field: imdb_name
     accept_all: yes
     move:
-      to: '/home/cgiacofe/flextest/storage/movies/{{imdb_name}} ({{imdb_year}})'
+      to: '/media/usb/Movies/{{imdb_name}} ({{imdb_year}})'
       filename: '{{imdb_name}} ({{imdb_year}})'
       clean_source: 300
 
