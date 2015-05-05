@@ -367,7 +367,7 @@ tasks:
     quality: 1080p+ bluray+ h264+
 
     set:
-      path: '/home/cgiacofei/files/completed/movies/'
+      path: '/home/cgiacofei/files/completed/movies/{{imdb_name}} ({{imdb_year}})/'
       content_filename: '{{ movie_name }} {{movie_year}}'
       queuetotop: yes
 
@@ -382,7 +382,7 @@ tasks:
     quality: 720p+ webdl+ xvid+
 
     set:
-      path: '/home/cgiacofei/files/completed/movies/'
+      path: '/home/cgiacofei/files/completed/movies/{{imdb_name}} ({{imdb_year}})/'
       content_filename: '{{ movie_name }} {{movie_year}}'
       queuetotop: yes
 
