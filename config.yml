@@ -87,7 +87,7 @@ templates:
 
     torrent_alive:
       min_seeds: 10
-      reject_for: 3 hours
+      reject_for: 1 day
 
     content_filter:
       require:
@@ -475,11 +475,11 @@ tasks:
     move:
       to: '/home/cgiacofe/flextest/storage/tv/{{ series_name }}/Season {{series_season}}/'
       filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
-    #~ exec:
-      #~ allow_background: yes
-      #~ auto_escape: yes
-      #~ on_exit:
-        #~ phase: "/bin/rm -rf {{ secrets.downloads.tv_shows }}/*"
+    exec:
+      allow_background: yes
+      auto_escape: yes
+      on_exit:
+        phase: "/bin/rm -rf {{ secrets.downloads.tv_shows }}/*"
 
   tv_premiere_sorting:
     template: no_global
@@ -502,11 +502,11 @@ tasks:
     move:
       to: '/home/cgiacofe/flextest/storage/tv/{{ series_name }}/Season {{series_season}}/'
       filename: '{{ series_name }} - S{{ series_season|pad(2) }}xE{{ series_episode|pad(2) }}'
-    #~ exec:
-      #~ allow_background: yes
-      #~ auto_escape: yes
-      #~ on_exit:
-        #~ phase: "/bin/rm -rf {{ secrets.downloads.tv_premieres }}/*"
+    exec:
+      allow_background: yes
+      auto_escape: yes
+      on_exit:
+        phase: "/bin/rm -rf {{ secrets.downloads.tv_premieres }}/*"
 
   movie_sorting:
     template: no_global
@@ -520,6 +520,7 @@ tasks:
     move:
       to: '/home/cgiacofe/flextest/storage/movies/{{imdb_name}} ({{imdb_year}})'
       filename: '{{imdb_name}} ({{imdb_year}})'
+      clean_source: 300
 
 ################################################################################
 #
