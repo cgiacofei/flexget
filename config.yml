@@ -292,8 +292,7 @@ tasks:
           list: following
           type: shows
       settings:
-        target: 720p+ hdtv+
-        quality: 720p+ dvdscr+
+        quality: 720p+ webrip+
 
   #-----------------------------------------------------------------------------
   # Kids TV download task
@@ -315,8 +314,7 @@ tasks:
           list: kids_tv
           type: shows
       settings:
-        target: webrip+
-        quality: preair+
+        quality: 480p+ webrip+
 
   #-----------------------------------------------------------------------------
   # Tasks for TV premieres
