@@ -165,8 +165,7 @@ templates:
       - '{{ secrets.directories.movies }}'
 
     trakt_remove:
-      username: '{{ secrets.trakt.username }}'
-      password: '{{ secrets.trakt.password }}'
+      account: '{{ secrets.trakt.account }}'
       list: watchlist
 
   queue-movies:
@@ -237,7 +236,7 @@ templates:
         timeframe: 3 days
         quality: webrip+
       from:
-        listdir:
+        filesystem:
           - '{{ secrets.directories.tv_premieres }}'
 
     set:
@@ -288,7 +287,7 @@ tasks:
     configure_series:
       from:
         trakt_list:
-          username: '{{ secrets.trakt.username }}'
+          account: '{{ secrets.trakt.account }}'
           list: following
           type: shows
       settings:
@@ -310,7 +309,7 @@ tasks:
     configure_series:
       from:
         trakt_list:
-          username: '{{ secrets.trakt.username }}'
+          account: '{{ secrets.trakt.account }}'
           list: kids_tv
           type: shows
       settings:
@@ -345,7 +344,7 @@ tasks:
     template: no_global
     interval: 2 hours
     trakt_list:
-      username: '{{ secrets.trakt.username }}'
+      account: '{{ secrets.trakt.account }}'
       list: watchlist
       type: movies
     no_entries_ok: yes
@@ -396,8 +395,7 @@ tasks:
     template:
       - tv-global
       - local-torrents
-
-    listdir: '{{ secrets.torrents.tv }}'
+    filesystem: '{{ secrets.torrents.tv }}'
     set:
       path: '/home/cgiacofei/files/completed/tv_shows/'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
@@ -412,7 +410,7 @@ tasks:
       - movies-global
       - local-torrents
 
-    listdir: '{{ secrets.torrents.movies }}'
+    filesystem: '{{ secrets.torrents.movies }}'
     set:
       path: '/home/cgiacofei/files/completed/movies/'
 
@@ -424,7 +422,7 @@ tasks:
       - tv-global
       - local-torrents
 
-    listdir: '{{ secrets.torrents.kids_tv }}'
+    filesystem: '{{ secrets.torrents.kids_tv }}'
     set:
       path: '/home/cgiacofei/files/completed/andrea_tv/'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
@@ -438,7 +436,7 @@ tasks:
       - movies-global
       - local-torrents
 
-    listdir: '{{ secrets.torrents.kids_movies }}'
+    filesystem: '{{ secrets.torrents.kids_movies }}'
     set:
       path: '/home/cgiacofei/files/completed/andrea_movies/'
 
@@ -452,7 +450,7 @@ tasks:
 
   tv_sorting:
     template: no_global
-    find:
+    filesystem:
       path: '/home/media/completed_files/tv_shows'
       regexp: '.*\.(mkv|mp4|avi|mp4)$'
       recursive: yes
@@ -460,7 +458,7 @@ tasks:
     configure_series:
       from:
         trakt_list:
-          username: '{{ secrets.trakt.username }}'
+          account: '{{ secrets.trakt.account }}'
           list: following
           type: shows
       settings:
@@ -481,14 +479,14 @@ tasks:
 
   tv_premiere_sorting:
     template: no_global
-    find:
+    filesystem:
       path: '/home/media/completed_files/tv_premieres'
       regexp: '.*\.(mkv|mp4|avi|mp4)$'
       recursive: yes
     seen: local
     configure_series:
       from:
-        listdir:
+        filesystem:
           - '/home/media/completed_files/tv_premieres'
       settings:
         parse_only: yes
@@ -509,7 +507,7 @@ tasks:
   movie_sorting:
     template: no_global
     imdb_required: yes
-    find:
+    filesystem:
       path: '/home/media/completed_files/movies'
       regexp: '.*\.(mkv|mp4|avi|mp4)$'
       recursive: yes
@@ -532,17 +530,16 @@ tasks:
       - seen_info_hash
       - seen_movies
     accept_all: yes
-    listdir:
+    filesystem:
       - '{{ secrets.directories.movies }}'
-      #- '{{ secrets.directories.kids_movies }}'
+      - '{{ secrets.directories.kids_movies }}'
 
     imdb_lookup: yes
     require_field: [movie_name, movie_year]
     movie_queue: accept
 
     trakt_remove:
-      username: '{{ secrets.trakt.username }}'
-      password: '{{ secrets.trakt.password }}'
+      account: '{{ secrets.trakt.account }}'
       list: watchlist
 
   Clear_Torrents:

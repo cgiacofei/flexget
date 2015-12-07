@@ -2,7 +2,7 @@ APScheduler==3.0.3
 babelfish==0.5.4
 BeautifulSoup==3.2.1
 beautifulsoup4==4.3.2
-feedparser==5.2.0
+feedparser==5.2.1
 FlexGet==1.2.303
 futures==2.2.0
 guessit==0.10.3
