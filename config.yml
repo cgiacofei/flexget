@@ -7,7 +7,7 @@ schedules:
       minutes: 15
 
   # Tracked TV shows
-  - tasks: [trakt_tv, trakt_kids, TV_Premieres_Track]
+  - tasks: [trakt_tv, trakt_kids, TV_Track]
     interval:
       minutes: 30
 
@@ -31,7 +31,7 @@ schedules:
       days: 1
 
   # Sort Files
-  - tasks: [tv_sorting, tv_premiere_sorting, movie_sorting]
+  - tasks: [tv_sorting, movie_sorting]
     interval:
       minutes: 30
 
@@ -130,7 +130,6 @@ templates:
     # Prevent from downloading shows that were aquired manually
     exists_series:
       - '{{ secrets.directories.tv_shows }}'
-      - '{{ secrets.directories.tv_premieres }}'
       - '{{ secrets.directories.kids_tv }}'
 
     # Look up info on TheTVDB.com to fill in extra info
@@ -191,7 +190,7 @@ templates:
 
 ################################################################################
 #
-# Settings for finding and tracking series premieres
+# Settings for finding new series premieres
 #
 ################################################################################
   tv-premieres:
@@ -218,18 +217,18 @@ templates:
       # Block premieres that weren't within the last 60 days
       - tvdb_first_air_date != None and tvdb_first_air_date < now - timedelta(days=60): reject
 
-    # Accept all series permieres
+    # Accept all series premieres
     series_premiere:
       timeframe: 1 days
       quality: 720p+ hdtv+
 
     set:
-      path: '/home/cgiacofei/files/completed/tv_premieres/{{ series_name }}/'
+      path: '/home/cgiacofei/files/completed/tv_shows/{{ series_name }}/'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
       queuetotop: no
 
   # If a premier was grabbed, keep on tracking it until the directory is (re)moved
-  tv-premieres-track:
+  tv-track:
     configure_series:
       settings:
         target: 720p+ hdtv+
@@ -237,10 +236,10 @@ templates:
         quality: webrip+
       from:
         filesystem:
-          - '{{ secrets.directories.tv_premieres }}'
+          - '{{ secrets.directories.tv_shows }}'
 
     set:
-      path: '/home/cgiacofei/files/completed/tv_premieres/{{ series_name }}/'
+      path: '/home/cgiacofei/files/completed/tv_shows/{{ series_name }}/'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
       queuetotop: no
 
@@ -288,7 +287,7 @@ tasks:
       from:
         trakt_list:
           account: '{{ secrets.trakt.account }}'
-          list: following
+          list: watchlist
           type: shows
       settings:
         quality: 720p+ webrip+
@@ -326,13 +325,13 @@ tasks:
       - tv-global
       - tv-premieres
 
-  TV_Premieres_Track:
+  TV_Track:
     priority: 50
     parsing:
       series: internal
     template:
       - tv-global
-      - tv-premieres-track
+      - tv-track
 
 ################################################################################
 #
@@ -457,10 +456,8 @@ tasks:
     seen: local
     configure_series:
       from:
-        trakt_list:
-          account: '{{ secrets.trakt.account }}'
-          list: following
-          type: shows
+        filesystem:
+          - '/home/media/completed_files/tv_shows'
       settings:
         parse_only: yes
     regexp:
@@ -476,33 +473,6 @@ tasks:
       auto_escape: yes
       on_exit:
         phase: "/bin/rm -rf {{ secrets.downloads.tv_shows }}/*"
-
-  tv_premiere_sorting:
-    template: no_global
-    filesystem:
-      path: '/home/media/completed_files/tv_premieres'
-      regexp: '.*\.(mkv|mp4|avi|mp4)$'
-      recursive: yes
-    seen: local
-    configure_series:
-      from:
-        filesystem:
-          - '/home/media/completed_files/tv_premieres'
-      settings:
-        parse_only: yes
-    regexp:
-      reject:
-        - sample
-    require_field: series_name
-    accept_all: yes
-    move:
-      to: '/media/usb/TV Premieres/{{ series_name }}/Season {{series_season}}/'
-      filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
-    exec:
-      allow_background: yes
-      auto_escape: yes
-      on_exit:
-        phase: "/bin/rm -rf {{ secrets.downloads.tv_premieres }}/*"
 
   movie_sorting:
     template: no_global
