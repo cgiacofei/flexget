@@ -1,6 +1,6 @@
 #! /bin/bash
 
-REMOTE='whatbox'
+REMOTE='origin'
 BRANCH='master'
 VENV='/home/media/.flexget/venv'
 
