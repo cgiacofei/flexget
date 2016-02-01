@@ -17,7 +17,7 @@ schedules:
       hours: 1
 
   # Movies
-  - tasks: [populate_movies, trakt_movies-1080p, trakt_movies-720p]
+  - tasks: [trakt_movies-1080p, trakt_movies-720p, trakt_kids_movies]
     interval:
       hours: 2
 
@@ -37,7 +37,6 @@ schedules:
 
 templates:
   global:
-
     email:
       template: html
       from: c.giacofei.htpc@gmail.com
@@ -129,11 +128,16 @@ templates:
 
     # Prevent from downloading shows that were aquired manually
     exists_series:
-      - '{{ secrets.directories.tv_shows }}'
-      - '{{ secrets.directories.kids_tv }}'
+      - '{{ secrets.media.tv_shows }}'
+      - '{{ secrets.media.kids_tv }}'
 
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
+
+    set:
+      path: '{{ secrets.downloads.tv_shows }}/{{ series_name }}/'
+      content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
+      queuetotop: no
 
   movies-global:
     interval: 1 hour # I have flexget run every half hour, that's really only necessary for TV Shows
@@ -151,7 +155,7 @@ templates:
     # Impose reasonable size constraints
     content_size:
       max: 6000
-      min: 1000
+      min: 700
     trakt_lookup: yes
     imdb_lookup: no
     tmdb_lookup: no
@@ -160,33 +164,8 @@ templates:
 
     # Check for already downloaded or currently downloading movies
     exists_movie:
-      #- '{{ secrets.directories.kids_movies }}'
-      - '{{ secrets.directories.movies }}'
-
-    trakt_remove:
-      account: '{{ secrets.trakt.account }}'
-      list: watchlist
-
-  queue-movies:
-    parsing:
-      movie: guessit
-    movie_queue: accept
-
-    disable:
-      - seen_movies
-    discover:
-      what:
-        - emit_movie_queue: yes
-
-      from:
-        - flexget_archive: [movies]
-
-        - kat:
-            category: movies
-            verified: yes
-        - torrentz:
-            reputation: verified
-            extra_terms: "movie* hd"
+      #- '{{ secrets.media.kids_movies }}'
+      - '{{ secrets.media.movies }}'
 
 ################################################################################
 #
@@ -222,10 +201,6 @@ templates:
       timeframe: 1 days
       quality: 720p+ hdtv+
 
-    set:
-      path: '/home/cgiacofei/files/completed/tv_shows/{{ series_name }}/'
-      content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
-      queuetotop: no
 
   # If a premier was grabbed, keep on tracking it until the directory is (re)moved
   tv-track:
@@ -236,12 +211,7 @@ templates:
         quality: webrip+
       from:
         filesystem:
-          - '{{ secrets.directories.tv_shows }}'
-
-    set:
-      path: '/home/cgiacofei/files/completed/tv_shows/{{ series_name }}/'
-      content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
-      queuetotop: no
+          - '{{ secrets.media.tv_shows }}'
 
   # Global settings for local torrent downloads
   local-torrents:
@@ -278,7 +248,7 @@ tasks:
     parsing:
       series: internal
     set:
-      path: '/home/cgiacofei/files/completed/tv_shows/'
+      path: '{{ secrets.downloads.tv_shows }}'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
       queuetotop: yes
     template:
@@ -300,7 +270,7 @@ tasks:
     parsing:
       series: internal
     set:
-      path: '/home/cgiacofei/files/completed/andrea_tv/'
+      path: '{{ secrets.downloads.kids_tv }}'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
       queuetotop: yes
     template:
@@ -338,18 +308,6 @@ tasks:
 # Movie Tasks
 #
 ################################################################################
-  populate_movies:
-    priority: 100
-    template: no_global
-    interval: 2 hours
-    trakt_list:
-      account: '{{ secrets.trakt.account }}'
-      list: watchlist
-      type: movies
-    no_entries_ok: yes
-    accept_all: yes
-    movie_queue: add
-
   #-----------------------------------------------------------------------------
   # Main movie download task
   #-----------------------------------------------------------------------------
@@ -358,14 +316,32 @@ tasks:
     imdb_lookup: yes
     template:
       - movies-global
-      - queue-movies
+    discover:
+      what:
+        - trakt_list:
+            account: '{{ secrets.trakt.account }}'
+            list: watchlist
+            type: movies
+      from:
+        - flexget_archive: [movies]
+
+        - kat:
+            category: movies
+            verified: yes
+        - torrentz:
+            reputation: verified
+            extra_terms: "movie* hd"
 
     quality: 1080p+ bluray+ h264+
 
     set:
-      path: '/home/cgiacofei/files/completed/movies/{{imdb_name}} ({{imdb_year}})/'
+      path: '{{ secrets.downloads.movies }}/{{imdb_name}} ({{imdb_year}})/'
       content_filename: '{{ movie_name }} {{movie_year}}'
       queuetotop: yes
+
+    trakt_remove:
+      account: '{{ secrets.trakt.account }}'
+      list: watchlist
 
   # Delay sets a window to allow for higher resolution videos
   trakt_movies-720p:
@@ -373,16 +349,66 @@ tasks:
     imdb_lookup: yes
     template:
       - movies-global
-      - queue-movies
+    discover:
+      what:
+        - trakt_list:
+            account: '{{ secrets.trakt.account }}'
+            list: watchlist
+            type: movies
+      from:
+        - flexget_archive: [movies]
+
+        - kat:
+            category: movies
+            verified: yes
+        - torrentz:
+            reputation: verified
+            extra_terms: "movie* hd"
 
     quality: 720p+ webdl+ xvid+
 
     set:
-      path: '/home/cgiacofei/files/completed/movies/{{imdb_name}} ({{imdb_year}})/'
+      path: '{{ secrets.downloads.movies }}/{{imdb_name}} ({{imdb_year}})/'
       content_filename: '{{ movie_name }} {{movie_year}}'
       queuetotop: yes
 
+    trakt_remove:
+      account: '{{ secrets.trakt.account }}'
+      list: watchlist
+
     delay: 2 days
+
+  trakt_kids_movies:
+    priority: 120
+    imdb_lookup: yes
+    template:
+      - movies-global
+    discover:
+      what:
+        - trakt_list:
+            account: '{{ secrets.trakt.account }}'
+            list: kids_movies
+            type: movies
+      from:
+        - flexget_archive: [movies]
+
+        - kat:
+            category: movies
+            verified: yes
+        - torrentz:
+            reputation: verified
+            extra_terms: "movie* hd"
+
+    quality: hdtv+ xvid+
+
+    set:
+      path: '{{ secrets.downloads.kids_movies }}/{{imdb_name}} ({{imdb_year}})/'
+      content_filename: '{{ movie_name }} {{movie_year}}'
+      queuetotop: yes
+
+    trakt_remove:
+      account: '{{ secrets.trakt.account }}'
+      list: kids_movies
 
 ################################################################################
 #
@@ -396,7 +422,7 @@ tasks:
       - local-torrents
     filesystem: '{{ secrets.torrents.tv }}'
     set:
-      path: '/home/cgiacofei/files/completed/tv_shows/'
+      path: '{{ secrets.downloads.tv_shows }}'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
 
     all_series:
@@ -411,7 +437,7 @@ tasks:
 
     filesystem: '{{ secrets.torrents.movies }}'
     set:
-      path: '/home/cgiacofei/files/completed/movies/'
+      path: '{{ secrets.downloads.movies }}'
 
     movie_queue: remove
 
@@ -423,7 +449,7 @@ tasks:
 
     filesystem: '{{ secrets.torrents.kids_tv }}'
     set:
-      path: '/home/cgiacofei/files/completed/andrea_tv/'
+      path: '{{ secrets.downloads.kids_tv }}'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
 
     all_series:
@@ -437,7 +463,7 @@ tasks:
 
     filesystem: '{{ secrets.torrents.kids_movies }}'
     set:
-      path: '/home/cgiacofei/files/completed/andrea_movies/'
+      path: '{{ secrets.downloads.kids_movies }}'
 
     movie_queue: remove
 
@@ -450,14 +476,14 @@ tasks:
   tv_sorting:
     template: no_global
     filesystem:
-      path: '/home/media/completed_files/tv_shows'
+      path: '{{ secrets.downloads.tv_shows }}'
       regexp: '.*\.(mkv|mp4|avi|mp4)$'
       recursive: yes
     seen: local
     configure_series:
       from:
         filesystem:
-          - '/home/media/completed_files/tv_shows'
+          - '{{ secrets.media.tv_shows }}'
       settings:
         parse_only: yes
     regexp:
@@ -466,7 +492,7 @@ tasks:
     require_field: series_name
     accept_all: yes
     move:
-      to: '/media/usb/TV Shows/{{ series_name }}/Season {{series_season}}/'
+      to: '/media/usb/tv_shows/{{ series_name }}/Season {{series_season}}/'
       filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
     exec:
       allow_background: yes
@@ -478,13 +504,27 @@ tasks:
     template: no_global
     imdb_required: yes
     filesystem:
-      path: '/home/media/completed_files/movies'
+      path: '{{ secrets.downloads.movies }}'
       regexp: '.*\.(mkv|mp4|avi|mp4)$'
       recursive: yes
     require_field: imdb_name
     accept_all: yes
     move:
-      to: '/media/usb/Movies/{{imdb_name}} ({{imdb_year}})'
+      to: '/media/usb/movies/{{imdb_name}} ({{imdb_year}})'
+      filename: '{{imdb_name}} ({{imdb_year}})'
+      clean_source: 300
+
+  kids_movie_sorting:
+    template: no_global
+    imdb_required: yes
+    filesystem:
+      path: '{{ secrets.downloads.kids_movies }}'
+      regexp: '.*\.(mkv|mp4|avi|mp4)$'
+      recursive: yes
+    require_field: imdb_name
+    accept_all: yes
+    move:
+      to: '/media/usb/kids_movies/{{imdb_name}} ({{imdb_year}})'
       filename: '{{imdb_name}} ({{imdb_year}})'
       clean_source: 300
 
@@ -501,8 +541,8 @@ tasks:
       - seen_movies
     accept_all: yes
     filesystem:
-      - '{{ secrets.directories.movies }}'
-      - '{{ secrets.directories.kids_movies }}'
+      - '{{ secrets.media.movies }}'
+      - '{{ secrets.media.kids_movies }}'
 
     imdb_lookup: yes
     require_field: [movie_name, movie_year]
