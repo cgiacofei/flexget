@@ -202,7 +202,7 @@ templates:
       quality: 720p+ hdtv+
 
 
-  # If a premier was grabbed, keep on tracking it until the directory is (re)moved
+  # Keep on tracking TV shows until the directory is (re)moved
   tv-track:
     configure_series:
       settings:
@@ -212,6 +212,17 @@ templates:
       from:
         filesystem:
           - '{{ secrets.media.tv_shows }}'
+
+  # Keep on tracking kids TV shows until the directory is (re)moved
+  kids-tv-track:
+    configure_series:
+      settings:
+        target: hdtv+
+        timeframe: 3 days
+        quality: webrip+
+      from:
+        filesystem:
+          - '{{ secrets.media.kids_tv }}'
 
   # Global settings for local torrent downloads
   local-torrents:
@@ -231,6 +242,7 @@ templates:
       on_output:
         for_accepted: rm '{{location}}'
     accept_all: yes
+    no_entries_ok: yes
 
 
 tasks:
@@ -241,7 +253,7 @@ tasks:
 ################################################################################
 
   #-----------------------------------------------------------------------------
-  # Main TV show download task
+  # Find TV shows from trakt.tv watchlist
   #-----------------------------------------------------------------------------
   trakt_tv:
     priority: 10
@@ -263,7 +275,7 @@ tasks:
         quality: 720p+ webrip+
 
   #-----------------------------------------------------------------------------
-  # Kids TV download task
+  # Kids TV from trakt.tv
   #-----------------------------------------------------------------------------
   trakt_kids:
     priority: 20
@@ -285,7 +297,7 @@ tasks:
         quality: 480p+ webrip+
 
   #-----------------------------------------------------------------------------
-  # Tasks for TV premieres
+  # Find new TV premieres
   #-----------------------------------------------------------------------------
   TV_Premieres:
     priority: 40
@@ -295,6 +307,9 @@ tasks:
       - tv-global
       - tv-premieres
 
+  #-----------------------------------------------------------------------------
+  # Track existing TV shows
+  #-----------------------------------------------------------------------------
   TV_Track:
     priority: 50
     parsing:
@@ -302,6 +317,17 @@ tasks:
     template:
       - tv-global
       - tv-track
+
+  #-----------------------------------------------------------------------------
+  # Track existing TV shows
+  #-----------------------------------------------------------------------------
+  Kids_TV_Track:
+    priority: 60
+    parsing:
+      series: internal
+    template:
+      - tv-global
+      - kids-tv-track
 
 ################################################################################
 #
@@ -499,6 +525,33 @@ tasks:
       auto_escape: yes
       on_exit:
         phase: "/bin/rm -rf {{ secrets.downloads.tv_shows }}/*"
+
+  kids_tv_sorting:
+    template: no_global
+    filesystem:
+      path: '{{ secrets.downloads.kids_tv }}'
+      regexp: '.*\.(mkv|mp4|avi|mp4)$'
+      recursive: yes
+    seen: local
+    configure_series:
+      from:
+        filesystem:
+          - '{{ secrets.media.kids_tv }}'
+      settings:
+        parse_only: yes
+    regexp:
+      reject:
+        - sample
+    require_field: series_name
+    accept_all: yes
+    move:
+      to: '/media/usb/kids_tv/{{ series_name }}/Season {{series_season}}/'
+      filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
+    exec:
+      allow_background: yes
+      auto_escape: yes
+      on_exit:
+        phase: "/bin/rm -rf {{ secrets.downloads.kids_tv }}/*"
 
   movie_sorting:
     template: no_global
