@@ -199,14 +199,14 @@ templates:
     # Accept all series premieres
     series_premiere:
       timeframe: 1 days
-      quality: 720p+ hdtv+
+      quality: 720p+ hdtv+ <=h264
 
 
   # Keep on tracking TV shows until the directory is (re)moved
   tv-track:
     configure_series:
       settings:
-        target: 720p+ hdtv+
+        target: 720p+ hdtv+ <=h264
         timeframe: 3 days
         quality: webrip+
       from:
@@ -219,7 +219,7 @@ templates:
       settings:
         target: hdtv+
         timeframe: 3 days
-        quality: webrip+
+        quality: webrip+ <=h264
       from:
         filesystem:
           - '{{ secrets.media.kids_tv }}'
@@ -358,7 +358,7 @@ tasks:
             reputation: verified
             extra_terms: "movie* hd"
 
-    quality: 1080p+ bluray+ h264+
+    quality: 1080p+ bluray+ <=h264
 
     set:
       path: '{{ secrets.downloads.movies }}/{{imdb_name}} ({{imdb_year}})/'
