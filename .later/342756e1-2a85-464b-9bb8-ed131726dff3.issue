@@ -1,0 +1,7 @@
+status: reported
+responsible: nobody
+modified: 2016-02-03T12:24:09
+reporter: chris <c.giacofei@gmail.com>
+created: 2016-02-03T12:24:09
+
+Adjust quality settings to only allow video codecs up to x264.
