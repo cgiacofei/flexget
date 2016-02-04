@@ -39,8 +39,8 @@ templates:
   global:
     email:
       template: html
-      from: c.giacofei.htpc@gmail.com
-      to: c.giacofei@gmail.com
+      from: {{ secrets.gmail.from }}
+      to: {{ secrets.gmail.to }}
       smtp_username : '{{ secrets.gmail.smtp_username }}'
       smtp_password : '{{ secrets.gmail.smtp_password }}'
       smtp_host: smtp.gmail.com
