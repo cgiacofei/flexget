@@ -378,9 +378,9 @@ tasks:
       queuetotop: yes
 
     list_remove:
-      trakt_list:
-        account: '{{ secrets.trakt.account }}'
-        list: watchlist
+      - trakt_list:
+          account: '{{ secrets.trakt.account }}'
+          list: watchlist
 
   # Delay sets a window to allow for higher resolution videos
   trakt_movies-720p:
@@ -400,9 +400,9 @@ tasks:
       queuetotop: yes
 
     list_remove:
-      trakt_list:
-        account: '{{ secrets.trakt.account }}'
-        list: watchlist
+      - trakt_list:
+          account: '{{ secrets.trakt.account }}'
+          list: watchlist
 
     delay: 2 days
 
@@ -423,9 +423,9 @@ tasks:
       queuetotop: yes
 
     list_remove:
-      trakt_list:
-        account: '{{ secrets.trakt.account }}'
-        list: kids
+      - trakt_list:
+          account: '{{ secrets.trakt.account }}'
+          list: kids
 
 ################################################################################
 #
@@ -590,9 +590,9 @@ tasks:
     require_field: [movie_name, movie_year]
 
     list_remove:
-      trakt_list:
-        account: '{{ secrets.trakt.account }}'
-        list: watchlist
+      - trakt_list:
+          account: '{{ secrets.trakt.account }}'
+          list: watchlist
 
   Clear_Torrents:
     clean_transmission:
