@@ -135,7 +135,7 @@ templates:
     thetvdb_lookup: yes
 
     set:
-      path: '{{ secrets.roots.downloads }}/{{ secrets.directories.tv_shows }}/{{ series_name }}/'
+      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.tv_shows }}/{{ series_name }}/'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
       queuetotop: no
 
@@ -207,7 +207,6 @@ templates:
     configure_series:
       settings:
         target: 720p+ hdtv+ <=h264
-        timeframe: 3 days
         quality: webrip+
       from:
         filesystem:
@@ -218,7 +217,6 @@ templates:
     configure_series:
       settings:
         target: hdtv+
-        timeframe: 3 days
         quality: webrip+ <=h264
       from:
         filesystem:
@@ -260,7 +258,7 @@ tasks:
     parsing:
       series: internal
     set:
-      path: '{{ secrets.roots.downloads }}/{{ secrets.directories.tv_shows }}'
+      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.tv_shows }}'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
       queuetotop: yes
     template:
@@ -282,7 +280,7 @@ tasks:
     parsing:
       series: internal
     set:
-      path: '{{ secrets.roots.downloads }}/{{ secrets.directories.kids_tv }}'
+      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.kids_tv }}'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
       queuetotop: yes
     template:
@@ -361,7 +359,7 @@ tasks:
     quality: 1080p+ bluray+ <=h264
 
     set:
-      path: '{{ secrets.roots.downloads }}/{{ secrets.directories.movies }}/{{imdb_name}} ({{imdb_year}})/'
+      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.movies }}/{{imdb_name}} ({{imdb_year}})/'
       content_filename: '{{ movie_name }} {{movie_year}}'
       queuetotop: yes
 
@@ -394,7 +392,7 @@ tasks:
     quality: 720p+ webdl+ xvid+
 
     set:
-      path: '{{ secrets.roots.downloads }}/{{ secrets.directories.movies }}/{{imdb_name}} ({{imdb_year}})/'
+      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.movies }}/{{imdb_name}} ({{imdb_year}})/'
       content_filename: '{{ movie_name }} {{movie_year}}'
       queuetotop: yes
 
@@ -428,7 +426,7 @@ tasks:
     quality: hdtv+ xvid+
 
     set:
-      path: '{{ secrets.roots.downloads }}/{{ secrets.directories.kids_movies }}/{{imdb_name}} ({{imdb_year}})/'
+      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.kids_movies }}/{{imdb_name}} ({{imdb_year}})/'
       content_filename: '{{ movie_name }} {{movie_year}}'
       queuetotop: yes
 
@@ -448,7 +446,7 @@ tasks:
       - local-torrents
     filesystem: '{{ secrets.roots.torrents }}/{{ secrets.directories.tv_shows }}'
     set:
-      path: '{{ secrets.roots.downloads }}/{{ secrets.directories.tv_shows }}'
+      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.tv_shows }}'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
 
     all_series:
@@ -463,7 +461,7 @@ tasks:
 
     filesystem: '{{ secrets.roots.torrents }}/{{ secrets.directories.movies }}'
     set:
-      path: '{{ secrets.roots.downloads }}/{{ secrets.directories.movies }}'
+      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.movies }}'
 
     movie_queue: remove
 
@@ -475,7 +473,7 @@ tasks:
 
     filesystem: '{{ secrets.roots.torrents }}/{{ secrets.directories.kids_tv }}'
     set:
-      path: '{{ secrets.roots.downloads }}/{{ secrets.directories.kids_tv }}'
+      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.kids_tv }}'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
 
     all_series:
@@ -489,7 +487,7 @@ tasks:
 
     filesystem: '{{ secrets.roots.torrents }}/{{ secrets.directories.kids_movies }}'
     set:
-      path: '{{ secrets.roots.downloads }}/{{ secrets.directories.kids_movies }}'
+      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.kids_movies }}'
 
     movie_queue: remove
 
@@ -501,6 +499,8 @@ tasks:
 
   tv_sorting:
     template: no_global
+    imdb_lookup: yes
+    thetvdb_lookup: yes
     filesystem:
       path: '{{ secrets.roots.downloads }}/{{ secrets.directories.tv_shows }}'
       regexp: '.*\.(mkv|mp4|avi|mp4)$'
@@ -518,7 +518,7 @@ tasks:
     require_field: series_name
     accept_all: yes
     move:
-      to: '/media/usb/tv_shows/{{ series_name }}/Season {{series_season}}/'
+      to: '/media/usb/TV Shows/{{ series_name }}/Season {{series_season}}/'
       filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
     exec:
       allow_background: yes
@@ -545,7 +545,7 @@ tasks:
     require_field: series_name
     accept_all: yes
     move:
-      to: '/media/usb/kids_tv/{{ series_name }}/Season {{series_season}}/'
+      to: '/media/usb/Kids TV/{{ series_name }}/Season {{series_season}}/'
       filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
     exec:
       allow_background: yes
@@ -563,7 +563,7 @@ tasks:
     require_field: imdb_name
     accept_all: yes
     move:
-      to: '/media/usb/movies/{{imdb_name}} ({{imdb_year}})'
+      to: '/media/usb/Movies/{{imdb_name}} ({{imdb_year}})'
       filename: '{{imdb_name}} ({{imdb_year}})'
       clean_source: 300
 
@@ -577,7 +577,7 @@ tasks:
     require_field: imdb_name
     accept_all: yes
     move:
-      to: '/media/usb/kids_movies/{{imdb_name}} ({{imdb_year}})'
+      to: '/media/usb/Kids Movies/{{imdb_name}} ({{imdb_year}})'
       filename: '{{imdb_name}} ({{imdb_year}})'
       clean_source: 300
 
