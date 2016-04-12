@@ -343,7 +343,7 @@ tasks:
 
     accept_all: yes
     list_add:
-      -movie_list: Movies
+      - movie_list: Movies
 
   movies_kids:
     priority: 102
@@ -355,7 +355,7 @@ tasks:
 
     accept_all: yes
     list_add:
-      -movie_list: Kids
+      - movie_list: Kids
 
 
   #-----------------------------------------------------------------------------
@@ -377,9 +377,10 @@ tasks:
       content_filename: '{{ movie_name }} {{movie_year}}'
       queuetotop: yes
 
-    trakt_remove:
-      account: '{{ secrets.trakt.account }}'
-      list: watchlist
+    list_remove:
+      trakt_list:
+        account: '{{ secrets.trakt.account }}'
+        list: watchlist
 
   # Delay sets a window to allow for higher resolution videos
   trakt_movies-720p:
@@ -398,9 +399,10 @@ tasks:
       content_filename: '{{ movie_name }} {{movie_year}}'
       queuetotop: yes
 
-    trakt_remove:
-      account: '{{ secrets.trakt.account }}'
-      list: watchlist
+    list_remove:
+      trakt_list:
+        account: '{{ secrets.trakt.account }}'
+        list: watchlist
 
     delay: 2 days
 
@@ -420,9 +422,10 @@ tasks:
       content_filename: '{{ movie_name }} {{movie_year}}'
       queuetotop: yes
 
-    trakt_remove:
-      account: '{{ secrets.trakt.account }}'
-      list: kids
+    list_remove:
+      trakt_list:
+        account: '{{ secrets.trakt.account }}'
+        list: kids
 
 ################################################################################
 #
@@ -585,11 +588,11 @@ tasks:
 
     imdb_lookup: yes
     require_field: [movie_name, movie_year]
-    movie_queue: accept
 
-    trakt_remove:
-      account: '{{ secrets.trakt.account }}'
-      list: watchlist
+    list_remove:
+      trakt_list:
+        account: '{{ secrets.trakt.account }}'
+        list: watchlist
 
   Clear_Torrents:
     clean_transmission:
