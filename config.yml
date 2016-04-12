@@ -17,7 +17,7 @@ schedules:
       hours: 1
 
   # Movies
-  - tasks: [trakt_movies-1080p, trakt_movies-720p, trakt_kids_movies]
+  - tasks: [movies_watchlist, movies_kids, trakt_movies-1080p, trakt_movies-720p, trakt_kids_movies]
     interval:
       hours: 2
 
@@ -332,6 +332,32 @@ tasks:
 # Movie Tasks
 #
 ################################################################################
+
+  movies_watchlist:
+    priority: 101
+
+    trakt_list:
+      account: '{{ secrets.trakt.account }}'
+      list: watchlist
+      type: movies
+
+    accept_all: yes
+    list_add:
+      -movie_list: Movies
+
+  movies_kids:
+    priority: 102
+
+    trakt_list:
+      account: '{{ secrets.trakt.account }}'
+      list: kids
+      type: movies
+
+    accept_all: yes
+    list_add:
+      -movie_list: Kids
+
+
   #-----------------------------------------------------------------------------
   # Main movie download task
   #-----------------------------------------------------------------------------
@@ -340,23 +366,11 @@ tasks:
     imdb_lookup: yes
     template:
       - movies-global
-    discover:
-      what:
-        - trakt_list:
-            account: '{{ secrets.trakt.account }}'
-            list: watchlist
-            type: movies
-      from:
-        - flexget_archive: [movies]
-
-        - kat:
-            category: movies
-            verified: yes
-        - torrentz:
-            reputation: verified
-            extra_terms: "movie* hd"
 
     quality: 1080p+ bluray+ <=h264
+    
+    list_queue:
+      - movie_list: Movies
 
     set:
       path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.movies }}/{{imdb_name}} ({{imdb_year}})/'
@@ -373,23 +387,11 @@ tasks:
     imdb_lookup: yes
     template:
       - movies-global
-    discover:
-      what:
-        - trakt_list:
-            account: '{{ secrets.trakt.account }}'
-            list: watchlist
-            type: movies
-      from:
-        - flexget_archive: [movies]
-
-        - kat:
-            category: movies
-            verified: yes
-        - torrentz:
-            reputation: verified
-            extra_terms: "movie* hd"
 
     quality: 720p+ webdl+ xvid+
+    
+    list_queue:
+      - movie_list: Movies
 
     set:
       path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.movies }}/{{imdb_name}} ({{imdb_year}})/'
@@ -407,21 +409,9 @@ tasks:
     imdb_lookup: yes
     template:
       - movies-global
-    discover:
-      what:
-        - trakt_list:
-            account: '{{ secrets.trakt.account }}'
-            list: kids_movies
-            type: movies
-      from:
-        - flexget_archive: [movies]
-
-        - kat:
-            category: movies
-            verified: yes
-        - torrentz:
-            reputation: verified
-            extra_terms: "movie* hd"
+    
+    list_queue:
+      - movie_list: Kids
 
     quality: hdtv+ xvid+
 
@@ -432,7 +422,7 @@ tasks:
 
     trakt_remove:
       account: '{{ secrets.trakt.account }}'
-      list: kids_movies
+      list: kids
 
 ################################################################################
 #
