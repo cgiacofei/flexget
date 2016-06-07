@@ -62,7 +62,7 @@ templates:
       include_subs: yes
 
     free_space:
-      path: '{{ secrets.roots.torrents }}'
+      path: '/{{ secrets.roots.torrents }}'
       space: 20000
 
     pathscrub: windows
@@ -128,26 +128,26 @@ templates:
 
     # Prevent from downloading shows that were aquired manually
     exists_series:
-      - '{{ secrets.roots.media }}/{{ secrets.directories.tv_shows }}'
-      - '{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
+      - '/{{ secrets.roots.media }}/{{ secrets.directories.tv_shows }}'
+      - '/{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
 
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
 
   tv-settings:
     set:
-      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.tv_shows }}/{{ series_name }}/'
+      path: '/{{ secrets.roots.whatbox }}/{{ secrets.directories.tv_shows }}/{{ series_name }}/'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
       queuetotop: no
 
-  kidstv-settings:
+  kids-tv-settings:
     set:
-      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.kids_tv }}/{{ series_name }}/'
+      path: '/{{ secrets.roots.whatbox }}/{{ secrets.directories.kids_tv }}/{{ series_name }}/'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
       queuetotop: no
 
   movies-global:
-    interval: 1 hour # I have flexget run every half hour, that's really only necessary for TV Shows
+    interval: 1 hour
 
     #include: [ input/movie_input.yml ]
 
@@ -168,8 +168,58 @@ templates:
 
     # Check for already downloaded or currently downloading movies
     exists_movie:
-      - '{{ secrets.roots.media }}/{{ secrets.directories.kids_movies }}'
-      - '{{ secrets.roots.media }}/{{ secrets.directories.movies }}'
+      - '/{{ secrets.roots.media }}/{{ secrets.directories.kids_movies }}'
+      - '/{{ secrets.roots.media }}/{{ secrets.directories.movies }}'
+
+  movie-settings:
+    discover:
+      what:
+        - movie_list: Movies
+      from:
+        - kat:
+            category: movies
+        - piratebay:
+            category: movies
+        - torrentz: verified
+
+    list_queue:
+      - movie_list: Movies
+
+    set:
+      path: '/{{ secrets.roots.whatbox }}/{{ secrets.directories.movies }}/{{imdb_name}} ({{imdb_year}})/'
+      content_filename: '{{ movie_name }} {{movie_year}}'
+      queuetotop: no
+
+    list_remove:
+      - trakt_list:
+          account: '{{ secrets.trakt.account }}'
+          list: watchlist
+
+  kids-movie-settings:
+    discover:
+      what:
+        - movie_list: Kids
+      from:
+        - kat:
+            category: movies
+        - piratebay:
+            category: movies
+        - torrentz: verified
+
+    list_queue:
+      - movie_list: Kids
+
+    quality: hdtv+ xvid+
+
+    set:
+      path: '/{{ secrets.roots.whatbox }}/{{ secrets.directories.kids_movies }}/{{imdb_name}} ({{imdb_year}})/'
+      content_filename: '{{ movie_name }} {{movie_year}}'
+      queuetotop: no
+
+    list_remove:
+      - trakt_list:
+          account: '{{ secrets.trakt.account }}'
+          list: kids
 
 ################################################################################
 #
@@ -267,7 +317,7 @@ tasks:
           list: watchlist
           type: shows
         filesystem:
-          - '{{ secrets.roots.media }}/{{ secrets.directories.tv_shows }}'
+          - '/{{ secrets.roots.media }}/{{ secrets.directories.tv_shows }}'
 
     discover:
       what:
@@ -288,7 +338,7 @@ tasks:
       series: internal
     template:
       - tv-global
-      - kidstv-settings
+      - kids-tv-settings
 
     configure_series:
       settings:
@@ -301,7 +351,7 @@ tasks:
           list: kids_tv
           type: shows
         filesystem:
-          - '{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
+          - '/{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
 
     discover:
       what:
@@ -318,7 +368,6 @@ tasks:
 # Movie Tasks
 #
 ################################################################################
-
   movies_watchlist:
     priority: 101
     template: no_global
@@ -345,7 +394,6 @@ tasks:
     list_add:
       - movie_list: Kids
 
-
   #-----------------------------------------------------------------------------
   # Main movie download task
   #-----------------------------------------------------------------------------
@@ -354,31 +402,8 @@ tasks:
     imdb_lookup: yes
     template:
       - movies-global
-
+      - movie-settings
     quality: 1080p+ bluray+ <=h264
-
-    discover:
-      what:
-        - movie_list: Movies
-      from:
-        - kat:
-            category: movies
-        - piratebay:
-            category: movies
-        - torrentz: verified
-
-    list_queue:
-      - movie_list: Movies
-
-    set:
-      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.movies }}/{{imdb_name}} ({{imdb_year}})/'
-      content_filename: '{{ movie_name }} {{movie_year}}'
-      queuetotop: yes
-
-    list_remove:
-      - trakt_list:
-          account: '{{ secrets.trakt.account }}'
-          list: watchlist
 
   # Delay sets a window to allow for higher resolution videos
   trakt_movies-720p:
@@ -386,31 +411,8 @@ tasks:
     imdb_lookup: yes
     template:
       - movies-global
-
+      - movie-settings
     quality: 720p+ webdl+ xvid+
-
-    discover:
-      what:
-        - movie_list: Movies
-      from:
-        - kat:
-            category: movies
-        - piratebay:
-            category: movies
-        - torrentz: verified
-
-    list_queue:
-      - movie_list: Movies
-
-    set:
-      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.movies }}/{{imdb_name}} ({{imdb_year}})/'
-      content_filename: '{{ movie_name }} {{movie_year}}'
-      queuetotop: yes
-
-    list_remove:
-      - trakt_list:
-          account: '{{ secrets.trakt.account }}'
-          list: watchlist
 
     delay: 2 days
 
@@ -419,21 +421,9 @@ tasks:
     imdb_lookup: yes
     template:
       - movies-global
-
-    list_queue:
-      - movie_list: Kids
-
+      - kids-movie-settings
     quality: hdtv+ xvid+
 
-    set:
-      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.kids_movies }}/{{imdb_name}} ({{imdb_year}})/'
-      content_filename: '{{ movie_name }} {{movie_year}}'
-      queuetotop: yes
-
-    list_remove:
-      - trakt_list:
-          account: '{{ secrets.trakt.account }}'
-          list: kids
 
 ################################################################################
 #
@@ -445,9 +435,9 @@ tasks:
     template:
       - tv-global
       - local-torrents
-    filesystem: '{{ secrets.roots.torrents }}/{{ secrets.directories.tv_shows }}'
+    filesystem: '/{{ secrets.roots.torrents }}/{{ secrets.directories.tv_shows }}'
     set:
-      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.tv_shows }}'
+      path: '/{{ secrets.roots.whatbox }}/{{ secrets.directories.tv_shows }}'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
 
     all_series:
@@ -460,9 +450,9 @@ tasks:
       - movies-global
       - local-torrents
 
-    filesystem: '{{ secrets.roots.torrents }}/{{ secrets.directories.movies }}'
+    filesystem: '/{{ secrets.roots.torrents }}/{{ secrets.directories.movies }}'
     set:
-      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.movies }}'
+      path: '/{{ secrets.roots.whatbox }}/{{ secrets.directories.movies }}'
 
   Local_Torrents-TV_Andrea:
     priority: 3
@@ -470,9 +460,9 @@ tasks:
       - tv-global
       - local-torrents
 
-    filesystem: '{{ secrets.roots.torrents }}/{{ secrets.directories.kids_tv }}'
+    filesystem: '/{{ secrets.roots.torrents }}/{{ secrets.directories.kids_tv }}'
     set:
-      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.kids_tv }}'
+      path: '/{{ secrets.roots.whatbox }}/{{ secrets.directories.kids_tv }}'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
 
     all_series:
@@ -484,9 +474,9 @@ tasks:
       - movies-global
       - local-torrents
 
-    filesystem: '{{ secrets.roots.torrents }}/{{ secrets.directories.kids_movies }}'
+    filesystem: '/{{ secrets.roots.torrents }}/{{ secrets.directories.kids_movies }}'
     set:
-      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.kids_movies }}'
+      path: '/{{ secrets.roots.whatbox }}/{{ secrets.directories.kids_movies }}'
 
 ################################################################################
 #
@@ -500,14 +490,14 @@ tasks:
     imdb_lookup: yes
     thetvdb_lookup: yes
     filesystem:
-      path: '{{ secrets.roots.downloads }}/{{ secrets.directories.tv_shows }}'
+      path: '/{{ secrets.roots.downloads }}/{{ secrets.directories.tv_shows }}'
       regexp: '.*\.(mkv|mp4|avi)$'
       recursive: yes
 
     configure_series:
       from:
         filesystem:
-          - '{{ secrets.roots.downloads }}/{{ secrets.directories.tv_shows }}'
+          - '/{{ secrets.roots.downloads }}/{{ secrets.directories.tv_shows }}'
       settings:
         parse_only: yes
     regexp:
@@ -528,13 +518,13 @@ tasks:
     disable: seen
     template: no_global
     filesystem:
-      path: '{{ secrets.roots.downloads }}/{{ secrets.directories.kids_tv }}'
+      path: '/{{ secrets.roots.downloads }}/{{ secrets.directories.kids_tv }}'
       regexp: '.*\.(mkv|mp4|avi)$'
       recursive: yes
     configure_series:
       from:
         filesystem:
-          - '{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
+          - '/{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
       settings:
         parse_only: yes
     regexp:
@@ -543,7 +533,7 @@ tasks:
     require_field: series_name
     accept_all: yes
     move:
-      to: '/media/usb/Kids TV/{{ series_name }}/Season {{series_season}}/'
+      to: '/{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}/{{ series_name }}/Season {{series_season}}/'
       filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
     exec:
       allow_background: yes
@@ -556,13 +546,13 @@ tasks:
     template: no_global
     imdb_required: yes
     filesystem:
-      path: '{{ secrets.roots.downloads }}/{{ secrets.directories.movies }}'
+      path: '/{{ secrets.roots.downloads }}/{{ secrets.directories.movies }}'
       regexp: '.*\.(mkv|mp4|avi)$'
       recursive: yes
     require_field: imdb_name
     accept_all: yes
     move:
-      to: '/media/usb/Movies/{{imdb_name}} ({{imdb_year}})'
+      to: '/{{ secrets.roots.media }}/{{ secrets.directories.movies }}/{{imdb_name}} ({{imdb_year}})'
       filename: '{{imdb_name}} ({{imdb_year}})'
       clean_source: 300
 
@@ -571,7 +561,7 @@ tasks:
     template: no_global
     imdb_required: yes
     filesystem:
-      path: '{{ secrets.roots.downloads }}/{{ secrets.directories.kids_movies }}'
+      path: '/{{ secrets.roots.downloads }}/{{ secrets.directories.kids_movies }}'
       regexp: '.*\.(mkv|mp4|avi)$'
       recursive: yes
     require_field: imdb_name
@@ -594,8 +584,8 @@ tasks:
       - seen_movies
     accept_all: yes
     filesystem:
-      - '{{ secrets.roots.downloads }}/{{ secrets.directories.movies }}'
-      - '{{ secrets.roots.downloads }}/{{ secrets.directories.kids_movies }}'
+      - '/{{ secrets.roots.downloads }}/{{ secrets.directories.movies }}'
+      - '/{{ secrets.roots.downloads }}/{{ secrets.directories.kids_movies }}'
 
     imdb_lookup: yes
     require_field: [movie_name, movie_year]
@@ -623,17 +613,17 @@ tasks:
     configure_series:
       from:
         filesystem:
-          - '{{ secrets.roots.media }}/{{ secrets.directories.tv_shows }}'
-          - '{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
+          - '/{{ secrets.roots.media }}/{{ secrets.directories.tv_shows }}'
+          - '/{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
       settings:
         parse_only: yes
 
     # The filesystem plugin will find all of your existing episodes
     filesystem:
       regexp: .*(mkv|mp4|avi)$
-      path: 
-        - '{{ secrets.roots.media }}/{{ secrets.directories.tv_shows }}'
-        - '{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
+      path:
+        - '/{{ secrets.roots.media }}/{{ secrets.directories.tv_shows }}'
+        - '/{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
       recursive: yes
     # We use the manual plugin so that this task only runs when explicitly called
     manual: yes
