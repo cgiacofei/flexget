@@ -498,6 +498,7 @@ tasks:
 ################################################################################
 
   tv_sorting:
+    disable: seen
     template: no_global
     imdb_lookup: yes
     thetvdb_lookup: yes
@@ -505,7 +506,7 @@ tasks:
       path: '{{ secrets.roots.downloads }}/{{ secrets.directories.tv_shows }}'
       regexp: '.*\.(mkv|mp4|avi|mp4)$'
       recursive: yes
-    seen: local
+
     configure_series:
       from:
         filesystem:
@@ -527,12 +528,12 @@ tasks:
         phase: "/bin/rm -rf {{ secrets.roots.downloads }}/{{ secrets.directories.tv_shows }}/*"
 
   kids_tv_sorting:
+    disable: seen
     template: no_global
     filesystem:
       path: '{{ secrets.roots.downloads }}/{{ secrets.directories.kids_tv }}'
       regexp: '.*\.(mkv|mp4|avi|mp4)$'
       recursive: yes
-    seen: local
     configure_series:
       from:
         filesystem:
@@ -554,6 +555,7 @@ tasks:
         phase: "/bin/rm -rf {{ secrets.roots.downloads }}/{{ secrets.directories.kids_tv }}/*"
 
   movie_sorting:
+    disable: seen
     template: no_global
     imdb_required: yes
     filesystem:
@@ -568,6 +570,7 @@ tasks:
       clean_source: 300
 
   kids_movie_sorting:
+    disable: seen
     template: no_global
     imdb_required: yes
     filesystem:
