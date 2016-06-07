@@ -2,36 +2,32 @@ secrets: secretfile.yml
 
 schedules:
   # Local torrents
-  - tasks: 'Local_Torrents*'
+  - tasks: 'local_download*'
     interval:
       minutes: 15
 
-  # Tracked TV shows
-  - tasks: [TV_Track, Kids_TV_Track]
+  # Run download tasks
+  - tasks: [download*]
     interval:
       minutes: 30
 
-  # New TV premieres
-  - tasks: 'TV_Premieres'
-    interval:
-      hours: 1
 
-  # Movies
-  - tasks: [movies_watchlist, movies_kids, trakt_movies-1080p, trakt_movies-720p, trakt_kids_movies]
+  # Update movie queues
+  - tasks: [queue_watchlist_movies, queue_kids_movies]
     interval:
       hours: 2
 
   # Maintainence
-  - tasks: 'Clear_Torrents'
+  - tasks: 'maintenance_clear_torrents'
     interval:
       hours: 1
 
-  - tasks: 'Clean_Movie_Queue'
+  - tasks: 'maintenance_movie_queue'
     interval:
-      days: 1
+      days: 7
 
   # Sort Files
-  - tasks: [tv_sorting, kids_tv_sorting, movie_sorting, kids_movie_sorting]
+  - tasks: [sorting*]
     interval:
       minutes: 30
 
@@ -118,7 +114,7 @@ templates:
 # Global Settings
 #
 ################################################################################
-  tv-global:
+  template_tv_global:
     #include: [ input/tv_input.yml ]
 
     # Impose reasonable size constraints
@@ -134,19 +130,19 @@ templates:
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
 
-  tv-settings:
+  template_tv:
     set:
       path: '/{{ secrets.roots.whatbox }}/{{ secrets.directories.tv_shows }}/{{ series_name }}/'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
       queuetotop: no
 
-  kids-tv-settings:
+  template_kids_tv:
     set:
       path: '/{{ secrets.roots.whatbox }}/{{ secrets.directories.kids_tv }}/{{ series_name }}/'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
       queuetotop: no
 
-  movies-global:
+  template_movies_global:
     interval: 1 hour
 
     #include: [ input/movie_input.yml ]
@@ -171,7 +167,7 @@ templates:
       - '/{{ secrets.roots.media }}/{{ secrets.directories.kids_movies }}'
       - '/{{ secrets.roots.media }}/{{ secrets.directories.movies }}'
 
-  movie-settings:
+  template_movies:
     discover:
       what:
         - movie_list: Movies
@@ -193,9 +189,9 @@ templates:
     list_remove:
       - trakt_list:
           account: '{{ secrets.trakt.account }}'
-          list: watchlist
+          list: '{{ secrets.trakt.watchlist }}'
 
-  kids-movie-settings:
+  template_kids_movies:
     discover:
       what:
         - movie_list: Kids
@@ -219,14 +215,14 @@ templates:
     list_remove:
       - trakt_list:
           account: '{{ secrets.trakt.account }}'
-          list: kids
+          list: '{{ secrets.trakt.kids }}'
 
 ################################################################################
 #
 # Settings for finding new series premieres
 #
 ################################################################################
-  tv-premieres:
+  template_tv_premieres:
     # The entry has to have the tvdb_genres field so I can filter by it
     require_field:
       - tvdb_genres
@@ -257,7 +253,7 @@ templates:
 
 
   # Global settings for local torrent downloads
-  local-torrents:
+  template_local_torrents:
     disable:
       - seen
       - seen_info_hash
@@ -287,24 +283,24 @@ tasks:
   #-----------------------------------------------------------------------------
   # Find new TV premieres
   #-----------------------------------------------------------------------------
-  TV_Premieres:
+  download_tv_premieres:
     priority: 40
     parsing:
       series: internal
     template:
-      - tv-global
-      - tv-premieres
+      - template_tv_global
+      - template_tv_premieres
 
   #-----------------------------------------------------------------------------
   # Track existing TV shows and New Shows from trakt.tv
   #-----------------------------------------------------------------------------
-  TV_Track:
+  download_tv:
     priority: 50
     parsing:
       series: internal
     template:
-      - tv-global
-      - tv-settings
+      - template_tv_global
+      - template_tv
 
     configure_series:
       settings:
@@ -314,7 +310,7 @@ tasks:
       from:
         trakt_list:
           account: '{{ secrets.trakt.account }}'
-          list: watchlist
+          list: '{{ secrets.trakt.watchlist }}'
           type: shows
         filesystem:
           - '/{{ secrets.roots.media }}/{{ secrets.directories.tv_shows }}'
@@ -332,13 +328,13 @@ tasks:
   #-----------------------------------------------------------------------------
   # Track existing Kids TV shows
   #-----------------------------------------------------------------------------
-  Kids_TV_Track:
+  download_kids_tv:
     priority: 60
     parsing:
       series: internal
     template:
-      - tv-global
-      - kids-tv-settings
+      - template_tv_global
+      - template_kids_tv
 
     configure_series:
       settings:
@@ -348,7 +344,7 @@ tasks:
       from:
         trakt_list:
           account: '{{ secrets.trakt.account }}'
-          list: kids_tv
+          list: '{{ secrets.trakt.kids }}'
           type: shows
         filesystem:
           - '/{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
@@ -368,26 +364,26 @@ tasks:
 # Movie Tasks
 #
 ################################################################################
-  movies_watchlist:
+  queue_watchlist_movies:
     priority: 101
     template: no_global
 
     trakt_list:
       account: '{{ secrets.trakt.account }}'
-      list: watchlist
+      list: '{{ secrets.trakt.watchlist }}'
       type: movies
 
     accept_all: yes
     list_add:
       - movie_list: Movies
 
-  movies_kids:
+  queue_kids_movies:
     priority: 102
     template: no_global
 
     trakt_list:
       account: '{{ secrets.trakt.account }}'
-      list: kids
+      list: '{{ secrets.trakt.kids }}'
       type: movies
 
     accept_all: yes
@@ -397,31 +393,31 @@ tasks:
   #-----------------------------------------------------------------------------
   # Main movie download task
   #-----------------------------------------------------------------------------
-  trakt_movies-1080p:
+  download_movies_1080p:
     priority: 110
     imdb_lookup: yes
     template:
-      - movies-global
-      - movie-settings
+      - template_movies_global
+      - template_movies
     quality: 1080p+ bluray+ <=h264
 
   # Delay sets a window to allow for higher resolution videos
-  trakt_movies-720p:
+  download_movies_720p:
     priority: 120
     imdb_lookup: yes
     template:
-      - movies-global
-      - movie-settings
+      - template_movies_global
+      - template_movies
     quality: 720p+ webdl+ xvid+
 
     delay: 2 days
 
-  trakt_kids_movies:
+  download_kids_movies:
     priority: 120
     imdb_lookup: yes
     template:
-      - movies-global
-      - kids-movie-settings
+      - template_movies_global
+      - template_kids_movies
     quality: hdtv+ xvid+
 
 
@@ -430,11 +426,11 @@ tasks:
 # Local torrent file downloads
 #
 ################################################################################
-  Local_Torrents-TV:
+  local_download_tv:
     priority: 1
     template:
-      - tv-global
-      - local-torrents
+      - template_tv_global
+      - template_local_torrents
     filesystem: '/{{ secrets.roots.torrents }}/{{ secrets.directories.tv_shows }}'
     set:
       path: '/{{ secrets.roots.whatbox }}/{{ secrets.directories.tv_shows }}'
@@ -444,21 +440,21 @@ tasks:
       parse_only: yes
 
   # Same as above but for movies
-  Local_Torrents-Movies:
+  local_download_movies:
     priority: 2
     template:
-      - movies-global
-      - local-torrents
+      - template_movies_global
+      - template_local_torrents
 
     filesystem: '/{{ secrets.roots.torrents }}/{{ secrets.directories.movies }}'
     set:
       path: '/{{ secrets.roots.whatbox }}/{{ secrets.directories.movies }}'
 
-  Local_Torrents-TV_Andrea:
+  local_download_kids_tv:
     priority: 3
     template:
-      - tv-global
-      - local-torrents
+      - template_tv_global
+      - template_local_torrents
 
     filesystem: '/{{ secrets.roots.torrents }}/{{ secrets.directories.kids_tv }}'
     set:
@@ -468,11 +464,11 @@ tasks:
     all_series:
       parse_only: yes
 
-  Local_Torrents-Movies_Andrea:
+  local_download_kids_movies:
     priority: 4
     template:
-      - movies-global
-      - local-torrents
+      - template_movies_global
+      - template_local_torrents
 
     filesystem: '/{{ secrets.roots.torrents }}/{{ secrets.directories.kids_movies }}'
     set:
@@ -484,7 +480,7 @@ tasks:
 #
 ################################################################################
 
-  tv_sorting:
+  sorting_tv:
     disable: seen
     template: no_global
     imdb_lookup: yes
@@ -512,9 +508,10 @@ tasks:
       allow_background: yes
       auto_escape: yes
       on_exit:
-        phase: "/bin/rm -rf {{ secrets.roots.downloads }}/{{ secrets.directories.tv_shows }}/*"
+        phase: "/bin/find '/{{ secrets.roots.downloads }}/{{ secrets.directories.tv_shows }}' -type f -size -100M"
+        #phase: "/bin/rm -rf {{ secrets.roots.downloads }}/{{ secrets.directories.tv_shows }}/*"
 
-  kids_tv_sorting:
+  sorting_kids_tv:
     disable: seen
     template: no_global
     filesystem:
@@ -539,9 +536,10 @@ tasks:
       allow_background: yes
       auto_escape: yes
       on_exit:
-        phase: "/bin/rm -rf {{ secrets.roots.downloads }}/{{ secrets.directories.kids_tv }}/*"
+        phase: "/bin/find '/{{ secrets.roots.downloads }}/{{ secrets.directories.kids_tv }}' -type f -size -100M"
+        #phase: "/bin/rm -rf {{ secrets.roots.downloads }}/{{ secrets.directories.kids_tv }}/*"
 
-  movie_sorting:
+  sorting_movies:
     disable: seen
     template: no_global
     imdb_required: yes
@@ -555,8 +553,13 @@ tasks:
       to: '/{{ secrets.roots.media }}/{{ secrets.directories.movies }}/{{imdb_name}} ({{imdb_year}})'
       filename: '{{imdb_name}} ({{imdb_year}})'
       clean_source: 300
+    exec:
+      allow_background: yes
+      auto_escape: yes
+      on_exit:
+        phase: "/bin/find '/{{ secrets.roots.downloads }}/{{ secrets.directories.movies }}' -type f -size -100M"
 
-  kids_movie_sorting:
+  sorting_kids_movies:
     disable: seen
     template: no_global
     imdb_required: yes
@@ -570,13 +573,18 @@ tasks:
       to: '/media/usb/Kids Movies/{{imdb_name}} ({{imdb_year}})'
       filename: '{{imdb_name}} ({{imdb_year}})'
       clean_source: 300
+    exec:
+      allow_background: yes
+      auto_escape: yes
+      on_exit:
+        phase: "/bin/find '/{{ secrets.roots.downloads }}/{{ secrets.directories.kids_movies }}' -type f -size -100M"
 
 ################################################################################
 #
 # Maintainence Tasks
 #
 ################################################################################
-  Clean_Movie_Queue:
+  maintenance_movie_queue:
     template: no_global
     disable:
       - seen
@@ -593,9 +601,10 @@ tasks:
     list_remove:
       - trakt_list:
           account: '{{ secrets.trakt.account }}'
-          list: watchlist
+          list: '{{ secrets.trakt.watchlist }}'
+      - movie_list: Movies
 
-  Clear_Torrents:
+  maintenance_clear_torrents:
     clean_transmission:
       host: '{{ secrets.transmission.host }}'
       port: 21772
@@ -606,7 +615,7 @@ tasks:
 
     disable: details
 
-  seed_series_db:
+  maintenance_seed_series_db:
     template: no_global
     disable: builtins
 
