@@ -7,7 +7,7 @@ schedules:
       minutes: 15
 
   # Tracked TV shows
-  - tasks: [trakt_tv, trakt_kids, TV_Track]
+  - tasks: [TV_Track, Kids_TV_Track]
     interval:
       minutes: 30
 
@@ -119,7 +119,7 @@ templates:
 #
 ################################################################################
   tv-global:
-    include: [ input/tv_input.yml ]
+    #include: [ input/tv_input.yml ]
 
     # Impose reasonable size constraints
     content_size:
@@ -202,26 +202,6 @@ templates:
       quality: 720p+ hdtv+ <=h264
 
 
-  # Keep on tracking TV shows until the directory is (re)moved
-  tv-track:
-    configure_series:
-      settings:
-        target: 720p+ hdtv+ <=h264
-        quality: webrip+
-      from:
-        filesystem:
-          - '{{ secrets.roots.media }}/{{ secrets.directories.tv_shows }}'
-
-  # Keep on tracking kids TV shows until the directory is (re)moved
-  kids-tv-track:
-    configure_series:
-      settings:
-        target: hdtv+
-        quality: webrip+ <=h264
-      from:
-        filesystem:
-          - '{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
-
   # Global settings for local torrent downloads
   local-torrents:
     disable:
@@ -251,50 +231,6 @@ tasks:
 ################################################################################
 
   #-----------------------------------------------------------------------------
-  # Find TV shows from trakt.tv watchlist
-  #-----------------------------------------------------------------------------
-  trakt_tv:
-    priority: 10
-    parsing:
-      series: internal
-    set:
-      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.tv_shows }}'
-      content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
-      queuetotop: yes
-    template:
-      - tv-global
-    configure_series:
-      from:
-        trakt_list:
-          account: '{{ secrets.trakt.account }}'
-          list: watchlist
-          type: shows
-      settings:
-        quality: 720p+ webrip+
-
-  #-----------------------------------------------------------------------------
-  # Kids TV from trakt.tv
-  #-----------------------------------------------------------------------------
-  trakt_kids:
-    priority: 20
-    parsing:
-      series: internal
-    set:
-      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.kids_tv }}'
-      content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
-      queuetotop: yes
-    template:
-      - tv-global
-    configure_series:
-      from:
-        trakt_list:
-          account: '{{ secrets.trakt.account }}'
-          list: kids_tv
-          type: shows
-      settings:
-        quality: 480p+ webrip+
-
-  #-----------------------------------------------------------------------------
   # Find new TV premieres
   #-----------------------------------------------------------------------------
   TV_Premieres:
@@ -306,7 +242,7 @@ tasks:
       - tv-premieres
 
   #-----------------------------------------------------------------------------
-  # Track existing TV shows
+  # Track existing TV shows and New Shows from trakt.tv
   #-----------------------------------------------------------------------------
   TV_Track:
     priority: 50
@@ -314,10 +250,33 @@ tasks:
       series: internal
     template:
       - tv-global
-      - tv-track
+      - tv-settings
+
+    configure_series:
+      settings:
+        target: 720p+ hdtv+ <=h264
+        quality: webrip+
+        begin: S01E01
+      from:
+        trakt_list:
+          account: '{{ secrets.trakt.account }}'
+          list: watchlist
+          type: shows
+        filesystem:
+          - '{{ secrets.roots.media }}/{{ secrets.directories.tv_shows }}'
+
+    discover:
+      what:
+        - emit_series: yes
+      from:
+        - kat:
+            category: tv
+        - piratebay:
+            category: tv
+        - torrentz: verified
 
   #-----------------------------------------------------------------------------
-  # Track existing TV shows
+  # Track existing Kids TV shows
   #-----------------------------------------------------------------------------
   Kids_TV_Track:
     priority: 60
@@ -325,7 +284,30 @@ tasks:
       series: internal
     template:
       - tv-global
-      - kids-tv-track
+      - kidstv-settings
+
+    configure_series:
+      settings:
+        target: hdtv+
+        quality: webrip+ <=h264
+        begin: S01E01
+      from:
+        trakt_list:
+          account: '{{ secrets.trakt.account }}'
+          list: kids_tv
+          type: shows
+        filesystem:
+          - '{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
+
+    discover:
+      what:
+        - emit_series: yes
+      from:
+        - kat:
+            category: tv
+        - piratebay:
+            category: tv
+        - torrentz: verified
 
 ################################################################################
 #
@@ -494,7 +476,7 @@ tasks:
     thetvdb_lookup: yes
     filesystem:
       path: '{{ secrets.roots.downloads }}/{{ secrets.directories.tv_shows }}'
-      regexp: '.*\.(mkv|mp4|avi|mp4)$'
+      regexp: '.*\.(mkv|mp4|avi)$'
       recursive: yes
 
     configure_series:
@@ -522,7 +504,7 @@ tasks:
     template: no_global
     filesystem:
       path: '{{ secrets.roots.downloads }}/{{ secrets.directories.kids_tv }}'
-      regexp: '.*\.(mkv|mp4|avi|mp4)$'
+      regexp: '.*\.(mkv|mp4|avi)$'
       recursive: yes
     configure_series:
       from:
@@ -608,3 +590,25 @@ tasks:
       delete_files: yes
 
     disable: details
+
+  seed_series_db:
+    template: no_global
+    disable: builtins
+
+    configure_series:
+      from:
+        filesystem:
+          - '{{ secrets.roots.media }}/{{ secrets.directories.tv_shows }}'
+          - '{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
+      settings:
+        parse_only: yes
+
+    # The filesystem plugin will find all of your existing episodes
+    filesystem:
+      regexp: .*(mkv|mp4|avi)$
+      path: 
+        - '{{ secrets.roots.media }}/{{ secrets.directories.tv_shows }}'
+        - '{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
+      recursive: yes
+    # We use the manual plugin so that this task only runs when explicitly called
+    manual: yes
