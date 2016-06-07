@@ -7,7 +7,7 @@ schedules:
       minutes: 15
 
   # Run download tasks
-  - tasks: [download*]
+  - tasks: 'download*'
     interval:
       minutes: 30
 
@@ -90,6 +90,7 @@ templates:
         - '*.mkv'
         - '*.mpg'
         - '*.mp4'
+        - '*.mpeg'
 
       reject:
         - 'password.txt'
@@ -478,7 +479,7 @@ tasks:
     thetvdb_lookup: yes
     filesystem:
       path: '/{{ secrets.roots.downloads }}/{{ secrets.directories.tv_shows }}'
-      regexp: '.*\.(mkv|mp4|avi)$'
+      regexp: '.*\.(mkv|mp4|avi|mpg|mpeg)$'
       recursive: yes
 
     configure_series:
@@ -507,7 +508,7 @@ tasks:
     template: no_global
     filesystem:
       path: '/{{ secrets.roots.downloads }}/{{ secrets.directories.kids_tv }}'
-      regexp: '.*\.(mkv|mp4|avi)$'
+      regexp: '.*\.(mkv|mp4|avi|mpg|mpeg)$'
       recursive: yes
     configure_series:
       from:
@@ -536,7 +537,7 @@ tasks:
     imdb_required: yes
     filesystem:
       path: '/{{ secrets.roots.downloads }}/{{ secrets.directories.movies }}'
-      regexp: '.*\.(mkv|mp4|avi)$'
+      regexp: '.*\.(mkv|mp4|avi|mpg|mpeg)$'
       recursive: yes
     require_field: imdb_name
     accept_all: yes
@@ -556,7 +557,7 @@ tasks:
     imdb_required: yes
     filesystem:
       path: '/{{ secrets.roots.downloads }}/{{ secrets.directories.kids_movies }}'
-      regexp: '.*\.(mkv|mp4|avi)$'
+      regexp: '.*\.(mkv|mp4|avi|mpg|mpeg)$'
       recursive: yes
     require_field: imdb_name
     accept_all: yes
@@ -620,7 +621,7 @@ tasks:
 
     # The filesystem plugin will find all of your existing episodes
     filesystem:
-      regexp: .*(mkv|mp4|avi)$
+      regexp: .*(mkv|mp4|avi|mpg|mpeg)$
       path:
         - '/{{ secrets.roots.media }}/{{ secrets.directories.tv_shows }}'
         - '/{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
