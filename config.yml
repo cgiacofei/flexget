@@ -130,6 +130,17 @@ templates:
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
 
+    discover:
+      what:
+        - emit_series:
+            backfill: yes
+      from:
+        - kat:
+            category: tv
+        - piratebay:
+            category: tv
+        - torrentz: verified
+
   template_tv:
     set:
       path: '/{{ secrets.roots.whatbox }}/{{ secrets.directories.tv_shows }}/{{ series_name }}/'
@@ -315,16 +326,6 @@ tasks:
         filesystem:
           - '/{{ secrets.roots.media }}/{{ secrets.directories.tv_shows }}'
 
-    discover:
-      what:
-        - emit_series: yes
-      from:
-        - kat:
-            category: tv
-        - piratebay:
-            category: tv
-        - torrentz: verified
-
   #-----------------------------------------------------------------------------
   # Track existing Kids TV shows
   #-----------------------------------------------------------------------------
@@ -348,16 +349,6 @@ tasks:
           type: shows
         filesystem:
           - '/{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
-
-    discover:
-      what:
-        - emit_series: yes
-      from:
-        - kat:
-            category: tv
-        - piratebay:
-            category: tv
-        - torrentz: verified
 
 ################################################################################
 #
