@@ -31,7 +31,7 @@ schedules:
       days: 1
 
   # Sort Files
-  - tasks: [tv_sorting, movie_sorting]
+  - tasks: [tv_sorting, kids_tv_sorting, movie_sorting, kids_movie_sorting]
     interval:
       minutes: 30
 
@@ -134,15 +134,22 @@ templates:
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
 
+  tv-settings:
     set:
       path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.tv_shows }}/{{ series_name }}/'
+      content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
+      queuetotop: no
+
+  kidstv-settings:
+    set:
+      path: '{{ secrets.roots.whatbox }}/{{ secrets.directories.kids_tv }}/{{ series_name }}/'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
       queuetotop: no
 
   movies-global:
     interval: 1 hour # I have flexget run every half hour, that's really only necessary for TV Shows
 
-    include: [ input/movie_input.yml ]
+    #include: [ input/movie_input.yml ]
 
     # Some feeds might include TV Shows, ignore them
     regexp:
@@ -156,9 +163,6 @@ templates:
     content_size:
       max: 6000
       min: 700
-    trakt_lookup: yes
-    imdb_lookup: no
-    tmdb_lookup: no
 
     seen_movies: strict # Don't download movies we've already seen
 
@@ -330,6 +334,7 @@ tasks:
 
   movies_kids:
     priority: 102
+    template: no_global
 
     trakt_list:
       account: '{{ secrets.trakt.account }}'
@@ -351,7 +356,17 @@ tasks:
       - movies-global
 
     quality: 1080p+ bluray+ <=h264
-    
+
+    discover:
+      what:
+        - movie_list: Movies
+      from:
+        - kat:
+            category: movies
+        - piratebay:
+            category: movies
+        - torrentz: verified
+
     list_queue:
       - movie_list: Movies
 
@@ -373,7 +388,17 @@ tasks:
       - movies-global
 
     quality: 720p+ webdl+ xvid+
-    
+
+    discover:
+      what:
+        - movie_list: Movies
+      from:
+        - kat:
+            category: movies
+        - piratebay:
+            category: movies
+        - torrentz: verified
+
     list_queue:
       - movie_list: Movies
 
@@ -394,7 +419,7 @@ tasks:
     imdb_lookup: yes
     template:
       - movies-global
-    
+
     list_queue:
       - movie_list: Kids
 
@@ -532,7 +557,7 @@ tasks:
     imdb_required: yes
     filesystem:
       path: '{{ secrets.roots.downloads }}/{{ secrets.directories.movies }}'
-      regexp: '.*\.(mkv|mp4|avi|mp4)$'
+      regexp: '.*\.(mkv|mp4|avi)$'
       recursive: yes
     require_field: imdb_name
     accept_all: yes
@@ -547,7 +572,7 @@ tasks:
     imdb_required: yes
     filesystem:
       path: '{{ secrets.roots.downloads }}/{{ secrets.directories.kids_movies }}'
-      regexp: '.*\.(mkv|mp4|avi|mp4)$'
+      regexp: '.*\.(mkv|mp4|avi)$'
       recursive: yes
     require_field: imdb_name
     accept_all: yes
