@@ -335,6 +335,7 @@ tasks:
 
   movies_watchlist:
     priority: 101
+    template: no_global
 
     trakt_list:
       account: '{{ secrets.trakt.account }}'
