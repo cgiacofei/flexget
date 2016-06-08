@@ -116,7 +116,7 @@ templates:
 #
 ################################################################################
   template_tv_global:
-    #include: [ input/tv_input.yml ]
+    include: [ input/tv_input.yml ]
 
     # Impose reasonable size constraints
     content_size:
@@ -131,16 +131,16 @@ templates:
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
 
-    discover:
-      what:
-        - emit_series:
-            backfill: yes
-      from:
-        - kat:
-            category: tv
-        - piratebay:
-            category: tv
-        - torrentz: verified
+    #discover:
+    #  what:
+    #    - emit_series:
+    #        backfill: yes
+    #  from:
+    #    - kat:
+    #        category: tv
+    #    - piratebay:
+    #        category: tv
+    #    - torrentz: verified
 
   template_tv:
     set:
