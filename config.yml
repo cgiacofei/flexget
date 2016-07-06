@@ -302,6 +302,7 @@ tasks:
     template:
       - template_tv_global
       - template_tv_premieres
+      - template_tv
 
   #-----------------------------------------------------------------------------
   # Track existing TV shows and New Shows from trakt.tv
