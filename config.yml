@@ -33,15 +33,15 @@ schedules:
 
 templates:
   global:
-    email:
-      template: html
-      from: '{{ secrets.gmail.from }}'
-      to: '{{ secrets.gmail.to }}'
-      smtp_username : '{{ secrets.gmail.smtp_username }}'
-      smtp_password : '{{ secrets.gmail.smtp_password }}'
-      smtp_host: smtp.gmail.com
-      smtp_port: 587
-      smtp_tls: yes
+    #~ email:
+      #~ template: html
+      #~ from: '{{ secrets.gmail.from }}'
+      #~ to: '{{ secrets.gmail.to }}'
+      #~ smtp_username : '{{ secrets.gmail.smtp_username }}'
+      #~ smtp_password : '{{ secrets.gmail.smtp_password }}'
+      #~ smtp_host: smtp.gmail.com
+      #~ smtp_port: 587
+      #~ smtp_tls: yes
 
     transmission:
       host: '{{ secrets.transmission.host }}'
