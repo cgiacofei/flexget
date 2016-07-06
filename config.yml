@@ -326,7 +326,10 @@ tasks:
           list: '{{ secrets.trakt.watchlist }}'
           type: shows
         filesystem:
-          - '/{{ secrets.roots.media }}/{{ secrets.directories.tv_shows }}'
+          retrieve: dirs
+          recursive: True
+          path:
+            - '/{{ secrets.roots.media }}/{{ secrets.directories.tv_shows }}'
 
   #-----------------------------------------------------------------------------
   # Track existing Kids TV shows
@@ -350,7 +353,10 @@ tasks:
           list: '{{ secrets.trakt.kids }}'
           type: shows
         filesystem:
-          - '/{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
+          retrieve: dirs
+          recursive: True
+          path:
+            - '/{{ secrets.roots.media }}/{{ secrets.directories.kids_tv }}'
 
 ################################################################################
 #
