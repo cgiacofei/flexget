@@ -319,7 +319,7 @@ tasks:
       settings:
         target: 720p+ hdtv+ <=h264
         quality: webrip+
-        begin: S01E01
+        identified_by: ep
       from:
         trakt_list:
           account: '{{ secrets.trakt.account }}'
@@ -346,7 +346,7 @@ tasks:
       settings:
         target: hdtv+
         quality: webrip+ <=h264
-        begin: S01E01
+        identified_by: ep
       from:
         trakt_list:
           account: '{{ secrets.trakt.account }}'
