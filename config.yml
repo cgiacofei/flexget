@@ -131,17 +131,6 @@ templates:
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
 
-    #discover:
-    #  what:
-    #    - emit_series:
-    #        backfill: yes
-    #  from:
-    #    - kat:
-    #        category: tv
-    #    - piratebay:
-    #        category: tv
-    #    - torrentz: verified
-
   template_tv:
     set:
       path: '/{{ secrets.roots.whatbox }}/{{ secrets.directories.tv_shows }}/{{ series_name }}/'
@@ -184,8 +173,10 @@ templates:
       what:
         - movie_list: Movies
       from:
-        - kat:
-            category: movies
+        - rarbg: 
+            category:
+              - x264 720p
+              - x264 1080p
         - piratebay:
             category: movies
         - torrentz: verified
@@ -208,8 +199,10 @@ templates:
       what:
         - movie_list: Kids
       from:
-        - kat:
-            category: movies
+        - rarbg: 
+            category:
+              - x264 720p
+              - x264 1080p
         - piratebay:
             category: movies
         - torrentz: verified
