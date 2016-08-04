@@ -1,4 +1,4 @@
-secrets: secretfile.yml
+variables: secretfile.yml
 
 schedules:
   # Local torrents
