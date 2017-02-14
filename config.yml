@@ -1,5 +1,10 @@
 variables: secretfile.yml
 
+web_server:
+  bind: 0.0.0.0 # IP V4
+  port: 58080
+  web_ui: yes
+
 schedules:
   # Local torrents
   - tasks: 'local_download*'
@@ -181,10 +186,12 @@ templates:
               - x264 1080p
         - piratebay:
             category: movies
-        - torrentz: verified
 
-    list_queue:
-      - movie_list: Movies
+    list_match:
+      from:
+        - movie_list: Movies
+      action: accept
+      remove_on_match: yes
 
     set:
       path: '{? roots.whatbox ?}/{? directories.movies ?}/{{imdb_name}} ({{imdb_year}})/'
@@ -207,10 +214,12 @@ templates:
               - x264 1080p
         - piratebay:
             category: movies
-        - torrentz: verified
 
-    list_queue:
-      - movie_list: Kids
+    list_match:
+      from:
+        - movie_list: Kids 
+      action: accept
+      remove_on_match: yes
 
     quality: hdtv+ xvid+
 
