@@ -495,7 +495,7 @@ tasks:
     accept_all: yes
     move:
       to: '/media/usb/TV Shows/{{ series_name }}/Season {{series_season}}/'
-      filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
+      rename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
     exec:
       allow_background: yes
       auto_escape: yes
@@ -523,7 +523,7 @@ tasks:
     accept_all: yes
     move:
       to: '/{? roots.media ?}/{? directories.kids_tv ?}/{{ series_name }}/Season {{series_season}}/'
-      filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
+      rename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
     exec:
       allow_background: yes
       auto_escape: yes
@@ -543,7 +543,7 @@ tasks:
     accept_all: yes
     move:
       to: '/{? roots.media ?}/{? directories.movies ?}/{{imdb_name}} ({{imdb_year}})'
-      filename: '{{imdb_name}} ({{imdb_year}})'
+      rename: '{{imdb_name}} ({{imdb_year}})'
       clean_source: 300
     exec:
       allow_background: yes
@@ -563,7 +563,7 @@ tasks:
     accept_all: yes
     move:
       to: '/media/usb/Kids Movies/{{imdb_name}} ({{imdb_year}})'
-      filename: '{{imdb_name}} ({{imdb_year}})'
+      rename: '{{imdb_name}} ({{imdb_year}})'
       clean_source: 300
     exec:
       allow_background: yes
