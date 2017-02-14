@@ -481,6 +481,7 @@ tasks:
 ################################################################################
 
   sorting_tv:
+    no_entries_ok: yes
     disable: seen
     template: no_global
     imdb_lookup: yes
@@ -512,6 +513,7 @@ tasks:
         #phase: "/bin/rm -rf {? roots.downloads ?}/{? directories.tv_shows ?}/*"
 
   sorting_kids_tv:
+    no_entries_ok: yes
     disable: seen
     template: no_global
     imdb_lookup: yes
@@ -541,6 +543,7 @@ tasks:
         #phase: "/bin/rm -rf {? roots.downloads ?}/{? directories.kids_tv ?}/*"
 
   sorting_movies:
+    no_entries_ok: yes
     disable: seen
     template: no_global
     imdb_lookup: yes
@@ -561,6 +564,7 @@ tasks:
         phase: "/bin/find '{? roots.downloads ?}/{? directories.movies ?}' -type f -size -100M"
 
   sorting_kids_movies:
+    no_entries_ok: yes
     disable: seen
     template: no_global
     imdb_lookup: yes
