@@ -1,5 +1,4 @@
 inputs:
-  - rss: { url: 'http://www.torlock.com/television/rss.xml', silent: yes }  # TorLock (TV)
-  - rss: { url: 'http://torrentz.eu/feed_verified?q=tv', silent: yes }      # Torrentz (Verified only, TV)
   - rss: { url: 'http://showrss.info/feeds/all.rss', silent: yes }          # EZRSS
   - rss: { url: 'http://rss.bt-chat.com/?group=3', silent: yes }            # BT-Chat (EZTV)
+  - rss: { url: 'https://rarbg.to/rssdd.php?category=41', silent: yes }

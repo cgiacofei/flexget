@@ -122,7 +122,6 @@ templates:
 ################################################################################
   template_tv_global:
     include: [ input/tv_input.yml ]
-    imdb_lookup: yes
 
     # Impose reasonable size constraints
     content_size:
