@@ -117,6 +117,7 @@ templates:
 ################################################################################
   template_tv_global:
     include: [ input/tv_input.yml ]
+    imdb_lookup: yes
 
     # Impose reasonable size constraints
     content_size:
@@ -145,7 +146,8 @@ templates:
 
   template_movies_global:
     interval: 1 hour
-
+    imdb_lookup: yes
+    
     #include: [ input/movie_input.yml ]
 
     # Some feeds might include TV Shows, ignore them
@@ -387,7 +389,6 @@ tasks:
   #-----------------------------------------------------------------------------
   download_movies_1080p:
     priority: 110
-    imdb_lookup: yes
     template:
       - template_movies_global
       - template_movies
@@ -396,7 +397,6 @@ tasks:
   # Delay sets a window to allow for higher resolution videos
   download_movies_720p:
     priority: 120
-    imdb_lookup: yes
     template:
       - template_movies_global
       - template_movies
@@ -406,7 +406,6 @@ tasks:
 
   download_kids_movies:
     priority: 120
-    imdb_lookup: yes
     template:
       - template_movies_global
       - template_kids_movies
@@ -506,6 +505,7 @@ tasks:
   sorting_kids_tv:
     disable: seen
     template: no_global
+    imdb_lookup: yes
     filesystem:
       path: '/{? roots.downloads ?}/{? directories.kids_tv ?}'
       regexp: '.*\.(mkv|mp4|avi|mpg|mpeg)$'
@@ -534,7 +534,7 @@ tasks:
   sorting_movies:
     disable: seen
     template: no_global
-    imdb_required: yes
+    imdb_lookup: yes
     filesystem:
       path: '/{? roots.downloads ?}/{? directories.movies ?}'
       regexp: '.*\.(mkv|mp4|avi|mpg|mpeg)$'
@@ -554,7 +554,7 @@ tasks:
   sorting_kids_movies:
     disable: seen
     template: no_global
-    imdb_required: yes
+    imdb_lookup: yes
     filesystem:
       path: '/{? roots.downloads ?}/{? directories.kids_movies ?}'
       regexp: '.*\.(mkv|mp4|avi|mpg|mpeg)$'
