@@ -1,0 +1,13 @@
+#! /bin/bash
+
+DIR=$1
+
+mkdir -p logs
+
+grep "INFO" $DIR/flexget.log >> $DIR/logs/info.log
+grep "WARNING" $DIR/flexget.log >> $DIR/logs/warning.log
+grep "CRITICAL" $DIR/flexget.log >> $DIR/logs/critical.log
+grep "VERBOSE" $DIR/flexget.log >> $DIR/logs/verbose.log
+grep "ERROR" $DIR/flexget.log >> $DIR/logs/error.log
+
+rm $DIR/flexget.log
