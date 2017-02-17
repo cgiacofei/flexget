@@ -1,4 +1,12 @@
 inputs:
-  - rss: { url: 'http://www.torlock.com/movies/rss.xml', silent: yes }     # TorLock (Movies)
-  - rss: { url: 'http://torrentz.eu/feed_verified?q=movies', silent: yes } # Torrentz (Verified Movies)
+    - rss:
+        url: 'https://rarbg.to/rssdd.php?category=17&category=44&category=45'
+        all_entries: no
+        silent: yes 
+        link: [link, magneturi]
+    - rss:
+        url: 'https://extratorrent.cc/rss.xml?cid=4&type=last'
+        all_entries: no
+        silent: yes
+        link: [link, magneturi]
 
