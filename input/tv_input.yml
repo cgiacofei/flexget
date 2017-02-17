@@ -1,4 +1,16 @@
 inputs:
-  - rss: { url: 'http://showrss.info/feeds/all.rss', silent: yes }          # EZRSS
-  - rss: { url: 'http://rss.bt-chat.com/?group=3', silent: yes }            # BT-Chat (EZTV)
-  - rss: { url: 'https://rarbg.to/rssdd.php?category=41', silent: yes }
+    - rss:
+        url: 'http://showrss.info/feeds/all.rss'
+        all_entries: no
+        silent: yes
+        link: [link, magneturi]
+    - rss:
+        url: 'http://rss.bt-chat.com/?group=3'
+        all_entries: no
+        silent: yes
+        link: [link, magneturi]
+    - rss:
+        url: 'https://rarbg.to/rssdd.php?category=41'
+        all_entries: no
+        silent: yes
+        link: [link, magneturi]
