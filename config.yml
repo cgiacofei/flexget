@@ -152,7 +152,7 @@ templates:
     interval: 1 hour
     imdb_lookup: yes
     
-    #include: [ input/movie_input.yml ]
+    include: [ input/movie_input.yml ]
 
     # Some feeds might include TV Shows, ignore them
     regexp:
