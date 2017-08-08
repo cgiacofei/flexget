@@ -480,7 +480,9 @@ tasks:
 
   sorting_tv:
     no_entries_ok: yes
-    disable: seen
+    disable:
+      - seen
+      - retry_failed
     template: no_global
     imdb_lookup: yes
     thetvdb_lookup: yes
@@ -512,7 +514,9 @@ tasks:
 
   sorting_kids_tv:
     no_entries_ok: yes
-    disable: seen
+    disable:
+      - seen
+      - retry_failed
     template: no_global
     imdb_lookup: yes
     filesystem:
@@ -542,7 +546,9 @@ tasks:
 
   sorting_movies:
     no_entries_ok: yes
-    disable: seen
+    disable:
+      - seen
+      - retry_failed
     template: no_global
     imdb_lookup: yes
     filesystem:
