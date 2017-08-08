@@ -573,7 +573,7 @@ tasks:
     require_field: imdb_name
     accept_all: yes
     move:
-      to: '{? roots.media ?}/{? kids_movies ?}/{{imdb_name}} ({{imdb_year}})'
+      to: '{? roots.media ?}/{? directories.kids_movies ?}/{{imdb_name}} ({{imdb_year}})'
       rename: '{{imdb_name}} ({{imdb_year}})'
       clean_source: 300
     exec:
