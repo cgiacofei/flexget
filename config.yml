@@ -120,8 +120,8 @@ templates:
 
     # Prevent from downloading shows that were aquired manually
     exists_series:
-      - '{? roots.media ?}/{? directories.tv_shows ?}'
-      - '{? roots.media ?}/{? directories.kids_tv ?}'
+      - '{? roots.media ?}/{? directories.tv_shows ?}/{{ series_name }}'
+      - '{? roots.media ?}/{? directories.kids_tv ?}/{{ series_name }}'
 
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
@@ -163,6 +163,8 @@ templates:
     exists_movie:
       - '{? roots.media ?}/{? directories.kids_movies ?}'
       - '{? roots.media ?}/{? directories.movies ?}'
+      - '{? roots.downloads ?}/{? directories.kids_movies ?}'
+      - '{? roots.downloads ?}/{? directories.movies ?}'
 
   template_movies:
     discover:
