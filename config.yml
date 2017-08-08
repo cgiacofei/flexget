@@ -38,16 +38,6 @@ schedules:
 
 templates:
   global:
-    #~ email:
-      #~ template: html
-      #~ from: '{? gmail.from ?}'
-      #~ to: '{? gmail.to ?}'
-      #~ smtp_username : '{? gmail.smtp_username ?}'
-      #~ smtp_password : '{? gmail.smtp_password ?}'
-      #~ smtp_host: smtp.gmail.com
-      #~ smtp_port: 587
-      #~ smtp_tls: yes
-
     transmission:
       host: '{? transmission.host ?}'
       port: 21772
@@ -63,7 +53,7 @@ templates:
       include_subs: yes
 
     free_space:
-      path: '{? roots.torrents ?}'
+      path: '{? roots.media ?}'
       space: 20000
 
     pathscrub: windows
@@ -613,6 +603,8 @@ tasks:
       - trakt_list:
           account: '{? trakt.account ?}'
           list: '{? trakt.watchlist ?}'
+          type: movies
+          strip_dates: yes
       - movie_list: Movies
 
   maintenance_clear_torrents:
@@ -621,7 +613,7 @@ tasks:
       port: 21772
       username: '{? transmission.username ?}'
       password: '{? transmission.password ?}'
-      finished_for: 1 hours
+      finished_for: 4 hours
       delete_files: no
 
     disable: details
