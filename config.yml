@@ -126,6 +126,18 @@ templates:
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
 
+    discover:
+      what:
+        - next_series_episodes: yes
+      from:
+        - limetorrents:
+            category: tv
+            order_by: seeds
+
+        - piratebay:
+            category: highres tv
+            sort_by: seeds
+
   template_tv:
     set:
       path: '{? roots.whatbox ?}/{? directories.tv_shows ?}/{{ series_name }}/'
