@@ -154,7 +154,7 @@ templates:
     set:
       path: '{? roots.whatbox ?}/{? directories.kids_tv ?}/{{ series_name }}/'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
-      queuetotop: no
+      queuetotop: yes
 
   template_movies_global:
     interval: 1 hour
@@ -207,7 +207,7 @@ templates:
     set:
       path: '{? roots.whatbox ?}/{? directories.movies ?}/{{imdb_name}} ({{imdb_year}})/'
       content_filename: '{{ movie_name }} {{movie_year}}'
-      queuetotop: no
+      queuetotop: yes
 
     list_remove:
       - trakt_list:
@@ -236,7 +236,7 @@ templates:
     set:
       path: '{? roots.whatbox ?}/{? directories.carrie_movies ?}/{{imdb_name}} ({{imdb_year}})/'
       content_filename: '{{ movie_name }} {{movie_year}}'
-      queuetotop: no
+      queuetotop: yes
 
     list_remove:
       - trakt_list:
@@ -268,7 +268,7 @@ templates:
     set:
       path: '{? roots.whatbox ?}/{? directories.kids_movies ?}/{{imdb_name}} ({{imdb_year}})/'
       content_filename: '{{ movie_name }} {{movie_year}}'
-      queuetotop: no
+      queuetotop: yes
 
     list_remove:
       - trakt_list:
