@@ -6,19 +6,13 @@ web_server:
   web_ui: yes
 
 schedules:
-  # Local torrents
-  - tasks: 'local_download*'
-    interval:
-      minutes: 15
-
   # Run download tasks
   - tasks: 'download*'
     interval:
       minutes: 30
 
-
   # Update movie queues
-  - tasks: [queue_watchlist_movies, queue_kids_movies]
+  - tasks: [queue_movies*]
     interval:
       hours: 2
 
@@ -34,7 +28,7 @@ schedules:
   # Sort Files
   - tasks: [sorting*]
     interval:
-      minutes: 30
+      minutes: 15
 
 templates:
   global:
@@ -76,7 +70,7 @@ templates:
         - \bASAP\b: {from: title}
 
     torrent_alive:
-      min_seeds: 10
+      min_seeds: 20
       reject_for: 1 day
 
     content_filter:
@@ -178,7 +172,7 @@ templates:
 
     # Impose reasonable size constraints
     content_size:
-      max: 6000
+      max: 10000
       min: 700
 
     seen_movies: strict # Don't download movies we've already seen
@@ -199,8 +193,10 @@ templates:
             category:
               - x264 720p
               - x264 1080p
+            sorted_by: seeders
         - piratebay:
             category: movies
+            sort_by: seeds
 
     list_match:
       from:
@@ -256,8 +252,10 @@ templates:
             category:
               - x264 720p
               - x264 1080p
+            sorted_by: seeders
         - piratebay:
             category: movies
+            sort_by: seeds
 
     list_match:
       from:
@@ -423,11 +421,16 @@ tasks:
       - template_tv_global
       - template_kids_tv
 
+    torrent_alive:
+      min_seeds: 5
+      reject_for: 1 day
+
     configure_series:
       settings:
         target: hdtv+
         quality: webrip+ <=h264
         identified_by: ep
+        tracking: backfill
       from:
         trakt_list:
           account: '{? trakt.account ?}'
@@ -444,11 +447,12 @@ tasks:
 # Movie Tasks
 #
 ################################################################################
-  queue_watchlist_movies:
+  queue_movies_watchlist:
     priority: 101
     template: no_global
 
     trakt_list:
+      username: '{? trakt.account ?}'
       account: '{? trakt.account ?}'
       list: '{? trakt.watchlist ?}'
       type: movies
@@ -457,11 +461,12 @@ tasks:
     list_add:
       - movie_list: Movies
 
-  queue_kids_movies:
-    priority: 102
+  queue_movies_kids:
+    priority: 103
     template: no_global
 
     trakt_list:
+      username: '{? trakt.account ?}'
       account: '{? trakt.account ?}'
       list: '{? trakt.kids ?}'
       type: movies
@@ -607,6 +612,7 @@ tasks:
       - retry_failed
     template: no_global
     imdb_lookup: yes
+    thetvdb_lookup: yes
     filesystem:
       path: '{? roots.downloads ?}/{? directories.kids_tv ?}'
       regexp: '.*\.(mkv|mp4|avi|mpg|mpeg)$'
