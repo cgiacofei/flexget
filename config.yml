@@ -125,24 +125,36 @@ templates:
 
     # Look up info on TheTVDB.com to fill in extra info
     thetvdb_lookup: yes
+    set_series_begin: yes
+    max_reruns: 1
 
     discover:
       what:
-        - next_series_episodes: yes
+        - next_series_episodes:
+            from_start: yes
+            backfill: yes
       from:
         - limetorrents:
             category: tv
             order_by: seeds
-
         - piratebay:
             category: highres tv
             sort_by: seeds
+        - rarbg:
+            category: HDTV
+            sorted_by: seeders
 
   template_tv:
     set:
       path: '{? roots.whatbox ?}/{? directories.tv_shows ?}/{{ series_name }}/'
       content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
-      queuetotop: no
+      queuetotop: yes
+
+  template_carrie_tv:
+    set:
+      path: '{? roots.whatbox ?}/{? directories.carrie_tv ?}/{{ series_name }}/'
+      content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
+      queuetotop: yes
 
   template_kids_tv:
     set:
@@ -205,6 +217,35 @@ templates:
       - trakt_list:
           account: '{? trakt.account ?}'
           list: '{? trakt.watchlist ?}'
+
+  template_carrie_movies:
+    discover:
+      what:
+        - movie_list: Carrie
+      from:
+        - rarbg: 
+            category:
+              - x264 720p
+              - x264 1080p
+            sorted_by: seeders
+        - piratebay:
+            category: movies
+            sort_by: seeds
+    list_match:
+      from:
+        - movie_list: Carrie
+      action: accept
+      remove_on_match: yes
+
+    set:
+      path: '{? roots.whatbox ?}/{? directories.carrie_movies ?}/{{imdb_name}} ({{imdb_year}})/'
+      content_filename: '{{ movie_name }} {{movie_year}}'
+      queuetotop: no
+
+    list_remove:
+      - trakt_list:
+          account: '{? trakt.account ?}'
+          list: '{? trakt.carrie ?}'
 
   template_kids_movies:
     discover:
@@ -343,10 +384,36 @@ tasks:
           path:
             - '{? roots.media ?}/{? directories.tv_shows ?}'
 
+  download_tv_carrie:
+    priority: 50
+    seen: local
+
+    parsing:
+      series: internal
+    template:
+      - template_tv_global
+      - template_carrie_tv
+
+    configure_series:
+      settings:
+        target: 720p+ hdtv+ <=h264
+        quality: webrip+
+        identified_by: ep
+        tracking: backfill
+      from:
+        trakt_list:
+          account: '{? trakt.account ?}'
+          list: '{? trakt.carrie ?}'
+          type: shows
+        filesystem:
+          retrieve: dirs
+          recursive: False
+          path:
+            - '{? roots.media ?}/{? directories.carrie_tv ?}'
   #-----------------------------------------------------------------------------
   # Track existing Kids TV shows
   #-----------------------------------------------------------------------------
-  download_kids_tv:
+  download_tv_kids:
     priority: 60
     seen: local
 
@@ -403,6 +470,20 @@ tasks:
     list_add:
       - movie_list: Kids
 
+  queue_movies_carrie:
+    priority: 102
+    template: no_global
+
+    trakt_list:
+      username: '{? trakt.account ?}'
+      account: '{? trakt.account ?}'
+      list: '{? trakt.carrie ?}'
+      type: movies
+
+    accept_all: yes
+    list_add:
+      - movie_list: Carrie
+
   #-----------------------------------------------------------------------------
   # Main movie download task
   #-----------------------------------------------------------------------------
@@ -423,66 +504,29 @@ tasks:
 
     delay: 2 days
 
-  download_kids_movies:
+  download_movies_1080p_carrie:
+    priority: 110
+    template:
+      - template_movies_global
+      - template_carrie_movies
+    quality: 1080p+ bluray+ <=h264
+
+  # Delay sets a window to allow for higher resolution videos
+  download_movies_720p_carrie:
+    priority: 120
+    template:
+      - template_movies_global
+      - template_carrie_movies
+    quality: 720p+ webdl+ xvid+
+
+    delay: 2 days
+
+  download_movies_kids:
     priority: 120
     template:
       - template_movies_global
       - template_kids_movies
     quality: hdtv+ xvid+
-
-
-################################################################################
-#
-# Local torrent file downloads
-#
-################################################################################
-  local_download_tv:
-    priority: 1
-    template:
-      - template_tv_global
-      - template_local_torrents
-    filesystem: '{? roots.torrents ?}/{? directories.tv_shows ?}'
-    set:
-      path: '{? roots.whatbox ?}/{? directories.tv_shows ?}'
-      content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
-
-    all_series:
-      parse_only: yes
-
-  # Same as above but for movies
-  local_download_movies:
-    priority: 2
-    template:
-      - template_movies_global
-      - template_local_torrents
-
-    filesystem: '{? roots.torrents ?}/{? directories.movies ?}'
-    set:
-      path: '{? roots.whatbox ?}/{? directories.movies ?}'
-
-  local_download_kids_tv:
-    priority: 3
-    template:
-      - template_tv_global
-      - template_local_torrents
-
-    filesystem: '{? roots.torrents ?}/{? directories.kids_tv ?}'
-    set:
-      path: '{? roots.whatbox ?}/{? directories.kids_tv ?}'
-      content_filename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
-
-    all_series:
-      parse_only: yes
-
-  local_download_kids_movies:
-    priority: 4
-    template:
-      - template_movies_global
-      - template_local_torrents
-
-    filesystem: '{? roots.torrents ?}/{? directories.kids_movies ?}'
-    set:
-      path: '{? roots.whatbox ?}/{? directories.kids_movies ?}'
 
 ################################################################################
 #
@@ -522,7 +566,39 @@ tasks:
       auto_escape: yes
       on_exit:
         phase: "/bin/find '{? roots.downloads ?}/{? directories.tv_shows ?}' -type f -size -100M"
-        #phase: "/bin/rm -rf {? roots.downloads ?}/{? directories.tv_shows ?}/*"
+
+  sorting_carrie_tv:
+    no_entries_ok: yes
+    disable:
+      - seen
+      - retry_failed
+    template: no_global
+    imdb_lookup: yes
+    thetvdb_lookup: yes
+    filesystem:
+      path: '{? roots.downloads ?}/{? directories.carrie_tv ?}'
+      regexp: '.*\.(mkv|mp4|avi|mpg|mpeg)$'
+      recursive: yes
+
+    configure_series:
+      from:
+        filesystem:
+          - '{? roots.downloads ?}/{? directories.carrie_tv ?}'
+      settings:
+        parse_only: yes
+    regexp:
+      reject:
+        - sample
+    require_field: series_name
+    accept_all: yes
+    move:
+      to: '{? roots.media ?}/{? directories.tv_shows ?}/{{ series_name }}/Season {{series_season}}/'
+      rename: '{{ series_name }} - {{ series_season|pad(2) }}x{{ series_episode|pad(2) }}'
+    exec:
+      allow_background: yes
+      auto_escape: yes
+      on_exit:
+        phase: "/bin/find '{? roots.downloads ?}/{? directories.carrie_tv ?}' -type f -size -100M"
 
   sorting_kids_tv:
     no_entries_ok: yes
@@ -538,7 +614,7 @@ tasks:
     configure_series:
       from:
         filesystem:
-          - '{? roots.media ?}/{? directories.kids_tv ?}'
+          - '{? roots.downloads ?}/{? directories.kids_tv ?}'
       settings:
         parse_only: yes
     regexp:
@@ -554,7 +630,6 @@ tasks:
       auto_escape: yes
       on_exit:
         phase: "/bin/find '{? roots.downloads ?}/{? directories.kids_tv ?}' -type f -size -100M"
-        #phase: "/bin/rm -rf {? roots.downloads ?}/{? directories.kids_tv ?}/*"
 
   sorting_movies:
     no_entries_ok: yes
@@ -648,8 +723,9 @@ tasks:
         filesystem:
           - '{? roots.media ?}/{? directories.tv_shows ?}'
           - '{? roots.media ?}/{? directories.kids_tv ?}'
+          - '{? roots.media ?}/{? directories.carrie_tv ?}'
       settings:
-        identified_by: ep
+        identified_by: auto
 
     # The filesystem plugin will find all of your existing episodes
     filesystem:
@@ -657,6 +733,7 @@ tasks:
       path:
         - '{? roots.media ?}/{? directories.tv_shows ?}'
         - '{? roots.media ?}/{? directories.kids_tv ?}'
+        - '{? roots.media ?}/{? directories.carrie_tv ?}'
       recursive: yes
     # We use the manual plugin so that this task only runs when explicitly called
     manual: yes
