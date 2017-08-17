@@ -8,3 +8,5 @@ temp/
 userstatic/
 secretfile.yml
 venv
+tags
+cached_resources
